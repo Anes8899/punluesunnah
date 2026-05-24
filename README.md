@@ -33,4 +33,45 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+my-islamic-app/
+├── public/                  # Static assets (images, SVGs, fonts)
+│   ├── icons/
+│   └── images/
+├── src/                     # Main source directory
+│   ├── app/                 # App Router (Pages & Routing)
+│   │   ├── layout.tsx       # Global layout (HTML wrapper, Navbar, Footer)
+│   │   ├── page.tsx         # Homepage dashboard (Where the panels sit)
+│   │   └── globals.css      # Global styles (Tailwind directives, custom font loading)
+│   │
+│   ├── components/          # Reusable UI Components
+│   │   ├── ui/              # Atom/Primitive design system elements
+│   │   │   ├── button.tsx
+│   │   │   └── card.tsx
+│   │   │
+│   │   ├── dashboard/       # Feature-specific layout containers
+│   │   │   ├── prayer-panel.tsx  # Wraps the row of cards
+│   │   │   └── hadith-panel.tsx  # Right-side card containing Arabic text
+│   │   │
+│   │   └── features/        # Business-logic UI components
+│   │       └── prayer/
+│   │           ├── prayer-time-card.tsx      <-- Your Neumorphic component!
+│   │           └── prayer-time-card.test.tsx # UI Automation / Unit tests
+│   │
+│   ├── hooks/               # Custom React hooks (e.g., usePrayerTimer)
+│   │   └── use-prayer-timer.ts
+│   │
+│   ├── lib/                 # Third-party configurations or core utils
+│   │   ├── utils.ts         # Tailwind merging helpers (clsx + tailwind-merge)
+│   │   └── prayer-calc.ts   # Calculations for times if done client-side
+│   │
+│   └── types/               # TypeScript type definitions
+│       └── index.ts
+│
+├── .env.local               # Environment variables
+├── docker-compose.yml       # Dev/Prod orchestration environment
+├── Dockerfile               # Multi-stage production build configuration
+├── next.config.js           # Next.js specific configuration
+├── package.json             # Core dependencies and test scripts
+└── tsconfig.json            # TypeScript rules
+```
