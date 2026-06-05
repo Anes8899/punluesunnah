@@ -7,7 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-khmer);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -133,5 +133,19 @@
   }
   html {
     @apply font-sans;
+  }
+  svg {
+    width: revert;
+    height: revert;
+  }
+}
+
+@layer utilities {
+  .font-khmer {
+    font-family: var(--font-khmer);
+  }
+  .font-arabic {
+    font-family: var(--font-arabic);
+    direction: rtl;
   }
 }

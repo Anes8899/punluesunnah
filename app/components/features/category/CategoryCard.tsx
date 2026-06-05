@@ -1,28 +1,21 @@
-import { AspectRatio } from "../../ui/aspect-ratio";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../ui/card";
+import Image from "next/image";
+import { Card, CardContent, CardHeader } from "../../ui/card";
+import { StaticImageData } from "next/image";
 
-export default function CategoryCard() {
+
+interface CategoryCardProps {
+  icon: string | StaticImageData;
+  label: string;
+  onClick?: () => void;
+}
+
+export default function CategoryCard({icon, label, onClick}: CategoryCardProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
-        <CardAction>Card Action</CardAction>
+    <Card className="items-center w-28 h-28 " onClick={onClick}>
+      <CardHeader className="w-20 h-20">
+        <Image src={icon} alt="kaaba" className="w-full" />
       </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
-      </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter>
+      <CardContent>{label}</CardContent>
     </Card>
   );
 }
