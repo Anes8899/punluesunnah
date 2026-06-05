@@ -17,15 +17,12 @@ interface PrayerTime {
 
 export default function PrayerCard({ nameTimePrayer, timePrayer }: PrayerTime) {
   return (
-    <Card className="w-16 rounded-2xl flex flex-col items-center justify-center gap-1 py-3">
-      <Cloud className="w-8 h-8 text-amber-300" />
-      <CardHeader className="flex items-center">
-        <CardTitle className="text-center">{nameTimePrayer}</CardTitle>
+    <Card className="w-full rounded-2xl py-3">
+      <Cloud className="w-8 h-8 text-amber-300 mx-auto" />
+      <CardHeader className="p-0 w-full">
+        <CardTitle className="mx-auto">{nameTimePrayer}</CardTitle>
       </CardHeader>
       <CardContent className="p-0 flex flex-col items-center gap-1">
-        {/* <p className="text-amber-200 text-sm font-medium tracking-widest uppercase">
-          {nameTimePrayer}
-        </p> */}
         <p className="text-gray-700 text-lg font-bold tabular-nums">
           {timePrayer}
         </p>
