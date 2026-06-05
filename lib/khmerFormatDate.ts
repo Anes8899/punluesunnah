@@ -6,6 +6,16 @@ const toKhmerNumeral = (num: number): string => {
     .join("");
 };
 
+const KHMER_DAYS = [
+  "អាទិត្យ",   // Sunday
+  "ចន្ទ",      // Monday
+  "អង្គារ",    // Tuesday
+  "ពុធ",       // Wednesday
+  "ព្រហស្បតិ៍", // Thursday
+  "សុក្រ",     // Friday
+  "សៅរ៍",      // Saturday
+];
+
 const KHMER_MONTHS = [
   "មករា",
   "កុម្ភៈ",
@@ -22,9 +32,10 @@ const KHMER_MONTHS = [
 ];
 
 export function formatKhmerDate(date: Date): string {
-  const day = toKhmerNumeral(date.getDate());
+  const day = KHMER_DAYS[date.getDate()];
+  const numberDay = toKhmerNumeral(date.getDate());
   const month = KHMER_MONTHS[date.getMonth()];
   const year = toKhmerNumeral(date.getFullYear());
 
-  return `ថ្ងៃទី${day} ខែ${month} ឆ្នាំ${year}`;
+  return `ថ្ងៃ${day} ទី${numberDay} ខែ${month} ឆ្នាំ${year}`;
 }
