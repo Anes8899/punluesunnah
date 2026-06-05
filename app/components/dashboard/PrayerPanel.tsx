@@ -13,11 +13,11 @@ import { getNextPrayer } from "@/lib/getNextPrayer";
 import { formatCountdown } from "@/lib/formatCountdown";
 
 export const PRAYERS = [
-  { key: "Fajr", label: "Fajr" },
-  { key: "Dhuhr", label: "Dhuhr" },
-  { key: "Asr", label: "Asr" },
-  { key: "Maghrib", label: "Maghrib" },
-  { key: "Isha", label: "Isha" },
+  { key: "Fajr", label: "Fajr", icon: "sunrise" },
+  { key: "Dhuhr", label: "Dhuhr", icon: "sun" },
+  { key: "Asr", label: "Asr", icon: "cloudy"},
+  { key: "Maghrib", label: "Maghrib", icon: "sunset" },
+  { key: "Isha", label: "Isha", icon: "moon" },
 ] as const;
 
 export type PrayerKey = (typeof PRAYERS)[number]["key"];
@@ -99,9 +99,10 @@ export default function PrayerPanel() {
           </div>
         </div>
         <div className="flex gap-2 pt-3 items-center justify-center">
-          {PRAYERS.map(({ key, label }) => (
+          {PRAYERS.map(({ key, label, icon }) => (
             <PrayerCard
               key={key}
+              icon={icon}
               nameTimePrayer={label}
               timePrayer={times[key]}
             />

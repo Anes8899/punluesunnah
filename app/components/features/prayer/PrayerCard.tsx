@@ -1,11 +1,8 @@
-import { Cloud } from "lucide-react";
-import { AspectRatio } from "../../ui/aspect-ratio";
+import { DynamicIcon, IconName } from 'lucide-react/dynamic';
+
 import {
   Card,
-  CardAction,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../../ui/card";
@@ -13,12 +10,13 @@ import {
 interface PrayerTime {
   nameTimePrayer: string;
   timePrayer: string;
+  icon: IconName;
 }
 
-export default function PrayerCard({ nameTimePrayer, timePrayer }: PrayerTime) {
+export default function PrayerCard({ nameTimePrayer, timePrayer, icon }: PrayerTime) {
   return (
     <Card className="w-full rounded-2xl py-3">
-      <Cloud className="w-8 h-8 text-amber-300 mx-auto" />
+       <DynamicIcon name={icon} color="black" className="w-10 h-10 mx-auto" />
       <CardHeader className="p-0 w-full">
         <CardTitle className="mx-auto">{nameTimePrayer}</CardTitle>
       </CardHeader>
