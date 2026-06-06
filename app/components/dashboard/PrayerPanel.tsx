@@ -108,7 +108,7 @@ export default function PrayerPanel() {
           <div className="flex items-baseline gap-1">
             <Clock className="w-3 h-3 text-muted-foreground" />
             <span className="text-lg font-medium tabular-nums tracking-tight">
-              -{countdown}
+              - {countdown}
             </span>
           </div>
         </div>
