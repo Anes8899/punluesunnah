@@ -11,6 +11,7 @@ import pray from "./pray.png";
 import religion from "./religion.png";
 import scholar from "./scholar.png";
 import zakat from "./zakat.png";
+import sujud from "./sujud.png";
 
 export {
   kaaba,
@@ -26,4 +27,5 @@ export {
   religion,
   scholar,
   zakat,
+  sujud
 };

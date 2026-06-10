@@ -12,7 +12,7 @@ import { getNextPrayer } from "@/lib/getNextPrayer";
 import { formatCountdown } from "@/lib/formatCountdown";
 
 export const PRAYERS = [
-  { key: "Fajr", label: "Fajr", icon: "sunrise" },
+  { key: "Fajr", label: "Fajr", icon: "sunrise", },
   { key: "Dhuhr", label: "Dhuhr", icon: "sun" },
   { key: "Asr", label: "Asr", icon: "cloudy" },
   { key: "Maghrib", label: "Maghrib", icon: "sunset" },
@@ -30,10 +30,9 @@ export default function PrayerPanel() {
   const [times, setTimes] = useState<PrayerTimes | null>(null);
   const [loading, setLoading] = useState(true);
   const [countdown, setCountdown] = useState("");
-  const [nextPrayer, setNextPrayer] = useState<{
-    key: PrayerKey;
-    label: string;
-  } | null>(null);
+  const [nextPrayer, setNextPrayer] = useState<PrayerKey>("Fajr");
+
+  console.log(nextPrayer);
 
   const KhmerDate = useKhmerDate();
 
@@ -49,15 +48,10 @@ export default function PrayerPanel() {
 
     const tick = () => {
       const next = getNextPrayer(times);
-      if (!next) {
-        setNextPrayer(null);
-        setCountdown("");
-        return;
-      }
+      if (!next) return;
+      setNextPrayer(next?.key ?? PRAYERS[0].key);
 
-      setNextPrayer({ key: next.key, label: next.label });
-
-      const diffSeconds = Math.floor((next.time.getTime() - Date.now()) / 1000);
+      const diffSeconds = Math.floor((next.time.getTime()  - Date.now()) / 1000);
       setCountdown(formatCountdown(Math.max(0, diffSeconds)));
     };
 
@@ -102,7 +96,7 @@ export default function PrayerPanel() {
               បន្ទាប់
             </span>
             <span className="text-[11px] bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium">
-              {nextPrayer?.label}
+              {nextPrayer}
             </span>
           </div>
           <div className="flex items-baseline gap-1">
@@ -120,6 +114,7 @@ export default function PrayerPanel() {
             icon={icon}
             nameTimePrayer={label}
             timePrayer={times[key]}
+            nextPrayer={key == nextPrayer}
           />
         ))}
       </div>

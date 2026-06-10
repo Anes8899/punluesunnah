@@ -32,7 +32,7 @@ const KHMER_MONTHS = [
 ];
 
 export function formatKhmerDate(date: Date): string {
-  const day = KHMER_DAYS[date.getDate()];
+  const day = KHMER_DAYS[date.getDay()];
   const numberDay = toKhmerNumeral(date.getDate());
   const month = KHMER_MONTHS[date.getMonth()];
   const year = toKhmerNumeral(date.getFullYear());

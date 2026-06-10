@@ -11,7 +11,7 @@ interface CategoryCardProps {
 
 export default function CategoryCard({icon, label, onClick}: CategoryCardProps) {
   return (
-    <Card className="h-28 flex flex-col items-center" onClick={onClick}>
+    <Card className="h-28 flex flex-col items-center cursor-pointer" onClick={onClick}>
       <CardHeader className="w-20 h-20">
         <Image src={icon} alt="kaaba" className="w-full" />
       </CardHeader>

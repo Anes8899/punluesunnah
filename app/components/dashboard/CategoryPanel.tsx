@@ -8,25 +8,25 @@ import {
   inheritance,
   leaf,
   muslim,
-  pray,
   religion,
   scholar,
   zakat,
+  sujud,
 } from "@/app/assets/icon";
 
 const CategoryList = [
   { icon: kaaba, label: "គោលជំនឿ" },
-  { icon: pray, label: "អ៊ីហ្ពើឌះ" },
+  { icon: sujud, label: "អ៊ីហ្ពើឌះ" },
   { icon: book, label: "អាល់គុរអាន" },
   { icon: hadist, label: "ហាទីស" },
   { icon: arabicLanguage, label: "ភាសាអារ៉ាប់" },
-  { icon: religion, label: "សីលធម៌" },
-  { icon: muslim, label: "ទូអា" },
-  { icon: leaf, label: "សម្ភារចិត្ត" },
-  { icon: mosque, label: "ឃុតបាះ" },
+  { icon: mosque, label: "សីលធម៌" },
+  { icon: religion, label: "ទូអា" },
+  { icon: leaf, label: "សម្អាតរចិត្ត" },
+  { icon: muslim, label: "ឃុតបាះ" },
   { icon: zakat, label: "គណនាហ្សកាត" },
   { icon: inheritance, label: "គណនាមរតក" },
-  { icon: scholar, label: "អ៊ីស្លែស" },
+  { icon: scholar, label: "អ៊ូស្តើស" },
 ];
 
 export default function CategoryPanel() {

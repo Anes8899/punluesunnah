@@ -1,20 +1,23 @@
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { PrayerKey } from "../../dashboard/PrayerPanel";
 
 interface PrayerTime {
   nameTimePrayer: string;
   timePrayer: string;
   icon: IconName;
+  nextPrayer: boolean;
 }
 
 export default function PrayerCard({
   nameTimePrayer,
   timePrayer,
   icon,
+  nextPrayer,
 }: PrayerTime) {
   return (
-    <Card className="w-full rounded-2xl py-3">
+    <Card className={`w-full rounded-2xl py-3 ${nextPrayer ? "bg-green-700" : ""}`}>
       <div className="bg-muted rounded-full w-12 h-12 flex items-center justify-center mx-auto">
         <DynamicIcon name={icon} color="black" className="w-6 h-6" />
       </div>
