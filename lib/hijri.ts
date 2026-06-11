@@ -1,12 +1,34 @@
+const monthIslam = [
+  "Muharram",
+  "Safar",
+  "Rabi al-Awwal",
+  "Rabi al-Thani",
+  "Jumada al-Ula",
+  "Jumada al-Thani",
+  "Rajab",
+  "Shaban",
+  "Ramadan",
+  "Shawwal",
+  "Dhul Qadah",
+  "Dhul Hijjah",
+];
+
 export function getHijriDate(date: Date = new Date()): string {
-  const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).formatToParts(date);
+  const parts = new Intl.DateTimeFormat(
+    ['en-u-ca-islamic-umalqura', 'en-u-ca-islamic-civil', 'en-u-ca-islamic'],
+    {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+    }
+  ).formatToParts(date);
 
-  const get = (type: string) => parts.find(p => p.type === type)?.value ?? '';
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
 
-  return `${get('day')} ${get('month')} ${get('year')}`;
-  // → "17 Dhu al-Hijjah 1447 AH"
+  const day = get('day');
+  const monthIndex = parseInt(get('month')) - 1; // 0-based
+  const year = get('year');
+  const month = monthIslam[monthIndex];
+
+  return `${day} ${month} ${year}`;
 }
