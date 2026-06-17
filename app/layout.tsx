@@ -1,34 +1,46 @@
-import { getHijriDate } from "@/lib/hijri";
+'use client'
+
 import "./globals.css";
-import { Battambang, Noto_Naskh_Arabic } from "next/font/google"
+import { Battambang, Noto_Naskh_Arabic } from "next/font/google";
 import myImage from "@/app/assets/icon/logo.png";
 import Image from "next/image";
-
-
+import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const khmer = Battambang({
   weight: ["400", "700"],
   subsets: ["khmer"],
   variable: "--font-khmer",
-})
+});
 
 const arabic = Noto_Naskh_Arabic({
   weight: ["400", "700"],
   subsets: ["arabic"],
   variable: "--font-arabic",
-})
+});
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: Infinity,
+          },
+        },
+      }),
+  );
   return (
     <html className={`${khmer.variable} ${arabic.variable}`}>
       <body
         className="bg-[#f0f4f8] min-h-screen font-sans text-slate-800 antialiased"
         suppressHydrationWarning
       >
+      <QueryClientProvider client={queryClient}>
         {/* Top Branding Bar */}
         <header className="w-full max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -51,6 +63,7 @@ export default function RootLayout({
 
         {/* Dynamic Route Content */}
         <main className="max-w-7xl mx-auto px-6 py-6">{children}</main>
+        </QueryClientProvider>
       </body>
     </html>
   );

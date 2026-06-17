@@ -1,4 +1,12 @@
-export interface PrayerTimes {
+import {
+  Coordinates,
+  CalculationMethod,
+  PrayerTimes,
+  Madhab,
+  PolarCircleResolution,
+} from "adhan";
+
+export interface SalahName {
   Fajr: string;
   Sunrise: string;
   Dhuhr: string;
@@ -7,21 +15,24 @@ export interface PrayerTimes {
   Isha: string;
 }
 
-export async function getPrayerTime(
-  lat: number = 11.5564,
-  lng: number = 104.9282,
-  date: Date = new Date(),
-): Promise<PrayerTimes> {
-  const day = date.getDay();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
+const HCIRAC_ADJUSTMENTS = {
+  fajr: -7,
+  sunrise: -2,
+  dhuhr: -1,
+  asr: 0,
+  maghrib: 1,
+  isha: 5,
+} as const;
 
-  const url = `https://api.aladhan.com/v1/timings/${day}-${month}-${year}?latitude=${lat}&longitude=${lng}&method=11`;
-  try {
-    const res = await fetch(url);
-    const result = await res.json();
-    return result.data.timings;
-  } catch (err) {
-    throw err;
-  }
+export function getPrayerTime(
+  lat: number = 11.579375,
+  lng: number = 104.913811,
+) {
+  const coordinates = new Coordinates(lat, lng);
+  const params = CalculationMethod.MuslimWorldLeague();
+  params.polarCircleResolution = PolarCircleResolution.AqrabBalad;
+  params.madhab = Madhab.Shafi;
+  Object.assign(params.adjustments, HCIRAC_ADJUSTMENTS);
+
+  return new PrayerTimes(coordinates, new Date(), params);
 }
