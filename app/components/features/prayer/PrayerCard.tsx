@@ -1,7 +1,6 @@
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { PrayerKey } from "../../dashboard/PrayerPanel";
 
 interface PrayerTime {
   nameTimePrayer: string;

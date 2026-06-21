@@ -9,6 +9,7 @@ import { formatKhmerDate } from "@/lib/khmerFormatDate";
 import PrayerCard from "../features/prayer/PrayerCard";
 import { formatCountdown } from "@/lib/formatCountdown";
 import { usePrayerTimes } from "@/app/hook/usePrayerTimes";
+import { useGetCurrentLocation } from "@/app/hook/userGetCurrentLocation";
 
 export const PRAYERS = [
   { key: "fajr", label: "Fajr", icon: "sunrise" },
@@ -29,7 +30,8 @@ export default function PrayerPanel() {
   const [countdown, setCountdown] = useState("");
   const [nextSalah, setNextPrayer] = useState<PrayerKey>("fajr");
   const KhmerDate = useKhmerDate();
-  const { data: times, isLoading } = usePrayerTimes();
+  const {data: location, } = useGetCurrentLocation();
+  const { data: times, isLoading } = usePrayerTimes(location?.coords.latitude, location?.coords.longitude);
 
   // countdown ticker
   useEffect(() => {

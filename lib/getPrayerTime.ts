@@ -16,17 +16,17 @@ export interface SalahName {
 }
 
 const HCIRAC_ADJUSTMENTS = {
-  fajr: -7,
+  fajr: -8,
   sunrise: -2,
   dhuhr: -1,
   asr: 0,
-  maghrib: 1,
+  maghrib: 2,
   isha: 5,
 } as const;
 
 export function getPrayerTime(
-  lat: number = 11.579375,
-  lng: number = 104.913811,
+  lat: number = 11.562108,
+  lng: number = 104.888535,
 ) {
   const coordinates = new Coordinates(lat, lng);
   const params = CalculationMethod.MuslimWorldLeague();
