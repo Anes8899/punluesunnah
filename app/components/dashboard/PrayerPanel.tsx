@@ -9,7 +9,9 @@ import { formatKhmerDate } from "@/lib/khmerFormatDate";
 import PrayerCard from "../features/prayer/PrayerCard";
 import { formatCountdown } from "@/lib/formatCountdown";
 import { usePrayerTimes } from "@/app/hook/usePrayerTimes";
-import { useGetCurrentLocation } from "@/app/hook/userGetCurrentLocation";
+import { useGetCurrentLocation } from "@/app/hook/useGetCurrentLocation";
+import { useGetCityName } from "@/app/hook/useGetCityName";
+import { Badge } from "../ui/badge";
 
 export const PRAYERS = [
   { key: "fajr", label: "Fajr", icon: "sunrise" },
@@ -27,11 +29,14 @@ const useKhmerDate = (date: Date = new Date()) => {
 };
 
 export default function PrayerPanel() {
+  const { data: location } = useGetCurrentLocation();
   const [countdown, setCountdown] = useState("");
   const [nextSalah, setNextPrayer] = useState<PrayerKey>("fajr");
   const KhmerDate = useKhmerDate();
-  const {data: location, } = useGetCurrentLocation();
-  const { data: times, isLoading } = usePrayerTimes(location?.coords.latitude, location?.coords.longitude);
+  const lat = location?.coords.latitude;
+  const lng = location?.coords.longitude;
+  const { data: times, isLoading } = usePrayerTimes(lat, lng);
+  const { data: addr } = useGetCityName(lat, lng);
 
   // countdown ticker
   useEffect(() => {
@@ -68,10 +73,10 @@ export default function PrayerPanel() {
             ម៉ោងសឡាត
           </h1>
         </div>
-        <div className="flex items-center justify-center gap-1 px-2">
-          <MapPin className="w-4 h-4 shrink-0 text-red-500" />
-          <p>Phnom Penh</p>
-        </div>
+          <Badge className="flex items-center gap-1.5 px-2.5 py-1 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300">
+           <MapPin/>
+            {addr?.town} · {addr?.state}
+          </Badge>
         <div className="flex items-center justify-center gap-1 px-2">
           <p>{getHijriDate()}</p>
         </div>
@@ -103,7 +108,7 @@ export default function PrayerPanel() {
           </div>
         </div>
       </div>
-      <div className="flex gap-2 pt-3 items-center justify-center">
+      <div className="sm:flex-row flex flex-col gap-2 pt-3 items-center justify-center">
         {PRAYERS.map(({ key, label, icon }) => (
           <PrayerCard
             key={key}
