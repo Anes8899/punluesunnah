@@ -2,7 +2,6 @@
 
 import "./globals.css";
 import { Battambang, Noto_Naskh_Arabic } from "next/font/google";
-import myImage from "@/app/assets/icon/logo.png";
 import Image from "next/image";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -47,7 +46,7 @@ export default function RootLayout({
             {/* <div className="w-10 h-10 rounded-full bg-[#00966b] flex items-center justify-center text-white font-bold">
               LS
             </div> */}
-            <Image src={myImage} alt="description" width={100} height={100} />
+            <Image src="/assets/icon/logo.png" alt="description" width={100} height={100} />
             <div>
               <h1 className="font-bold text-lg text-slate-800">
                 The Light Of Sunnah

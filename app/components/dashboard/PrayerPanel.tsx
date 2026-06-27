@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Clock, MapPin } from "lucide-react";
-import { mosque } from "@/app/assets/icon";
+import { mosque } from "@/public/assets/icon";
 import { useEffect, useMemo, useState } from "react";
 import { getHijriDate } from "@/lib/hijri";
 import { formatKhmerDate } from "@/lib/khmerFormatDate";
