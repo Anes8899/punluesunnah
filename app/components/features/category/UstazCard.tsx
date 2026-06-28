@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
@@ -9,29 +11,32 @@ import {
   CardHeader,
   CardTitle,
 } from "../../ui/card";
+import { useRouter } from "next/navigation";
 
-interface UstazCard {
-  href?: () => void;
+type UstazCard = {
+  id: number;
   image?: string;
   name: string;
   description?: string;
-}
+};
 
 export default function UstazCard({
-  href,
+  id,
   image,
   name,
   description,
 }: UstazCard) {
+  const router = useRouter();
   return (
     <Card className="relative mx-auto w-full max-w-sm pt-0">
-      <Image
-        src={`${image}`}
-        alt="Event cover"
-        width={90}
-        height={90}
-        className="h-full w-full object-contain"
-      />
+      <div className="relative w-full aspect-square bg-muted overflow-hidden rounded-t-xl">
+        <Image
+          src={`${image}`}
+          alt="Ustaz cover"
+          fill
+          className="object-contain"
+        />
+      </div>
       <CardHeader>
         <CardAction>
           <Badge variant="secondary">Featured</Badge>
@@ -40,7 +45,10 @@ export default function UstazCard({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button className="w-full" onClick={href}>
+        <Button
+          className="w-full"
+          onClick={() => router.push(`/ustaz/${id}`)}
+        >
           ចុចត្រុងនេះ
         </Button>
       </CardFooter>

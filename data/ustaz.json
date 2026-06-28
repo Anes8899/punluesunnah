@@ -7,9 +7,53 @@
     "featured": true,
     "specialization": "ហ្វីកហ៍",
     "description": "អុស្តាហ៍ដែលមានបទពិសោធន៍ច្រើនឆ្នាំ...",
+    "videos": [
+      { "id": "EML-4EQAqP0", "title": "មេរៀនទី១" },
+       { "id": "EML-4EQAqP0", "title": "មេរៀនទី១" },
+        { "id": "EML-4EQAqP0", "title": "មេរៀនទី១" }
+    ],
     "social": {
       "facebook": "https://facebook.com/ahmad",
       "youtube": "https://youtube.com/@ahmad"
+    }
+  },
+  {
+    "id": 2,
+    "name": "អុស្តាហ៍ យូស៊ុប",
+    "slug": "yusuf",
+    "image": "/assets/ustaz/yusuf.jpg",
+    "featured": false,
+    "specialization": "អាគីដា",
+    "description": "អ្នកបង្រៀនដែលចេះច្បាស់...",
+    "social": {
+      "facebook": "https://facebook.com/yusuf",
+      "youtube": null
+    }
+  },
+  {
+    "id": 2,
+    "name": "អុស្តាហ៍ យូស៊ុប",
+    "slug": "yusuf",
+    "image": "/assets/ustaz/yusuf.jpg",
+    "featured": false,
+    "specialization": "អាគីដា",
+    "description": "អ្នកបង្រៀនដែលចេះច្បាស់...",
+    "social": {
+      "facebook": "https://facebook.com/yusuf",
+      "youtube": null
+    }
+  },
+  {
+    "id": 2,
+    "name": "អុស្តាហ៍ យូស៊ុប",
+    "slug": "yusuf",
+    "image": "/assets/ustaz/yusuf.jpg",
+    "featured": false,
+    "specialization": "អាគីដា",
+    "description": "អ្នកបង្រៀនដែលចេះច្បាស់...",
+    "social": {
+      "facebook": "https://facebook.com/yusuf",
+      "youtube": null
     }
   },
   {
