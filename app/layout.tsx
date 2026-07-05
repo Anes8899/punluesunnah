@@ -42,8 +42,7 @@ export default function RootLayout({
         <QueryClientProvider client={queryClient}>
           {/* Top Branding Bar */}
           <header className="w-full bg-white px-6 py-4">
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
-              <div className="flex items-center gap-3">
+              <div className="flex items-start justify-start gap-3 px-8">
                 <Image
                   src="/assets/icon/logo.png"
                   alt="description"
@@ -51,13 +50,12 @@ export default function RootLayout({
                   height={100}
                 />
                 <div>
-                  <h1 className="font-bold text-lg text-slate-800">
+                  <h1 className="font-bold text-lg text-slate-800 items-start justify-start">
                     The Light Of Sunnah
                   </h1>
                   <p className="text-xs text-slate-400">ពន្លឺ នៃ ស៊ុណ្ណះ</p>
                 </div>
               </div>
-            </div>
           </header>
 
           {/* Dynamic Route Content */}
