@@ -8,6 +8,7 @@ import { useHorizontalScroll } from "@/app/hook/useHorizontalScroll";
 import { Video } from "@/lib/getUstazData";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { notFound } from "next/navigation";
+import { useState } from "react";
 
 interface UstazDetailClientProp {
   videos: Video[];
@@ -17,6 +18,7 @@ interface UstazDetailClientProp {
 const subject = ["Fiqh", "Hadith"];
 export function UstazDetailClient({ videos, name }: UstazDetailClientProp) {
   const { scrollRef, scroll } = useHorizontalScroll();
+  const [currentVideo, setCurrentVideo] = useState(videos[0]);
 
   if (!videos) {
     notFound();
@@ -32,8 +34,8 @@ export function UstazDetailClient({ videos, name }: UstazDetailClientProp) {
           className="w-full rounded-lg bg-muted overflow-hidden"
         >
           <iframe
-            src={`https://www.youtube.com/embed/${activeVideo?.id}`}
-            title={activeVideo?.title}
+            src={`https://www.youtube.com/embed/${currentVideo?.id}`}
+            title={currentVideo?.title}
             className="w-full h-full"
             allowFullScreen
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -42,7 +44,7 @@ export function UstazDetailClient({ videos, name }: UstazDetailClientProp) {
 
         {/* Title */}
         <h1 className="text-lg mt-5 font-semibold leading-snug line-clamp-2">
-          {activeVideo?.title ?? "វីដេអូ"}
+          {currentVideo?.title ?? "វីដេអូ"}
         </h1>
 
         <div className="flex items-center gap-3 mt-3 pb-3 border-b border-black/10">
@@ -106,7 +108,8 @@ export function UstazDetailClient({ videos, name }: UstazDetailClientProp) {
             index={i}
             name={name}
             videos={videos}
-            onClick={() => console.log(video.id)}
+            isActive={video.id === currentVideo.id}
+            onClick={() => setCurrentVideo(video)}
           />
         ))}
       </div>

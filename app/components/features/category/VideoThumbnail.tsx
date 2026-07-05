@@ -6,10 +6,18 @@ interface VideoThumbnailProp {
   video: Video;
   name: string;
   videos: Video[];
+  isActive: string;
   onClick: () => void;
 }
 
-export function VideoThumbnail({ video, index, name, videos, onClick }: VideoThumbnailProp) {
+export function VideoThumbnail({
+  video,
+  index,
+  name,
+  videos,
+  onClick,
+  isActive,
+}: VideoThumbnailProp) {
   return (
     <div
       key={video.id}
@@ -25,7 +33,7 @@ export function VideoThumbnail({ video, index, name, videos, onClick }: VideoThu
           width={100}
           height={100}
         />
-        {index === 0 && (
+        {isActive && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
             <div className="size-7 bg-white rounded-full flex items-center justify-center">
               <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-10 border-l-black border-b-[6px] border-b-transparent ml-0.5" />
