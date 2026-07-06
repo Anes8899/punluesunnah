@@ -11,6 +11,7 @@ export default function Page() {
           key={ustaz.id}
           name={ustaz.name}
           image={ustaz.image}
+          social={ustaz.social}
         />
       ))}
     </div>

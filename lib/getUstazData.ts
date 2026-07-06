@@ -2,6 +2,7 @@ import ustaz from "../data/ustaz.json";
 export interface Video {
   id: string;
   title: string;
+  type: "figh" | "hadith" | "akida";
 }
 
 export interface Ustaz {

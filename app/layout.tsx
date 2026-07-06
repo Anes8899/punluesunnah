@@ -3,6 +3,7 @@
 import "./globals.css";
 import { Battambang, Noto_Naskh_Arabic } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -42,20 +43,23 @@ export default function RootLayout({
         <QueryClientProvider client={queryClient}>
           {/* Top Branding Bar */}
           <header className="w-full bg-white px-6 py-4">
-              <div className="flex items-start justify-start gap-3 px-8">
-                <Image
-                  src="/assets/icon/logo.png"
-                  alt="description"
-                  width={100}
-                  height={100}
-                />
-                <div>
-                  <h1 className="font-bold text-lg text-slate-800 items-start justify-start">
-                    The Light Of Sunnah
-                  </h1>
-                  <p className="text-xs text-slate-400">ពន្លឺ នៃ ស៊ុណ្ណះ</p>
-                </div>
+            <Link
+              href="/"
+              className="flex items-start justify-start gap-3 px-8 w-fit"
+            >
+              <Image
+                src="/assets/icon/logo.png"
+                alt="The Light Of Sunnah logo"
+                width={100}
+                height={100}
+              />
+              <div>
+                <h1 className="font-bold text-lg text-slate-800 items-start justify-start">
+                  The Light Of Sunnah
+                </h1>
+                <p className="text-xs text-slate-400">ពន្លឺ នៃ ស៊ុណ្ណះ</p>
               </div>
+            </Link>
           </header>
 
           {/* Dynamic Route Content */}

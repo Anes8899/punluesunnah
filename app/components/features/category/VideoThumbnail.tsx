@@ -6,7 +6,7 @@ interface VideoThumbnailProp {
   video: Video;
   name: string;
   videos: Video[];
-  isActive: string;
+  isActive: boolean;
   onClick: () => void;
 }
 

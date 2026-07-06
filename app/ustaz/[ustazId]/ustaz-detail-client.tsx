@@ -15,16 +15,23 @@ interface UstazDetailClientProp {
   name: string;
 }
 
-const subject = ["Fiqh", "Hadith"];
+const subjects = [
+  { value: "all", label: "ទាំងអស់" },
+  { value: "figh", label: "Fiqh" },
+  { value: "hadith", label: "Hadith" },
+  { value: "akida", label: "Akida" },
+];
 export function UstazDetailClient({ videos, name }: UstazDetailClientProp) {
-  const { scrollRef, scroll } = useHorizontalScroll();
+  const { scrollRef, scroll, isOverflowing } = useHorizontalScroll();
   const [currentVideo, setCurrentVideo] = useState(videos[0]);
+  const [subject, setSubject] = useState("all");
 
   if (!videos) {
     notFound();
   }
 
-  const [activeVideo] = videos;
+  const filteredVideos =
+    subject === "all" ? videos : videos.filter((video) => video.type === subject);
 
   return (
     <div className="flex flex-col lg:flex-row px-3 gap-5 bg-white">
@@ -59,41 +66,52 @@ export function UstazDetailClient({ videos, name }: UstazDetailClientProp) {
       </div>
       <div className="basis-1/3">
         <div className="relative flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="shrink-0"
-            onClick={() => scroll("left")}
-          >
-            <ChevronLeft className="size-5" />
-          </Button>
+          {isOverflowing && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="shrink-0"
+              onClick={() => scroll("left")}
+            >
+              <ChevronLeft className="size-5" />
+            </Button>
+          )}
 
           <div
             ref={scrollRef}
             className="flex overflow-x-auto scroll-smooth gap-2 scrollbar-hide"
           >
-            <ToggleGroup type="single" variant="outline" defaultValue="all">
-              {subject.map((sub, index) => (
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              value={subject}
+              onValueChange={(value) => {
+                if (value) setSubject(value);
+              }}
+            >
+              {subjects.map((sub) => (
                 <ToggleGroupItem
-                  key={index}
-                  value={sub}
-                  aria-label={`Toggle ${sub}`}
+                  key={sub.value}
+                  value={sub.value}
+                  aria-label={`Toggle ${sub.label}`}
                   className="text-2xl p-5 shrink-0"
                 >
-                  {sub}
+                  {sub.label}
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
           </div>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="shrink-0"
-            onClick={() => scroll("right")}
-          >
-            <ChevronRight className="size-5" />
-          </Button>
+          {isOverflowing && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="shrink-0"
+              onClick={() => scroll("right")}
+            >
+              <ChevronRight className="size-5" />
+            </Button>
+          )}
         </div>
         <div className="px-3 py-2 mt-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-black/40">
@@ -101,13 +119,13 @@ export function UstazDetailClient({ videos, name }: UstazDetailClientProp) {
           </p>
         </div>
 
-        {videos.map((video, i) => (
+        {filteredVideos.map((video, i) => (
           <VideoThumbnail
-            key={i}
+            key={video.id}
             video={video}
             index={i}
             name={name}
-            videos={videos}
+            videos={filteredVideos}
             isActive={video.id === currentVideo.id}
             onClick={() => setCurrentVideo(video)}
           />

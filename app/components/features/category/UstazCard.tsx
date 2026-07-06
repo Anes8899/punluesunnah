@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
 import {
   Card,
@@ -18,6 +17,7 @@ type UstazCard = {
   image?: string;
   name: string;
   description?: string;
+  social?: { facebook: string | null; youtube: string | null };
 };
 
 export default function UstazCard({
@@ -25,6 +25,7 @@ export default function UstazCard({
   image,
   name,
   description,
+  social,
 }: UstazCard) {
   const router = useRouter();
   return (
@@ -38,15 +39,48 @@ export default function UstazCard({
         />
       </div>
       <CardHeader>
-        <CardAction>
-          <Badge variant="secondary">Featured</Badge>
+        <CardAction className="flex gap-2">
+          {social?.facebook && (
+            <Button variant="outline" size="icon" asChild>
+              <a
+                href={social.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Facebook របស់ ${name}`}
+              >
+                <Image
+                  src="/assets/Facebook_logo_(square).png"
+                  alt="Facebook"
+                  width={20}
+                  height={20}
+                />
+              </a>
+            </Button>
+          )}
+          {social?.youtube && (
+            <Button variant="outline" size="icon" asChild>
+              <a
+                href={social.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`YouTube របស់ ${name}`}
+              >
+                <Image
+                  src="/assets/YouTube_full-color_icon_(2024).svg.webp"
+                  alt="YouTube"
+                  width={20}
+                  height={20}
+                />
+              </a>
+            </Button>
+          )}
         </CardAction>
         <CardTitle>{name}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardFooter>
+      <CardFooter className="p-0">
         <Button
-          className="w-full"
+          className="w-full h-full py-4 rounded-t-none rounded-b-xl cursor-pointer font-semibold transition hover:bg-primary/85 active:bg-primary/75"
           onClick={() => router.push(`/ustaz/${id}`)}
         >
           ចុចត្រុងនេះ
