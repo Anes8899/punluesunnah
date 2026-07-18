@@ -1,5 +1,5 @@
-import CategoryRoutePage from "../components/features/category/CategoryRoutePage";
+import ZakatCalculator from "../components/features/category/ZakatCalculator";
 
 export default function Page() {
-  return <CategoryRoutePage title="គណនាហ្សកាត" />;
+  return <ZakatCalculator />;
 }

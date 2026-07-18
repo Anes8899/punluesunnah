@@ -1,5 +1,5 @@
-import CategoryRoutePage from "../components/features/category/CategoryRoutePage";
+import TazkiyahLibrary from "../components/features/category/TazkiyahLibrary";
 
 export default function Page() {
-  return <CategoryRoutePage title="សម្អាតរចិត្ត" />;
+  return <TazkiyahLibrary />;
 }

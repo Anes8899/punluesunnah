@@ -1,5 +1,5 @@
-import CategoryRoutePage from "../components/features/category/CategoryRoutePage";
+import AkhlaqLibrary from "../components/features/category/AkhlaqLibrary";
 
 export default function Page() {
-  return <CategoryRoutePage title="សីលធម៌" />;
+  return <AkhlaqLibrary />;
 }

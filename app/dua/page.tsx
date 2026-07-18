@@ -1,5 +1,5 @@
-import CategoryRoutePage from "../components/features/category/CategoryRoutePage";
+import DuaLibrary from "../components/features/category/DuaLibrary";
 
 export default function Page() {
-  return <CategoryRoutePage title="ទូអា" />;
+  return <DuaLibrary />;
 }

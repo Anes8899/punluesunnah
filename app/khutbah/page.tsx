@@ -1,5 +1,5 @@
-import CategoryRoutePage from "../components/features/category/CategoryRoutePage";
+import KhutbahLibrary from "../components/features/category/KhutbahLibrary";
 
 export default function Page() {
-  return <CategoryRoutePage title="ឃុតបាះ" />;
+  return <KhutbahLibrary />;
 }

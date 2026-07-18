@@ -1,5 +1,5 @@
-import CategoryRoutePage from "../components/features/category/CategoryRoutePage";
+import HadithLibrary from "../components/features/category/HadithLibrary";
 
 export default function Page() {
-  return <CategoryRoutePage title="ហាទីស" />;
+  return <HadithLibrary />;
 }
