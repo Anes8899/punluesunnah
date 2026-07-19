@@ -1,5 +1,6 @@
 import CategoryPanel from "./components/dashboard/CategoryPanel";
 import HadithCard from "./components/dashboard/HadithPanel";
+import MakkahLivePanel from "./components/dashboard/MakkahLivePanel";
 import PrayerPanel from "./components/dashboard/PrayerPanel";
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
      <PrayerPanel/>
      <HadithCard/>
      <CategoryPanel/>
+     <MakkahLivePanel/>
     </div>
   );
 }

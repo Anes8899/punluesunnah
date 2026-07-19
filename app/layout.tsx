@@ -1,7 +1,7 @@
 "use client";
 
 import "./globals.css";
-import { Battambang, Noto_Naskh_Arabic } from "next/font/google";
+import { Amiri, Battambang, Noto_Naskh_Arabic } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -17,6 +17,12 @@ const arabic = Noto_Naskh_Arabic({
   weight: ["400", "700"],
   subsets: ["arabic"],
   variable: "--font-arabic",
+});
+
+const quran = Amiri({
+  weight: ["400", "700"],
+  subsets: ["arabic"],
+  variable: "--font-quran",
 });
 
 export default function RootLayout({
@@ -35,7 +41,7 @@ export default function RootLayout({
       }),
   );
   return (
-    <html className={`${khmer.variable} ${arabic.variable}`}>
+    <html className={`${khmer.variable} ${arabic.variable} ${quran.variable}`}>
       <body
         className="bg-[#f0f4f8] min-h-screen font-sans text-slate-800 antialiased"
         suppressHydrationWarning

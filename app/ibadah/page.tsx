@@ -1,5 +1,5 @@
-import CategoryRoutePage from "../components/features/category/CategoryRoutePage";
+import IbadahOverview from "../components/features/category/IbadahOverview";
 
 export default function Page() {
-  return <CategoryRoutePage title="អ៊ីហ្ពើឌះ" />;
+  return <IbadahOverview />;
 }

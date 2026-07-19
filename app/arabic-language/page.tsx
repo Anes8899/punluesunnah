@@ -1,5 +1,5 @@
-import CategoryRoutePage from "../components/features/category/CategoryRoutePage";
+import ArabicGrammarLesson from "../components/features/category/ArabicGrammarLesson";
 
 export default function Page() {
-  return <CategoryRoutePage title="ភាសាអារ៉ាប់" />;
+  return <ArabicGrammarLesson />;
 }
