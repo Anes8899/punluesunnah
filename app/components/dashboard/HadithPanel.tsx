@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 
 export default function HadithPanel() {
   return (
-    <div className="rounded-lg bg-white shadow-md flex flex-col p-5 items-center">
+    <div className="rounded-lg bg-surface border border-[#e8d9bb] shadow-md flex flex-col p-5 items-center">
         <Badge className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300 mb-5">
           ហាទីសប្រចាំថ្ងៃ
         </Badge>

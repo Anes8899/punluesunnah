@@ -13,7 +13,7 @@ export default function AkhlaqLibrary() {
     AKHLAQ_VIRTUES.find((v) => v.id === selectedId) ?? null;
 
   return (
-    <div className="overflow-hidden rounded-lg bg-[#f5ead8]">
+    <div className="overflow-hidden rounded-lg bg-surface">
       {/* Hero */}
       <section className="relative overflow-hidden px-6 py-16 sm:px-12 sm:py-20 lg:px-16 lg:py-24">
         <div className="pointer-events-none absolute -top-28 -right-24 size-[340px] rounded-full bg-[#ffe1d0] opacity-55" />

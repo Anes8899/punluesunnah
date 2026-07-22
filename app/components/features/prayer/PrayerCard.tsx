@@ -1,6 +1,5 @@
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
-
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { cn } from "@/lib/utils";
 
 interface PrayerTime {
   nameTimePrayer: string;
@@ -16,25 +15,31 @@ export default function PrayerCard({
   nextPrayer,
 }: PrayerTime) {
   return (
-    <Card
-      className={`w-full rounded-2xl py-3 ${nextPrayer ? "bg-green-700" : ""}`}
+    <div
+      className={cn(
+        "flex flex-col items-center gap-2 py-4 px-2 rounded-[28px] text-center transition-colors",
+        nextPrayer ? "bg-[#c67139] shadow-md" : "bg-[#f9f4ed]",
+      )}
     >
-      <div className="flex flex-row sm:flex-col items-center gap-3 sm:gap-0 px-3 sm:px-0">
-        <div className="bg-muted rounded-full shrink-0 w-12 h-12 flex items-center justify-center mx-auto">
-          <DynamicIcon name={icon} color="black" className="w-6 h-6" />
-        </div>
-         <div className="flex flex-col sm:items-center">
-          
-         </div>
-        <CardHeader className="p-0 w-full">
-          <CardTitle className="mx-auto">{nameTimePrayer}</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0 flex flex-col items-center gap-1">
-          <p className="text-xl font-medium tabular-nums tracking-tight">
-            {timePrayer}
-          </p>
-        </CardContent>
+      <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center shrink-0">
+        <DynamicIcon name={icon} className="w-5 h-5 text-[#8c491a]" />
       </div>
-    </Card>
+      <div
+        className={cn(
+          "font-heading text-sm",
+          nextPrayer ? "text-white" : "text-[#201e1d]",
+        )}
+      >
+        {nameTimePrayer}
+      </div>
+      <div
+        className={cn(
+          "text-[15px] font-semibold tabular-nums",
+          nextPrayer ? "text-white" : "text-[#2e2b25]",
+        )}
+      >
+        {timePrayer}
+      </div>
+    </div>
   );
 }

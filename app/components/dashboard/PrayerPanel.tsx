@@ -65,50 +65,38 @@ export default function PrayerPanel() {
   if (!times) return <p>Failed to load.</p>;
 
   return (
-    <div className="rounded-lg bg-white shadow-md flex flex-col p-5">
-      <div className="w-52 mx-auto flex flex-col justify-center items-center">
-        <div className="flex flex-col items-center justify-center gap-2">
-          <Image src={mosque} alt="mosque" className="w-8 h-8" />
-          <h1 className="scroll-m-20 text-center text-lg font-extrabold tracking-tight text-balance">
-            ម៉ោងសឡាត
-          </h1>
+    <div className="rounded-[28px] bg-surface border border-surface-border pt-8 px-6 sm:px-7 pb-7 flex flex-col">
+      <div className="flex flex-col items-center gap-1.5 text-center">
+        <div className="w-14 h-14 rounded-full bg-peach flex items-center justify-center">
+          <Image src={mosque} alt="mosque" className="w-7 h-7" />
         </div>
-          <Badge className="flex items-center gap-1.5 px-2.5 py-1 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300">
-           <MapPin/>
-            {addr?.town} · {addr?.state}
-          </Badge>
-        <div className="flex items-center justify-center gap-1 px-2">
-          <p>{getHijriDate()}</p>
-        </div>
+        <h1 className="font-heading text-2xl text-ink mt-0.5">ម៉ោងសឡាត</h1>
+        <Badge className="bg-badge-green text-badge-green-foreground hover:bg-badge-green rounded-full text-[11px] font-normal px-2.5 py-1 h-auto flex items-center gap-1">
+          <MapPin className="w-3 h-3" />
+          {addr?.town} · {addr?.state}
+        </Badge>
       </div>
-      <div className="bg-card border rounded-2xl px-5 py-4 flex justify-between items-center gap-1">
-        <div className="flex flex-col gap-1">
-          <span className="text-[11px] text-muted-foreground uppercase tracking-widest font-medium">
-            ថ្ងៃនេះ
+
+      <div className="flex items-center justify-between gap-4 mt-5 px-5 py-4 bg-surface-soft rounded-[28px] flex-wrap">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs text-ink-muted">ថ្ងៃនេះ</span>
+          <span className="text-sm text-ink">
+            {KhmerDate} · {getHijriDate()}
           </span>
-          <span className="text-[15px] font-medium">{KhmerDate}</span>
         </div>
 
-        {/* <div className="w-px h-9 bg-border" /> */}
-
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-1.5">
-            <span className="text-[11px] text-muted-foreground uppercase tracking-widest font-medium">
-              បន្ទាប់
-            </span>
-            <span className="text-[11px] bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium">
-              {nextSalah}
-            </span>
-          </div>
-          <div className="flex gap-1">
-            <Clock className="w-4 h-4 text-muted-foreground shrink-0" />
-            <span className="text-base sm:text-lg w-5 font-medium tabular-nums tracking-tight">
-              -{countdown}
-            </span>
+        <div className="flex items-center gap-2.5">
+          <span className="inline-flex items-center bg-peach text-amber text-[11px] px-2.5 py-1 rounded-full">
+            បន្ទាប់ {nextSalah}
+          </span>
+          <div className="flex items-center gap-1.5 text-[15px] font-semibold tabular-nums text-amber">
+            <Clock className="w-[15px] h-[15px] animate-pulse shrink-0" />
+            {countdown}
           </div>
         </div>
       </div>
-      <div className="sm:flex-row flex flex-col gap-2 pt-3 items-center justify-center">
+
+      <div className="grid grid-cols-5 gap-1.5 sm:gap-3 mt-4">
         {PRAYERS.map(({ key, label, icon }) => (
           <PrayerCard
             key={key}

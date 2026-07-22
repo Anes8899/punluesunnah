@@ -39,6 +39,15 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+  --color-surface-border: var(--surface-border);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-peach: var(--peach);
+  --color-amber: var(--amber);
+  --color-badge-green: var(--badge-green);
+  --color-badge-green-foreground: var(--badge-green-foreground);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -92,6 +101,15 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --surface: #f5ead8;
+  --surface-soft: #f9f4ed;
+  --surface-border: #e8d9bb;
+  --ink: #201e1d;
+  --ink-muted: #645c50;
+  --peach: #fff2eb;
+  --amber: #8c491a;
+  --badge-green: #f0fae1;
+  --badge-green-foreground: #3d472b;
 }
 
 .dark {
