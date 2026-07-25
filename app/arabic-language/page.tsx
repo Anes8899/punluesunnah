@@ -1,4 +1,4 @@
-import ArabicGrammarLesson from "../components/features/category/ArabicGrammarLesson";
+import ArabicGrammarLesson from "../features/category/ArabicGrammarLesson";
 
 export default function Page() {
   return <ArabicGrammarLesson />;

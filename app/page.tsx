@@ -1,7 +1,7 @@
-import CategoryPanel from "./components/dashboard/CategoryPanel";
-import HadithCard from "./components/dashboard/HadithPanel";
-import MakkahLivePanel from "./components/dashboard/MakkahLivePanel";
-import PrayerPanel from "./components/dashboard/PrayerPanel";
+import CategoryPanel from "./dashboard/CategoryPanel";
+import HadithCard from "./dashboard/HadithPanel";
+import MakkahLivePanel from "./dashboard/MakkahLivePanel";
+import PrayerPanel from "./dashboard/PrayerPanel";
 
 export default function Home() {
   return (

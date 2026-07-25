@@ -1,4 +1,4 @@
-import UstazCard from "../components/features/category/UstazCard";
+import UstazCard from "../features/category/UstazCard";
 import ustazData from "@/data/ustaz.json";
 
 export default function Page() {

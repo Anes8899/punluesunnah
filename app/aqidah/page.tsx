@@ -1,10 +1,10 @@
-import AqidahPillar from "../components/features/category/AqidahPillar";
+import AqidahPillar from "../features/category/AqidahPillar";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "../components/ui/accordion";
+} from "../ui/accordion";
 
 const tawhidCategories = [
   {

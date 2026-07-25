@@ -1,4 +1,4 @@
-import IbadahOverview from "../components/features/category/IbadahOverview";
+import IbadahOverview from "../features/category/IbadahOverview";
 
 export default function Page() {
   return <IbadahOverview />;

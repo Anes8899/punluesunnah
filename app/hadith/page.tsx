@@ -1,4 +1,4 @@
-import HadithLibrary from "../components/features/category/HadithLibrary";
+import HadithLibrary from "../features/category/HadithLibrary";
 
 export default function Page() {
   return <HadithLibrary />;

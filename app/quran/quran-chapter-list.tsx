@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ChapterCard from "../components/features/category/ChapterCard";
+import ChapterCard from "../features/category/ChapterCard";
 import { Chapter } from "@/lib/getChapters";
 
 interface QuranChapterListProps {

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import VerseList from "../../components/features/category/VerseList";
-import { Button } from "../../components/ui/button";
+import VerseList from "../../features/category/VerseList";
+import { Button } from "../../ui/button";
 import { getChapters } from "@/lib/getChapters";
 import { getVerses } from "@/lib/getVerses";
 

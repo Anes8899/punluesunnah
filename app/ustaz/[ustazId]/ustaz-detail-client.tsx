@@ -1,9 +1,9 @@
 "use client";
 
-import { VideoThumbnail } from "@/app/components/features/category/VideoThumbnail";
-import { AspectRatio } from "@/app/components/ui/aspect-ratio";
-import { Button } from "@/app/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "@/app/components/ui/toggle-group";
+import { VideoThumbnail } from "@/app/features/category/VideoThumbnail";
+import { AspectRatio } from "@/app/ui/aspect-ratio";
+import { Button } from "@/app/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/app/ui/toggle-group";
 import { useHorizontalScroll } from "@/app/hook/useHorizontalScroll";
 import { Video } from "@/lib/getUstazData";
 import { ChevronLeft, ChevronRight } from "lucide-react";
