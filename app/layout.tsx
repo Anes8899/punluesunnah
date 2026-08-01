@@ -43,12 +43,12 @@ export default function RootLayout({
   return (
     <html className={`${khmer.variable} ${arabic.variable} ${quran.variable}`}>
       <body
-        className="bg-surface min-h-screen font-sans text-slate-800 antialiased"
+        className="bg-surface-soft min-h-screen font-sans text-slate-800 antialiased"
         suppressHydrationWarning
       >
         <QueryClientProvider client={queryClient}>
           {/* Top Branding Bar */}
-          <header className="w-full bg-surface px-6 py-4">
+          <header className="w-full bg-surface-soft px-6 py-4">
             <Link
               href="/"
               className="flex items-start justify-start gap-3 px-8 w-fit"

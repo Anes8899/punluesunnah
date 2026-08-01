@@ -18,7 +18,7 @@ export default function PrayerCard({
     <div
       className={cn(
         "flex flex-col items-center gap-2 py-4 px-2 rounded-[28px] text-center transition-colors",
-        nextPrayer ? "bg-[#c67139] shadow-md" : "bg-[#f9f4ed]",
+        nextPrayer ? "bg-[#00966b] shadow-md" : "bg-[#f9f4ed]",
       )}
     >
       <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center shrink-0">

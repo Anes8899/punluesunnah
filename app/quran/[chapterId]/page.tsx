@@ -27,44 +27,12 @@ export default async function ChapterPage({
   console.log(chapter);
 
   return (
-    <div className="mt-4 border">
-      <div className="flex items-center justify-between gap-3">
-        <Button asChild variant="outline">
-          <Link href="/quran">ត្រឡប់ក្រោយ</Link>
-        </Button>
-
-        <div className="flex gap-2">
-          {prevId ? (
-            <Button asChild variant="outline" size="icon">
-              <Link href={`/quran/${prevId}`} aria-label="ជំពូកមុន">
-                <ChevronLeft />
-              </Link>
-            </Button>
-          ) : (
-            <Button variant="outline" size="icon" disabled>
-              <ChevronLeft />
-            </Button>
-          )}
-
-          {nextId ? (
-            <Button asChild variant="outline" size="icon">
-              <Link href={`/quran/${nextId}`} aria-label="ជំពូកបន្ទាប់">
-                <ChevronRight />
-              </Link>
-            </Button>
-          ) : (
-            <Button variant="outline" size="icon" disabled>
-              <ChevronRight />
-            </Button>
-          )}
-        </div>
-      </div>
-
+    <div className="mt-4">
       <div className="mt-6 text-center">
-        <p className="text-xs tracking-wide text-slate-400 uppercase">
+        {/* <p className="text-xs tracking-wide text-slate-400 uppercase">
           ជំពូក {chapter.id} · {chapter.revelation_place} ·{" "}
           {chapter.verses_count} Aya
-        </p>
+        </p> */}
         <p className="font-arabic mt-2 text-4xl text-[#00966b]">
           {chapter.name_arabic}
         </p>
@@ -74,15 +42,45 @@ export default async function ChapterPage({
         <p className="text-sm text-slate-500">{chapter.translated_name.name}</p>
       </div>
 
-      <div dir="rtl" className="flex flex-wrap items-center justify-center text-right w-full max-w-170 mx-auto gap-3 px-4">
+      <div
+        dir="rtl"
+        className="flex flex-wrap items-center justify-center text-right w-full max-w-170 mx-auto gap-3 px-4 mt-10"
+      >
         {verses.map((vers) => (
           <VerseList
             key={vers.id}
-            showBismillah={chapter.bismillah_pre} 
+            showBismillah={chapter.bismillah_pre}
             text_uthmani={vers.text_uthmani}
             verse_number={vers.verse_number}
           />
         ))}
+
+        <div className="flex items-center justify-center gap-3 mt-6 w-full">
+          <div className="flex gap-2">
+            {nextId ? (
+              <Button asChild variant="outline" size="icon">
+                <Link href={`/quran/${nextId}`} aria-label="ជំពូកបន្ទាប់">
+                  <ChevronRight />
+                </Link>
+              </Button>
+            ) : (
+              <Button variant="outline" size="icon" disabled>
+                <ChevronRight />
+              </Button>
+            )}
+            {prevId ? (
+              <Button asChild variant="outline" size="icon">
+                <Link href={`/quran/${prevId}`} aria-label="ជំពូកមុន">
+                  <ChevronLeft />
+                </Link>
+              </Button>
+            ) : (
+              <Button variant="outline" size="icon" disabled>
+                <ChevronLeft />
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
