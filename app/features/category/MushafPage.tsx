@@ -58,8 +58,8 @@ export default function MushafPage({
           <div
             key={line.key}
             dir="rtl"
-            className={`font-arabic flex flex-nowrap items-baseline gap-x-3 text-2xl leading-loose text-slate-800 md:text-4xl ${
-              centered ? "justify-center" : "justify-between"
+            className={`font-arabic flex w-fit flex-nowrap items-baseline gap-x-1 mx-auto text-2xl leading-loose text-slate-800 md:text-4xl ${
+              centered ? "justify-center" : "justify-start"
             }`}
           >
             {line.words.map((word, index) =>
