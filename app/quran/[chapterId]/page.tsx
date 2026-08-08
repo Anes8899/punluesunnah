@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import VerseList from "../../features/category/VerseList";
+import MushafPage from "../../features/category/MushafPage";
 import { Button } from "../../ui/button";
 import { getChapters } from "@/lib/getChapters";
 import { getVerses } from "@/lib/getVerses";
+import { buildMushafLines } from "@/lib/mushafLines";
 
 export default async function ChapterPage({
   params,
@@ -16,6 +17,8 @@ export default async function ChapterPage({
 
   const [chapters, verses] = await Promise.all([getChapters(), getVerses(id)]);
 
+  console.log(chapters, "verse");
+
   const chapter = chapters.find((c) => c.id === id);
   if (!chapter) {
     notFound();
@@ -24,7 +27,7 @@ export default async function ChapterPage({
   const prevId = id > 1 ? id - 1 : null;
   const nextId = id < 114 ? id + 1 : null;
 
-  console.log(chapter);
+  const lines = buildMushafLines(verses);
 
   return (
     <div className="mt-4">
@@ -44,16 +47,14 @@ export default async function ChapterPage({
 
       <div
         dir="rtl"
-        className="flex flex-wrap items-center justify-center text-right w-full max-w-170 mx-auto gap-3 px-4 mt-10"
+        className="w-full max-w-3xl mx-auto px-4 mt-10 overflow-x-auto"
       >
-        {verses.map((vers) => (
-          <VerseList
-            key={vers.id}
-            showBismillah={chapter.bismillah_pre}
-            text_uthmani={vers.text_uthmani}
-            verse_number={vers.verse_number}
-          />
-        ))}
+        <MushafPage
+          lines={lines}
+          centeredVerseRange={
+            id === 1 ? [1, chapter.verses_count] : id === 2 ? [1, 5] : undefined
+          }
+        />
 
         <div className="flex items-center justify-center gap-3 mt-6 w-full">
           <div className="flex gap-2">
