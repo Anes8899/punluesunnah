@@ -32,14 +32,30 @@ const CategoryList = [
   { icon: scholar, label: "អ៊ូស្តើស", href: "/ustaz" },
 ];
 
+const CardColors = [
+  "bg-peach",
+  "bg-blue-100",
+  "bg-emerald-100",
+  "bg-violet-100",
+  "bg-rose-100",
+  "bg-amber-100",
+  "bg-cyan-100",
+  "bg-lime-100",
+];
+
 export default function CategoryPanel() {
     const router = useRouter();
 
   return (
-    // flex flex-wrap justify-center gap-x-2 gap-y-4
-    <div className="grid grid-cols-1 gap-4 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 mx-auto">
-      {CategoryList.map((cat) => (
-        <CategoryCard key={cat.label} icon={cat.icon} label={cat.label} onClick={() => cat.href ? router.push(cat.href) : undefined} />
+    <div className="grid w-full gap-4 grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
+      {CategoryList.map((cat, index) => (
+        <CategoryCard
+          key={cat.label}
+          icon={cat.icon}
+          label={cat.label}
+          color={CardColors[index % CardColors.length]}
+          onClick={() => cat.href ? router.push(cat.href) : undefined}
+        />
       ))}
     </div>
   );

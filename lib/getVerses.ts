@@ -7,12 +7,20 @@ export interface QuranWord {
   char_type_name: string;
 }
 
+export interface Translation {
+  text: string;
+  resource_id: number;
+}
+
 export interface Verse {
   id: number;
   verse_key: string;
   verse_number: number;
   text_uthmani: string;
+  juz_number: number;
+  hizb_number: number;
   words: QuranWord[];
+  translations: Translation[];
 }
 
 // mushaf=19 is the QCF V4 Tajweed mushaf layout; code_v2 carries the colored
@@ -27,7 +35,7 @@ export async function getVerses(chapterId: number): Promise<Verse[]> {
   const { access_token } = await getAccessToken();
 
   const res = await fetch(
-    `https://apis.quran.foundation/content/api/v4/verses/by_chapter/${chapterId}?fields=text_uthmani&words=true&word_fields=code_v2,page_number,line_number,char_type_name&mushaf=19&per_page=300`,
+    `https://apis.quran.foundation/content/api/v4/verses/by_chapter/${chapterId}?fields=text_uthmani,juz_number,hizb_number&words=true&word_fields=code_v2,page_number,line_number,char_type_name&translations=20&mushaf=19&per_page=300`,
     {
       headers: {
         "x-auth-token": access_token,
