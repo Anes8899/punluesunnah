@@ -19,7 +19,7 @@ import {
 
 const CategoryList = [
   { icon: kaaba, label: "គោលជំនឿ", href: "/aqidah" },
-  { icon: sujud, label: "អ៊ីហ្ពើឌះ", href: "/ibadah" },
+  { icon: sujud, label: "ហ្វិកហ៍", href: "/figh" },
   { icon: book, label: "អាល់គុរអាន", href: "/quran" },
   { icon: hadist, label: "ហាទីស", href: "/hadith" },
   { icon: arabicLanguage, label: "ភាសាអារ៉ាប់", href: "/arabic-language" },
