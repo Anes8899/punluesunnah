@@ -13,7 +13,7 @@ interface CategoryCardProps {
 export default function CategoryCard({ icon, label, onClick, color = "bg-peach" }: CategoryCardProps) {
   return (
     <Card
-      className={`group flex-row items-center gap-3 overflow-hidden ${color} py-5 cursor-pointer transition-shadow hover:shadow-md border-none`}
+      className={`group flex-row items-center gap-3 overflow-hidden ${color} py-5 cursor-pointer transition-shadow hover:shadow-md ring-0`}
       onClick={onClick}
     >
       <CardContent className="flex min-w-0 flex-1 flex-col gap-1 px-0 pl-4">

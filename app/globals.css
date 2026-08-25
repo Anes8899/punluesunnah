@@ -7,6 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-page: var(--page);
   --font-sans: var(--font-khmer);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
@@ -101,6 +102,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --page: #faf6ef;
   --surface: #f5ead8;
   --surface-soft: #f9f4ed;
   --surface-border: #e8d9bb;
@@ -144,7 +146,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  
+  --page: oklch(0.145 0 0);
 }
 
 @layer base {

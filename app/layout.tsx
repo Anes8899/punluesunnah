@@ -43,12 +43,12 @@ export default function RootLayout({
   return (
     <html className={`${khmer.variable} ${arabic.variable} ${quran.variable}`}>
       <body
-        className="bg-surface-soft min-h-screen font-sans text-slate-800 antialiased"
+        className="bg-page min-h-screen font-sans text-ink antialiased"
         suppressHydrationWarning
       >
         <QueryClientProvider client={queryClient}>
           {/* Top Branding Bar */}
-          <header className="w-full bg-surface-soft px-6 py-4">
+          <header className="w-full bg-page px-6 py-4">
             <Link
               href="/"
               className="flex items-start justify-start gap-3 px-8 w-fit"
@@ -60,10 +60,10 @@ export default function RootLayout({
                 height={100}
               />
               <div>
-                <h1 className="font-bold text-lg text-slate-800 items-start justify-start">
+                <h1 className="font-bold text-lg text-ink items-start justify-start">
                   The Light Of Sunnah
                 </h1>
-                <p className="text-xs text-slate-400">ពន្លឺ នៃ ស៊ុណ្ណះ</p>
+                <p className="text-xs text-ink-muted">ពន្លឺ នៃ ស៊ុណ្ណះ</p>
               </div>
             </Link>
           </header>

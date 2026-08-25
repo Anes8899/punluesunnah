@@ -14,9 +14,9 @@ export default function FighLessonCard({
   return (
     <Link
       href={`/figh/${bookId}/${lesson.id}`}
-      className="group/lesson flex items-center gap-3.5 rounded-2xl border border-surface-border bg-surface-soft px-4 py-3.5 no-underline transition-colors hover:border-amber/25 hover:bg-peach"
+      className="group/lesson flex items-center gap-3.5 rounded-2xl bg-linear-to-r from-badge-green via-badge-green/40 to-surface-soft px-4 py-3.5 no-underline shadow-sm transition-all hover:from-badge-green hover:via-badge-green hover:to-surface-soft hover:shadow-md"
     >
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-peach text-sm font-bold text-amber transition-colors group-hover/lesson:bg-background">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-background to-badge-green text-sm font-bold text-badge-green-foreground shadow-sm transition-all group-hover/lesson:from-badge-green-foreground group-hover/lesson:to-badge-green-foreground group-hover/lesson:text-badge-green">
         {lesson.id}
       </span>
 
@@ -29,7 +29,7 @@ export default function FighLessonCard({
         </span>
       </span>
 
-      <ChevronRight className="size-4 shrink-0 text-ink-muted transition-all group-hover/lesson:translate-x-0.5 group-hover/lesson:text-amber" />
+      <ChevronRight className="size-4 shrink-0 text-ink-muted transition-all group-hover/lesson:translate-x-0.5 group-hover/lesson:text-badge-green-foreground" />
     </Link>
   );
 }

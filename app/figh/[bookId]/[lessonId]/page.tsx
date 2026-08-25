@@ -35,7 +35,7 @@ export default async function FighLessonPage({
   const { book, lesson } = found;
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6">
+    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 lg:max-w-3xl lg:py-10">
       <Breadcrumb className="mb-3">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -56,8 +56,10 @@ export default async function FighLessonPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <p className="font-arabic text-3xl text-amber">{lesson.arabic_title}</p>
-      <h1 className="mt-1 mb-6 text-2xl font-bold text-ink sm:text-3xl">
+      <p className="font-arabic text-3xl text-amber lg:text-4xl">
+        {lesson.arabic_title}
+      </p>
+      <h1 className="mt-1 mb-6 text-2xl font-bold text-ink sm:text-3xl lg:mb-8 lg:text-4xl">
         {lesson.khmer_title}
       </h1>
 
