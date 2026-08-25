@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import FighLessonCard from "../figh-lesson-card";
-import { FIGH_BOOKS, getFighBook } from "../figh-data";
+import { FIGH_BOOKS, getFighBook } from "@/lib/figh-data";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,7 +9,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "../../ui/breadcrumb";
+} from "@/app/ui/breadcrumb";
 
 export function generateStaticParams() {
   return FIGH_BOOKS.map((book) => ({ bookId: String(book.id) }));

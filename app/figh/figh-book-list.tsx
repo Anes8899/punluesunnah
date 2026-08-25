@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import FighBookCard from "./figh-book-card";
-import { FIGH_BOOKS } from "./figh-data";
+import { FIGH_BOOKS } from "@/lib/figh-data";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,7 +12,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "../ui/breadcrumb";
+} from "@/app/ui/breadcrumb";
 
 export default function FighBookList() {
   const [query, setQuery] = useState("");

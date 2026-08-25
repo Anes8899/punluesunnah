@@ -1,4 +1,4 @@
-import type { FighContentBlock, FighTone } from "./figh-data";
+import type { FighContentBlock, FighTone } from "@/lib/figh-data";
 
 const TONES: Record<FighTone, string> = {
   highlight: "border-amber/25 bg-peach text-amber",

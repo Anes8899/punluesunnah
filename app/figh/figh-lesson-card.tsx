@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import type { FighLesson } from "./figh-data";
+import type { FighLesson } from "@/lib/figh-data";
 
 interface FighLessonCardProps {
   bookId: number;

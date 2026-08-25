@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import FighLessonContent from "../../figh-lesson-content";
-import { FIGH_BOOKS, getFighLesson } from "../../figh-data";
+import { FIGH_BOOKS, getFighLesson } from "@/lib/figh-data";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,7 +9,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "../../../ui/breadcrumb";
+} from "@/app/ui/breadcrumb";
 
 export function generateStaticParams() {
   return FIGH_BOOKS.flatMap((book) =>

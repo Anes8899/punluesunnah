@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Card, CardContent } from "../ui/card";
-import type { FighBook } from "./figh-data";
+import { Card, CardContent } from "@/app/ui/card";
+import type { FighBook } from "@/lib/figh-data";
 
 const ACCENTS = [
   { tint: "bg-badge-green", text: "text-badge-green-foreground" },
