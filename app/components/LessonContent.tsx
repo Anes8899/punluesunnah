@@ -1,6 +1,28 @@
-import type { FighContentBlock, FighTone } from "@/lib/figh-data";
+export type Tone = "highlight" | "success";
 
-const TONES: Record<FighTone, string> = {
+export type ContentBlock =
+  | { type: "text"; text: string }
+  | { type: "definition"; label: string; text: string }
+  | { type: "divider"; text: string }
+  | { type: "callout"; text: string; tone?: Tone }
+  | {
+      type: "evidence";
+      kind: "quran" | "hadith";
+      arabic: string;
+      intro?: string;
+      source?: string;
+      translation?: string;
+      translation_source?: string;
+    }
+  | {
+      type: "section";
+      title: string;
+      blocks: ContentBlock[];
+      number?: string;
+      tone?: Tone;
+    };
+
+const TONES: Record<Tone, string> = {
   highlight: "bg-peach/50 text-amber",
   success: "bg-badge-green/50 text-badge-green-foreground",
 };
@@ -11,7 +33,7 @@ function wrapArabic(kind: "quran" | "hadith", arabic: string) {
   return kind === "quran" ? `﴿ ${arabic} ﴾` : `(( ${arabic} ))`;
 }
 
-function Block({ block }: { block: FighContentBlock }) {
+function Block({ block }: { block: ContentBlock }) {
   switch (block.type) {
     case "text":
       return (
@@ -109,7 +131,7 @@ function Block({ block }: { block: FighContentBlock }) {
   }
 }
 
-function Blocks({ blocks }: { blocks: FighContentBlock[] }) {
+function Blocks({ blocks }: { blocks: ContentBlock[] }) {
   return (
     <div className="grid gap-3.5 lg:gap-5">
       {blocks.map((block, i) => (
@@ -119,10 +141,10 @@ function Blocks({ blocks }: { blocks: FighContentBlock[] }) {
   );
 }
 
-export default function FighLessonContent({
+export default function LessonContent({
   content,
 }: {
-  content: FighContentBlock[];
+  content: ContentBlock[];
 }) {
   return <Blocks blocks={content} />;
 }

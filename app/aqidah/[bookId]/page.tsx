@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import AqidahLessonCard from "../aqidah-lesson-card";
+import BookCard from "@/app/components/BookCard";
 import { AQIDAH_BOOKS, getAqidahBook } from "@/lib/aqidah-data";
 import {
   Breadcrumb,
@@ -28,7 +28,7 @@ export default async function AqidahBookPage({
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
       <Breadcrumb className="mb-3">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -49,14 +49,20 @@ export default async function AqidahBookPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <p className="font-arabic text-3xl text-amber">{book.arabic_title}</p>
+      <p className="font-arabic text-3xl text-amber text-center">{book.arabic_title}</p>
       <h1 className="mt-1 mb-6 text-2xl font-bold text-ink sm:text-3xl">
         {book.khmer_title}
       </h1>
 
-      <div className="grid gap-3.5">
+      <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
         {book.lessons.map((lesson) => (
-          <AqidahLessonCard key={lesson.id} bookId={book.id} lesson={lesson} />
+          <BookCard
+            key={lesson.id}
+            href={`/aqidah/${book.id}/${lesson.id}`}
+            badge={lesson.id}
+            arabicTitle={lesson.arabic_title}
+            khmerTitle={lesson.khmer_title}
+          />
         ))}
       </div>
 

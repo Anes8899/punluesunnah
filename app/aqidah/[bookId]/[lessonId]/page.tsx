@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import AqidahLessonContent from "../../aqidah-lesson-content";
+import LessonContent from "@/app/components/LessonContent";
 import { AQIDAH_BOOKS, getAqidahLesson } from "@/lib/aqidah-data";
 import {
   Breadcrumb,
@@ -35,9 +35,15 @@ export default async function AqidahLessonPage({
   const { book, lesson } = found;
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 lg:max-w-3xl lg:py-10">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
       <Breadcrumb className="mb-3">
         <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">ទំព័រដើម</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
               <Link href="/aqidah">សៀវភៅទាំងអស់</Link>
@@ -64,7 +70,7 @@ export default async function AqidahLessonPage({
       </h1>
 
       {lesson.content.length > 0 ? (
-        <AqidahLessonContent content={lesson.content} />
+        <LessonContent content={lesson.content} />
       ) : (
         <p className="py-10 text-center text-sm text-ink-muted">
           មិនទាន់មានខ្លឹមសារមេរៀនទេ

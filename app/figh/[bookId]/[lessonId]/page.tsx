@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import FighLessonContent from "../../figh-lesson-content";
+import LessonContent from "@/app/components/LessonContent";
 import { FIGH_BOOKS, getFighLesson } from "@/lib/figh-data";
 import {
   Breadcrumb,
@@ -35,9 +35,15 @@ export default async function FighLessonPage({
   const { book, lesson } = found;
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 lg:max-w-3xl lg:py-10">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:py-10">
       <Breadcrumb className="mb-3">
         <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">ទំព័រដើម</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
               <Link href="/figh">សៀវភៅទាំងអស់</Link>
@@ -56,7 +62,7 @@ export default async function FighLessonPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <p className="font-arabic text-3xl text-amber lg:text-4xl">
+      <p className="font-arabic text-3xl text-amber lg:text-4xl text-center">
         {lesson.arabic_title}
       </p>
       <h1 className="mt-1 mb-6 text-2xl font-bold text-ink sm:text-3xl lg:mb-8 lg:text-4xl">
@@ -64,7 +70,7 @@ export default async function FighLessonPage({
       </h1>
 
       {lesson.content.length > 0 ? (
-        <FighLessonContent content={lesson.content} />
+        <LessonContent content={lesson.content} />
       ) : (
         <p className="py-10 text-center text-sm text-ink-muted">
           មិនទាន់មានខ្លឹមសារមេរៀនទេ
