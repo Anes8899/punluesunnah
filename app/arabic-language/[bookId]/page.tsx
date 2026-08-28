@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookCard from "@/app/components/BookCard";
-import { FIGH_BOOKS, getFighBook } from "@/lib/figh-data";
+import { ARABIC_BOOKS, getArabicBook } from "@/lib/arabic-data";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,16 +12,16 @@ import {
 } from "@/app/ui/breadcrumb";
 
 export function generateStaticParams() {
-  return FIGH_BOOKS.map((book) => ({ bookId: String(book.id) }));
+  return ARABIC_BOOKS.map((book) => ({ bookId: String(book.id) }));
 }
 
-export default async function FighBookPage({
+export default async function ArabicBookPage({
   params,
 }: {
   params: Promise<{ bookId: string }>;
 }) {
   const { bookId } = await params;
-  const book = getFighBook(Number(bookId));
+  const book = getArabicBook(Number(bookId));
 
   if (!book) {
     notFound();
@@ -39,7 +39,7 @@ export default async function FighBookPage({
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/figh">សៀវភៅទាំងអស់</Link>
+              <Link href="/arabic-language">ភាសាអារ៉ាប់</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -58,7 +58,7 @@ export default async function FighBookPage({
         {book.lessons.map((lesson) => (
           <BookCard
             key={lesson.id}
-            href={`/figh/${book.id}/${lesson.id}`}
+            href={`/arabic-language/${book.id}/${lesson.id}`}
             badge={lesson.id}
             arabicTitle={lesson.arabic_title}
             khmerTitle={lesson.khmer_title}

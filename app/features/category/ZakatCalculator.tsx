@@ -1,6 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Info } from "lucide-react";
+
+type Currency = "KHR" | "USD";
+
+const CURRENCIES: Record<Currency, { symbol: string; label: string; decimals: number }> = {
+  KHR: { symbol: "៛", label: "រៀល (៛)", decimals: 0 },
+  USD: { symbol: "$", label: "ដុល្លារ ($)", decimals: 2 },
+};
 
 interface ZakatState {
   cash: string;
@@ -12,6 +20,7 @@ interface ZakatState {
   receivable: string;
   payable: string;
   nisabStandard: "silver" | "gold";
+  currency: Currency;
 }
 
 const initialState: ZakatState = {
@@ -24,11 +33,16 @@ const initialState: ZakatState = {
   receivable: "",
   payable: "",
   nisabStandard: "silver",
+  currency: "KHR",
 };
 
 interface ZakatResult {
   goldValueFmt: string;
   silverValueFmt: string;
+  totalAssets: number;
+  totalLiabilities: number;
+  netWealth: number;
+  zakatDue: number;
   totalAssetsFmt: string;
   totalLiabilitiesFmt: string;
   netWealthFmt: string;
@@ -38,10 +52,20 @@ interface ZakatResult {
   eligible: boolean;
 }
 
-const fmt = (n: number) => "៛" + Math.round(n || 0).toLocaleString("en-US");
+const format = (n: number, currency: Currency) => {
+  const { symbol, decimals } = CURRENCIES[currency];
+  return (
+    symbol +
+    (n || 0).toLocaleString("en-US", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    })
+  );
+};
 
 function compute(s: ZakatState): ZakatResult {
   const num = (v: string) => Number(v) || 0;
+  const fmt = (n: number) => format(n, s.currency);
 
   const goldWeight = num(s.goldWeight);
   const goldPrice = num(s.goldPrice);
@@ -61,6 +85,10 @@ function compute(s: ZakatState): ZakatResult {
   return {
     goldValueFmt: fmt(goldValue),
     silverValueFmt: fmt(silverValue),
+    totalAssets,
+    totalLiabilities,
+    netWealth,
+    zakatDue,
     totalAssetsFmt: fmt(totalAssets),
     totalLiabilitiesFmt: fmt(totalLiabilities),
     netWealthFmt: fmt(netWealth),
@@ -71,65 +99,61 @@ function compute(s: ZakatState): ZakatResult {
   };
 }
 
-function Card({ kicker, title, children }: { kicker: string; title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-lg bg-white p-5 shadow-sm">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#00966b]">{kicker}</p>
-      <h3 className="mt-1 mb-3 text-base font-bold text-slate-800">{title}</h3>
-      {children}
-    </div>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <label className="mb-1 block text-xs font-medium text-slate-500">{label}</label>
-      {children}
-    </div>
-  );
-}
-
-function MoneyInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  return (
-    <input
-      type="number"
-      min={0}
-      placeholder="0"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 focus:border-[#00966b] focus:outline-none focus:ring-1 focus:ring-[#00966b]"
-    />
-  );
-}
-
-function Segmented<T extends string>({
-  name,
-  options,
+function Field({
+  label,
+  hint,
+  suffix,
   value,
   onChange,
+  help,
 }: {
-  name: string;
-  options: { value: T; label: string }[];
-  value: T;
-  onChange: (v: T) => void;
+  label: string;
+  hint?: string;
+  suffix?: string;
+  value: string;
+  onChange: (v: string) => void;
+  help?: string;
 }) {
   return (
-    <div role="radiogroup" aria-label={name} className="inline-flex overflow-hidden rounded-md border border-slate-200">
-      {options.map((opt, i) => (
-        <button
-          key={opt.value}
-          type="button"
-          role="radio"
-          aria-checked={value === opt.value}
-          onClick={() => onChange(opt.value)}
-          className={`px-3 py-1.5 text-xs font-medium transition ${
-            i > 0 ? "border-l border-slate-200" : ""
-          } ${value === opt.value ? "bg-[#00966b] text-white" : "bg-white text-slate-600 hover:bg-slate-50"}`}
-        >
-          {opt.label}
-        </button>
-      ))}
+    <div>
+      <div className="mb-1.5 flex items-center gap-1">
+        <label className="text-xs font-medium text-ink">{label}</label>
+        {hint && (
+          <span title={hint} className="text-ink-muted/70">
+            <Info className="h-3 w-3" aria-hidden />
+          </span>
+        )}
+      </div>
+      <div className="relative">
+        <input
+          type="number"
+          min={0}
+          placeholder="0"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={`w-full rounded-xl border border-surface-border bg-surface-soft px-3 py-2.5 text-sm text-ink transition placeholder:text-ink-muted/50 focus:border-amber focus:bg-card focus:outline-none focus:ring-1 focus:ring-amber ${
+            suffix ? "pr-16" : ""
+          }`}
+        />
+        {suffix && (
+          <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[11px] text-ink-muted">
+            {suffix}
+          </span>
+        )}
+      </div>
+      {help && <p className="mt-1 text-[11px] text-ink-muted">{help}</p>}
+    </div>
+  );
+}
+
+function Tile({ value, label, dot }: { value: string; label: string; dot: string }) {
+  return (
+    <div className="rounded-xl border border-surface-border bg-card px-3 py-2.5">
+      <p className="truncate text-sm font-semibold text-ink">{value}</p>
+      <p className="mt-1 flex items-center gap-1.5 text-[10.5px] text-ink-muted">
+        <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${dot}`} aria-hidden />
+        <span className="truncate">{label}</span>
+      </p>
     </div>
   );
 }
@@ -142,146 +166,189 @@ export default function ZakatCalculator() {
 
   const result = useMemo(() => compute(state), [state]);
 
+  const bar = useMemo(() => {
+    const parts = [
+      { key: "assets", value: Math.max(result.totalAssets, 0), color: "bg-chart-1" },
+      { key: "liabilities", value: Math.max(result.totalLiabilities, 0), color: "bg-chart-2" },
+      { key: "net", value: Math.max(result.netWealth, 0), color: "bg-chart-3" },
+      { key: "zakat", value: Math.max(result.zakatDue, 0), color: "bg-chart-4" },
+    ];
+    const total = parts.reduce((sum, p) => sum + p.value, 0);
+    return parts.map((p) => ({
+      ...p,
+      width: total > 0 ? `${Math.max((p.value / total) * 100, p.value > 0 ? 4 : 0)}%` : "25%",
+    }));
+  }, [result]);
+
   return (
-    <div className="mx-auto max-w-6xl">
-      <header className="rounded-lg bg-white p-6 shadow-sm sm:p-8">
-        <div className="flex flex-wrap items-baseline gap-3">
-          <h1 className="text-2xl font-bold text-slate-800 sm:text-3xl">ម៉ាស៊ីនគណនាហ្សកាត</h1>
-          <span className="inline-flex items-center rounded-full bg-[#00966b]/10 px-3 py-1 text-xs font-medium text-[#00966b]">
-            ឧបករណ៍ហិរញ្ញវត្ថុអ៊ីស្លាម
-          </span>
-        </div>
-        <p className="mt-2 max-w-[70ch] text-sm text-slate-500">
-          សូមបញ្ចូលទ្រព្យសម្បត្តិ និងបំណុលរបស់អ្នកខាងក្រោម។ ហ្សកាតត្រូវបង់នឹងត្រូវបានគណនាដោយស្វ័យប្រវត្តិ
-          ក្នុងអត្រា ២.៥% នៃទ្រព្យសម្បត្តិសុទ្ធ នៅពេលដែលវាលើសពីកម្រិតនិសាប។ ចំនួនទឹកប្រាក់គិតជារៀល (៛)។
-        </p>
-      </header>
-
-      <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start">
-        <div className="flex min-w-0 flex-1 flex-col gap-4">
-          <Card kicker="សាច់ប្រាក់" title="សាច់ប្រាក់ និងសមតុល្យធនាគារ">
-            <Field label="សាច់ប្រាក់ក្នុងដៃ និងសមតុល្យធនាគារ">
-              <MoneyInput value={state.cash} onChange={(v) => patch("cash", v)} />
-            </Field>
-          </Card>
-
-          <Card kicker="លោហធាតុមានតម្លៃ" title="មាស និងប្រាក់">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Field label="ទម្ងន់មាស (ក្រាម)">
-                <MoneyInput value={state.goldWeight} onChange={(v) => patch("goldWeight", v)} />
-              </Field>
-              <Field label="តម្លៃមាស/ក្រាម (៛)">
-                <MoneyInput value={state.goldPrice} onChange={(v) => patch("goldPrice", v)} />
-              </Field>
-              <Field label="ទម្ងន់ប្រាក់ (ក្រាម)">
-                <MoneyInput value={state.silverWeight} onChange={(v) => patch("silverWeight", v)} />
-              </Field>
-              <Field label="តម្លៃប្រាក់/ក្រាម (៛)">
-                <MoneyInput value={state.silverPrice} onChange={(v) => patch("silverPrice", v)} />
-              </Field>
-            </div>
-            <p className="mt-3 border-t border-slate-100 pt-3 text-xs text-slate-500">
-              តម្លៃមាស៖ <strong className="text-slate-700">{result.goldValueFmt}</strong>
-            </p>
-            <p className="text-xs text-slate-500">
-              តម្លៃប្រាក់៖ <strong className="text-slate-700">{result.silverValueFmt}</strong>
-            </p>
-          </Card>
-
-          <Card kicker="ជំនួញ" title="ទ្រព្យសម្បត្តិជំនួញ និងទំនិញសន្និធិ">
-            <Field label="តម្លៃទីផ្សារបច្ចុប្បន្ននៃទំនិញជំនួញ">
-              <MoneyInput value={state.business} onChange={(v) => patch("business", v)} />
-            </Field>
-          </Card>
-
-          <Card kicker="បំណុល" title="ប្រាក់ជំពាក់">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Field label="គេជំពាក់អ្នក (បូក)">
-                <MoneyInput value={state.receivable} onChange={(v) => patch("receivable", v)} />
-              </Field>
-              <Field label="អ្នកជំពាក់គេ (ដក)">
-                <MoneyInput value={state.payable} onChange={(v) => patch("payable", v)} />
-              </Field>
-            </div>
-          </Card>
-
-          <Card kicker="កម្រិត" title="ស្តង់ដារនិសាប">
-            <p className="text-xs leading-relaxed text-slate-500">
-              និសាបគឺជាទ្រព្យសម្បត្តិអប្បបរមាដែលធ្វើឱ្យហ្សកាតក្លាយជាកាតព្វកិច្ច — ស្មើនឹងប្រាក់ ៥៩៥ ក្រាម
-              ឬមាស ៨៥ ក្រាម។
-            </p>
-            <div className="mt-2">
-              <Segmented
-                name="nisabStandard"
-                value={state.nisabStandard}
-                onChange={(v) => patch("nisabStandard", v)}
-                options={[
-                  { value: "silver", label: "ប្រាក់ (៥៩៥ក្រាម)" },
-                  { value: "gold", label: "មាស (៨៥ក្រាម)" },
-                ]}
-              />
-            </div>
-          </Card>
-
-          <button
-            type="button"
-            onClick={() => setState(initialState)}
-            className="w-fit rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50"
-          >
-            កំណត់ឡើងវិញទាំងអស់
-          </button>
-        </div>
-
-        <div className="flex w-full flex-col gap-3 lg:sticky lg:top-4 lg:w-[380px]">
-          <div className="rounded-lg bg-white p-5 shadow-md">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#00966b]">លទ្ធផល</p>
-            <div className="mt-1">
-              <p className="text-xs text-slate-500">ហ្សកាតត្រូវបង់ (២.៥%)</p>
-              <p className="mt-1 text-3xl font-bold text-[#00966b]">{result.zakatDueFmt}</p>
-            </div>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              {!result.hasNisabInput && (
-                <span className="inline-flex items-center rounded-full border border-slate-200 px-2.5 py-1 text-[11px] text-slate-500">
-                  សូមបញ្ចូលតម្លៃមាស/ប្រាក់ ដើម្បីគណនានិសាប
-                </span>
-              )}
-              {result.hasNisabInput && (
-                <span
-                  className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
-                    result.eligible ? "bg-[#00966b]/10 text-[#00966b]" : "bg-slate-100 text-slate-500"
-                  }`}
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+      <div className="rounded-3xl bg-card p-5 shadow-sm sm:p-8 lg:p-10">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <h1 className="text-2xl font-bold text-ink sm:text-3xl">ម៉ាស៊ីនគណនាហ្សកាត</h1>
+              <div className="sm:w-[210px]">
+                <label htmlFor="currency" className="mb-1.5 block text-[11px] text-ink-muted">
+                  ជ្រើសរើសរូបិយប័ណ្ណ
+                </label>
+                <select
+                  id="currency"
+                  value={state.currency}
+                  onChange={(e) => patch("currency", e.target.value as Currency)}
+                  className="w-full rounded-xl border border-surface-border bg-card px-3 py-2.5 text-sm text-ink focus:border-amber focus:outline-none focus:ring-1 focus:ring-amber"
                 >
-                  {result.eligible ? "លើសនិសាប · ត្រូវបង់ហ្សកាត" : "ក្រោមនិសាប · មិនទាន់ជាកាតព្វកិច្ច"}
-                </span>
-              )}
+                  <option value="KHR">{CURRENCIES.KHR.label}</option>
+                  <option value="USD">{CURRENCIES.USD.label}</option>
+                </select>
+              </div>
             </div>
 
-            <div className="mt-4 flex flex-col gap-2 border-t border-slate-100 pt-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-slate-500">ទ្រព្យសម្បត្តិសរុប</span>
-                <span className="text-slate-800">{result.totalAssetsFmt}</span>
+            <h2 className="mt-8 mb-4 text-xl font-bold text-ink">ទ្រព្យសម្បត្តិ</h2>
+            <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
+              <Field
+                label="សាច់ប្រាក់"
+                hint="សាច់ប្រាក់ក្នុងដៃ និងសមតុល្យធនាគារ"
+                value={state.cash}
+                onChange={(v) => patch("cash", v)}
+              />
+              <Field
+                label="មាស"
+                hint="ទម្ងន់មាសសរុបដែលអ្នកកាន់កាប់"
+                suffix="ក្រាម"
+                value={state.goldWeight}
+                onChange={(v) => patch("goldWeight", v)}
+              />
+              <Field
+                label="ប្រាក់"
+                hint="ទម្ងន់ប្រាក់សរុបដែលអ្នកកាន់កាប់"
+                suffix="ក្រាម"
+                value={state.silverWeight}
+                onChange={(v) => patch("silverWeight", v)}
+              />
+              <Field
+                label={`តម្លៃមាស/ក្រាម (${CURRENCIES[state.currency].symbol})`}
+                hint={`តម្លៃទីផ្សារបច្ចុប្បន្នក្នុងមួយក្រាម (${CURRENCIES[state.currency].symbol})`}
+                value={state.goldPrice}
+                onChange={(v) => patch("goldPrice", v)}
+                help={`តម្លៃមាស៖ ${result.goldValueFmt}`}
+              />
+              <Field
+                label={`តម្លៃប្រាក់/ក្រាម (${CURRENCIES[state.currency].symbol})`}
+                hint={`តម្លៃទីផ្សារបច្ចុប្បន្នក្នុងមួយក្រាម (${CURRENCIES[state.currency].symbol})`}
+                value={state.silverPrice}
+                onChange={(v) => patch("silverPrice", v)}
+                help={`តម្លៃប្រាក់៖ ${result.silverValueFmt}`}
+              />
+              <Field
+                label="ទ្រព្យសម្បត្តិជំនួញ"
+                hint="តម្លៃទីផ្សារបច្ចុប្បន្ននៃទំនិញសន្និធិ"
+                value={state.business}
+                onChange={(v) => patch("business", v)}
+              />
+              <div className="sm:col-span-2">
+                <Field
+                  label="គេជំពាក់អ្នក"
+                  hint="ប្រាក់កម្ចីដែលអ្នករំពឹងថានឹងទទួលបានមកវិញ"
+                  value={state.receivable}
+                  onChange={(v) => patch("receivable", v)}
+                />
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">បំណុលសរុប</span>
-                <span className="text-slate-800">{result.totalLiabilitiesFmt}</span>
-              </div>
-              <div className="flex justify-between font-semibold">
-                <span className="text-slate-700">ទ្រព្យសម្បត្តិសុទ្ធសម្រាប់គណនាហ្សកាត</span>
-                <span className="text-slate-800">{result.netWealthFmt}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">កម្រិតនិសាប</span>
-                <span className="text-slate-800">{result.nisabThresholdFmt}</span>
-              </div>
+            </div>
+
+            <h2 className="mt-8 mb-4 text-xl font-bold text-ink">បំណុល</h2>
+            <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
+              <Field
+                label="អ្នកជំពាក់គេ"
+                hint="បំណុលដល់កំណត់សង ដែលត្រូវដកចេញ"
+                value={state.payable}
+                onChange={(v) => patch("payable", v)}
+              />
             </div>
           </div>
 
-          <p className="px-2 text-[11.5px] leading-relaxed text-slate-400">
-            ឧបករណ៍នេះមានគោលបំណងអប់រំតែប៉ុណ្ណោះ ដោយផ្អែកលើអត្រាហ្សកាតស្តង់ដារ ២.៥% នៃទ្រព្យសម្បត្តិសុទ្ធ។
-            វាមិនមែនជាសាសនកិច្ចវិនិច្ឆ័យ (ហ្វាត់វ៉ា) ទេ សូមផ្ទៀងផ្ទាត់ជាមួយអ្នកប្រាជ្ញសាសនាដែលមានសមត្ថភាពជានិច្ច
-            ជាពិសេសចំពោះទ្រព្យសកម្មពិសេស ដូចជាភាគហ៊ុន ឬសន្សំសម្រាប់និវត្តន៍។
-          </p>
+          <aside className="w-full rounded-3xl bg-surface-soft p-4 lg:sticky lg:top-6 lg:w-[360px]">
+            <div className="rounded-2xl bg-card p-5 text-center shadow-sm">
+              <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-ink-muted">
+                {state.currency === "USD" ? "ដុល្លារ (USD)" : "រៀល (KHR)"}
+              </p>
+              <p className="mt-2 text-4xl font-bold text-ink">{result.zakatDueFmt}</p>
+              <p className="mt-3 text-sm font-semibold text-ink">ការគណនាហ្សកាត</p>
+              <p className="mt-1 text-[11px] text-ink-muted">
+                គិតតាមអត្រា ២.៥% នៃទ្រព្យសម្បត្តិសុទ្ធ
+              </p>
+            </div>
+
+            <div className="mt-4 flex h-1.5 gap-1 overflow-hidden">
+              {bar.map((p) => (
+                <span
+                  key={p.key}
+                  style={{ width: p.width }}
+                  className={`rounded-full ${p.color}`}
+                  aria-hidden
+                />
+              ))}
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <Tile value={result.totalAssetsFmt} label="ទ្រព្យសម្បត្តិសរុប" dot="bg-chart-1" />
+              <Tile value={result.totalLiabilitiesFmt} label="បំណុលសរុប" dot="bg-chart-2" />
+              <Tile value={result.netWealthFmt} label="ទ្រព្យសម្បត្តិសុទ្ធ" dot="bg-chart-3" />
+              <Tile value={result.zakatDueFmt} label="ហ្សកាតត្រូវបង់" dot="bg-chart-4" />
+            </div>
+
+            <div className="mt-4">
+              <label
+                htmlFor="nisabStandard"
+                className="mb-1.5 block text-[11px] text-ink-muted"
+              >
+                ស្តង់ដារនិសាប
+              </label>
+              <select
+                id="nisabStandard"
+                value={state.nisabStandard}
+                onChange={(e) => patch("nisabStandard", e.target.value as ZakatState["nisabStandard"])}
+                className="w-full rounded-xl border border-surface-border bg-card px-3 py-2.5 text-sm text-ink focus:border-amber focus:outline-none focus:ring-1 focus:ring-amber"
+              >
+                <option value="silver">ប្រាក់ (៥៩៥ ក្រាម)</option>
+                <option value="gold">មាស (៨៥ ក្រាម)</option>
+              </select>
+            </div>
+
+            <p className="mt-3 text-center text-[11.5px] leading-relaxed text-ink-muted">
+              {result.hasNisabInput
+                ? result.eligible
+                  ? `ទ្រព្យសម្បត្តិសុទ្ធរបស់អ្នកលើសកម្រិតនិសាប (${result.nisabThresholdFmt}) ដូច្នេះហ្សកាតជាកាតព្វកិច្ច។`
+                  : `ហ្សកាតមិនទាន់ជាកាតព្វកិច្ចទេ ព្រោះទ្រព្យសម្បត្តិសុទ្ធនៅក្រោមកម្រិតនិសាប (${result.nisabThresholdFmt})។`
+                : "សូមបញ្ចូលតម្លៃមាស ឬប្រាក់ក្នុងមួយក្រាម ដើម្បីគណនាកម្រិតនិសាប។"}
+            </p>
+
+            <div className="mt-4 text-center">
+              <p className="text-sm font-semibold text-ink">តើអ្នកគណនាហ្សកាតរួចរាល់ហើយឬនៅ?</p>
+              <p className="mt-1 text-[11.5px] leading-relaxed text-ink-muted">
+                សូមប្រគល់ហ្សកាតរបស់អ្នកទៅកាន់អ្នកដែលសក្តិសមទទួល។
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                setState((prev) => ({
+                  ...initialState,
+                  currency: prev.currency,
+                  nisabStandard: prev.nisabStandard,
+                }))
+              }
+              className="mt-4 w-full rounded-full bg-amber px-4 py-3 text-sm font-semibold text-amber-foreground transition hover:opacity-90"
+            >
+              គណនាឡើងវិញ
+            </button>
+
+            <p className="mt-4 text-center text-[10.5px] leading-relaxed text-ink-muted">
+              ឧបករណ៍នេះមានគោលបំណងអប់រំតែប៉ុណ្ណោះ មិនមែនជាសាសនកិច្ចវិនិច្ឆ័យ (ហ្វាត់វ៉ា) ទេ
+              សូមផ្ទៀងផ្ទាត់ជាមួយអ្នកប្រាជ្ញសាសនាដែលមានសមត្ថភាព ជាពិសេសចំពោះទ្រព្យសកម្មពិសេស
+              ដូចជាភាគហ៊ុន ឬសន្សំសម្រាប់និវត្តន៍។
+            </p>
+          </aside>
         </div>
       </div>
     </div>

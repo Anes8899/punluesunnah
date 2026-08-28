@@ -58,7 +58,7 @@ export default function MushafPage({
           <div
             key={line.key}
             dir="rtl"
-            className={`font-arabic flex w-fit flex-nowrap items-baseline gap-x-1 mx-auto text-2xl leading-loose text-slate-800 md:text-4xl ${
+            className={`font-arabic flex w-fit flex-nowrap items-baseline gap-x-1 mx-auto text-2xl leading-loose text-ink md:text-4xl ${
               centered ? "justify-center" : "justify-start"
             }`}
           >

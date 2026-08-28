@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Search, X } from "lucide-react";
 import BookCard from "@/app/components/BookCard";
-import { AQIDAH_BOOKS } from "@/lib/aqidah-data";
+import { ARABIC_BOOKS } from "@/lib/arabic-data";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,17 +14,17 @@ import {
   BreadcrumbSeparator,
 } from "@/app/ui/breadcrumb";
 
-export default function AqidahBookList() {
+export default function ArabicBookList() {
   const [query, setQuery] = useState("");
 
   const q = query.trim().toLowerCase();
   const filteredBooks = q
-    ? AQIDAH_BOOKS.filter(
+    ? ARABIC_BOOKS.filter(
         (book) =>
           book.khmer_title.toLowerCase().includes(q) ||
           book.arabic_title.includes(query.trim()),
       )
-    : AQIDAH_BOOKS;
+    : ARABIC_BOOKS;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
@@ -37,15 +37,13 @@ export default function AqidahBookList() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>សៀវភៅទាំងអស់</BreadcrumbPage>
+            <BreadcrumbPage>ភាសាអារ៉ាប់</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-        <h1 className="text-2xl font-bold text-ink sm:text-3xl">
-          សៀវភៅទាំងអស់
-        </h1>
+        <h1 className="text-2xl font-bold text-ink sm:text-3xl">ភាសាអារ៉ាប់</h1>
 
         <div className="group relative w-full sm:w-72 md:w-80">
           <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-amber-ink" />
@@ -74,7 +72,7 @@ export default function AqidahBookList() {
         {filteredBooks.map((book) => (
           <BookCard
             key={book.id}
-            href={`/aqidah/${book.id}`}
+            href={`/arabic-language/${book.id}`}
             badge={book.id}
             arabicTitle={book.arabic_title}
             khmerTitle={book.khmer_title}

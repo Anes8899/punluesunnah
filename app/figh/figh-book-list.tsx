@@ -48,7 +48,7 @@ export default function FighBookList() {
         </h1>
 
         <div className="group relative w-full sm:w-72 md:w-80">
-          <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-amber" />
+          <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-amber-ink" />
           <input
             type="text"
             value={query}
@@ -62,7 +62,7 @@ export default function FighBookList() {
               type="button"
               onClick={() => setQuery("")}
               aria-label="សម្អាតការស្វែងរក"
-              className="absolute top-1/2 right-3 flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface hover:text-amber"
+              className="absolute top-1/2 right-3 flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface hover:text-amber-ink"
             >
               <X className="size-4" />
             </button>

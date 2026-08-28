@@ -1,5 +1,5 @@
-import ArabicGrammarLesson from "../features/category/ArabicGrammarLesson";
+import ArabicBookList from "./arabic-book-list";
 
 export default function Page() {
-  return <ArabicGrammarLesson />;
+  return <ArabicBookList />;
 }

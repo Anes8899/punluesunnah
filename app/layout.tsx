@@ -1,16 +1,23 @@
 "use client";
 
 import "./globals.css";
-import { Amiri, Battambang, Noto_Naskh_Arabic } from "next/font/google";
+import { Amiri, Battambang, Caprasimo, Noto_Naskh_Arabic } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const khmer = Battambang({
-  weight: ["400", "700"],
+  weight: ["400", "700", "900"],
   subsets: ["khmer"],
   variable: "--font-khmer",
+});
+
+// Display face for numerals — Khmer families have no slab cut of their own.
+const display = Caprasimo({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-caprasimo",
 });
 
 const arabic = Noto_Naskh_Arabic({
@@ -41,7 +48,9 @@ export default function RootLayout({
       }),
   );
   return (
-    <html className={`${khmer.variable} ${arabic.variable} ${quran.variable}`}>
+    <html
+      className={`${khmer.variable} ${display.variable} ${arabic.variable} ${quran.variable}`}
+    >
       <body
         className="bg-page min-h-screen font-sans text-ink antialiased"
         suppressHydrationWarning

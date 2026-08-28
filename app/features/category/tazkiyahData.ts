@@ -8,6 +8,7 @@ export interface TazkiyahEntry {
 export interface TazkiyahTopic {
   id: string;
   kicker: string;
+  arabic: string;
   title: string;
   short: string;
   group: "accent" | "accent2";
@@ -18,6 +19,7 @@ export const TAZKIYAH_TOPICS: TazkiyahTopic[] = [
   {
     id: "dhikr",
     kicker: "ជីកគើរ",
+    arabic: "الذِّكْر",
     title: "ការរំលឹកចាំអល់ឡោះ",
     short: "ធ្វើឲ្យដួងចិត្តស្ងប់ស្ងាត់ • ៣ ខ្លឹមសារ",
     group: "accent",
@@ -49,6 +51,7 @@ export const TAZKIYAH_TOPICS: TazkiyahTopic[] = [
   {
     id: "sabr",
     kicker: "សាប្រ",
+    arabic: "الصَّبْر",
     title: "ការអត់ធ្មត់",
     short: "ជំនឿលើផែនការរបស់អល់ឡោះ • ៣ ខ្លឹមសារ",
     group: "accent2",
@@ -79,6 +82,7 @@ export const TAZKIYAH_TOPICS: TazkiyahTopic[] = [
   {
     id: "tawakkul",
     kicker: "តាវ៉ាក់កុល",
+    arabic: "التَّوَكُّل",
     title: "ការប្រគល់ទុកចិត្ត",
     short: "ដាក់លទ្ធផលទៅអល់ឡោះ • ៣ ខ្លឹមសារ",
     group: "accent",
@@ -110,6 +114,7 @@ export const TAZKIYAH_TOPICS: TazkiyahTopic[] = [
   {
     id: "salah",
     kicker: "សឡាត",
+    arabic: "الصَّلَاة",
     title: "សឡាតជាការសម្រាក",
     short: "ឱកាសផ្អាកចេញពីលោកិយ • ៣ ខ្លឹមសារ",
     group: "accent2",
@@ -139,6 +144,7 @@ export const TAZKIYAH_TOPICS: TazkiyahTopic[] = [
   {
     id: "dua",
     kicker: "ដុអា",
+    arabic: "الدُّعَاء",
     title: "ការបួងសួង",
     short: "និយាយផ្ទាល់ទៅអល់ឡោះ • ៣ ខ្លឹមសារ",
     group: "accent",
@@ -169,6 +175,7 @@ export const TAZKIYAH_TOPICS: TazkiyahTopic[] = [
   {
     id: "shukr",
     kicker: "ស៊្ហូគើរ",
+    arabic: "الشُّكْر",
     title: "ការដឹងគុណ",
     short: "ផ្ដោតលើភាពគ្រប់គ្រាន់ • ៣ ខ្លឹមសារ",
     group: "accent2",
@@ -199,6 +206,7 @@ export const TAZKIYAH_TOPICS: TazkiyahTopic[] = [
   {
     id: "tafakkur",
     kicker: "តាហ្វាក់កូរ",
+    arabic: "التَّفَكُّر",
     title: "ការគិតពិចារណា",
     short: "ពិចារណាលើការបង្កើត • ៣ ខ្លឹមសារ",
     group: "accent",
@@ -227,6 +235,7 @@ export const TAZKIYAH_TOPICS: TazkiyahTopic[] = [
   {
     id: "rest",
     kicker: "ដុអាមុនគេង",
+    arabic: "الرَّاحَة",
     title: "ការសម្រាកចិត្ត",
     short: "ប្រគល់កង្វល់មុនចូលគេង • ៣ ខ្លឹមសារ",
     group: "accent2",
@@ -255,3 +264,7 @@ export const TAZKIYAH_TOPICS: TazkiyahTopic[] = [
     ],
   },
 ];
+
+export function getTazkiyahTopic(id: string): TazkiyahTopic | undefined {
+  return TAZKIYAH_TOPICS.find((topic) => topic.id === id);
+}

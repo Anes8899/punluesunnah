@@ -49,7 +49,7 @@ export default async function AqidahBookPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <p className="font-arabic text-3xl text-amber text-center">{book.arabic_title}</p>
+      <p className="font-arabic text-3xl text-amber-ink text-center">{book.arabic_title}</p>
       <h1 className="mt-1 mb-6 text-2xl font-bold text-ink sm:text-3xl">
         {book.khmer_title}
       </h1>

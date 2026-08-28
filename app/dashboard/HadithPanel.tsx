@@ -5,8 +5,8 @@ import { Button } from "../ui/button";
 
 export default function HadithPanel() {
   return (
-    <div className="rounded-lg bg-surface border border-[#e8d9bb] shadow-md flex flex-col p-5 items-center">
-        <Badge className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300 mb-5">
+    <div className="rounded-lg bg-surface shadow-md flex flex-col p-5 items-center">
+        <Badge className="bg-badge-green text-badge-green-foreground mb-5">
           ហាទីសប្រចាំថ្ងៃ
         </Badge>
       <div className="flex flex-col items-center justify-center gap-5">
@@ -19,13 +19,13 @@ export default function HadithPanel() {
         អ្នកដែលប្រសើរជាងគេក្នុងចំណោមពួកអ្នក គឺអ្នកដែលរៀនអាល់គួរអាន និងបង្រៀនវា
       </blockquote>
       <div className="flex flex-col gap-2 mt-5">
-        <span className="h-10 inline-flex items-center gap-2 px-5 py-2 rounded-sm bg-whiteborder border-white text-sm text-foreground relative bg-gray-100">
+        <span className="h-10 inline-flex items-center gap-2 px-5 py-2 rounded-sm border border-surface-border bg-surface-soft text-sm text-ink relative">
           {/* decorative dots */}
-          <BookOpen style={{ width: 20, height: 20 }} className="text-orange-400" />
+          <BookOpen style={{ width: 20, height: 20 }} className="text-amber-ink" />
           ប្រភព៖ អាល់ពូខរី (៥០២៧)
         </span>
 
-        <Button className="bg-green-700 h-14 rounded-full">
+        <Button className="h-14 rounded-full">
           អានបន្ថែម
           <MoveRight />
         </Button>

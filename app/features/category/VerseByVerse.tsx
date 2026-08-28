@@ -22,17 +22,17 @@ export default function VerseByVerse({ verses }: { verses: Verse[] }) {
       {verses.map((verse) => (
         <div
           key={verse.id}
-          className="border-b border-slate-200 py-6 first:pt-0 last:border-b-0"
+          className="border-b border-surface-border py-6 first:pt-0 last:border-b-0"
         >
           <div
             dir="rtl"
-            className="font-arabic flex flex-wrap items-baseline justify-end gap-x-2 text-right text-3xl leading-loose text-slate-800 md:text-4xl"
+            className="font-arabic flex flex-wrap items-baseline justify-end gap-x-2 text-right text-3xl leading-loose text-ink md:text-4xl"
           >
             <span>{verse.text_uthmani}</span>
             <AyahMarker number={verse.verse_number} />
           </div>
 
-          <p className="mt-4 text-lg text-slate-800">
+          <p className="mt-4 text-lg text-ink">
             {verse.verse_number}.{" "}
             <span
               dangerouslySetInnerHTML={{
@@ -41,13 +41,13 @@ export default function VerseByVerse({ verses }: { verses: Verse[] }) {
             />
           </p>
 
-          <div className="mt-4 flex items-center gap-3 overflow-x-auto text-sm whitespace-nowrap text-slate-500">
+          <div className="mt-4 flex items-center gap-3 overflow-x-auto text-sm whitespace-nowrap text-ink-muted">
             {LINKS.map((link, index) => (
               <div key={link.label} className="flex items-center gap-3">
-                {index > 0 && <span className="text-slate-300">|</span>}
+                {index > 0 && <span className="text-ink-muted/50">|</span>}
                 <button
                   type="button"
-                  className="flex shrink-0 items-center gap-1.5 py-1 hover:text-slate-700"
+                  className="flex shrink-0 items-center gap-1.5 py-1 hover:text-ink"
                 >
                   <link.icon className="size-4" />
                   {link.label}

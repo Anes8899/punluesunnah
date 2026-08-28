@@ -62,7 +62,7 @@ export default async function AqidahLessonPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <p className="font-arabic text-3xl text-amber lg:text-4xl">
+      <p className="font-arabic text-3xl text-amber-ink lg:text-4xl">
         {lesson.arabic_title}
       </p>
       <h1 className="mt-1 mb-6 text-2xl font-bold text-ink sm:text-3xl lg:mb-8 lg:text-4xl">

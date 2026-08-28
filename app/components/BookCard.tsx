@@ -16,19 +16,16 @@ export default function BookCard({
   return (
     <Link
       href={href}
-      className="group/book relative flex h-full flex-col items-center gap-3.5 rounded-2xl bg-linear-to-b from-badge-green via-badge-green/40 to-surface-soft px-3 pt-14 pb-5 text-center no-underline shadow-sm transition-all hover:from-badge-green hover:via-badge-green hover:to-surface-soft hover:shadow-md sm:px-4 sm:pt-16 sm:pb-6"
+      className="flex h-full flex-col gap-2 rounded-[32px] bg-[#ebddc5] p-5 text-left no-underline shadow-[0_1px_2px_rgba(46,43,37,0.14)] transition hover:-translate-y-0.5 hover:shadow-[0_3px_10px_rgba(46,43,37,0.16)]"
     >
-      <span className="absolute top-3 left-3 flex size-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-background to-badge-green text-sm font-bold text-badge-green-foreground shadow-sm transition-all group-hover/book:from-badge-green-foreground group-hover/book:to-badge-green-foreground group-hover/book:text-badge-green sm:size-10 sm:text-base">
+      <span className="flex size-[52px] shrink-0 items-center justify-center rounded-full bg-[#f0fae1] text-lg font-bold text-[#56633f]">
         {badge}
       </span>
-
-      <span className="flex min-w-0 flex-1 flex-col items-center">
-        <span className="font-arabic block text-2xl leading-relaxed text-balance text-amber sm:text-3xl">
-          {arabicTitle}
-        </span>
-        <span className="mt-3 block text-base leading-relaxed font-medium text-balance text-ink sm:mt-4 sm:text-lg">
-          {khmerTitle}
-        </span>
+      <span className="font-arabic text-2xl leading-relaxed text-[#8c491a]">
+        {arabicTitle}
+      </span>
+      <span className="font-khmer text-lg font-bold text-[#201e1d]">
+        {khmerTitle}
       </span>
     </Link>
   );

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import LessonContent from "@/app/components/LessonContent";
-import { FIGH_BOOKS, getFighLesson } from "@/lib/figh-data";
+import { ARABIC_BOOKS, getArabicLesson } from "@/lib/arabic-data";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,7 +12,7 @@ import {
 } from "@/app/ui/breadcrumb";
 
 export function generateStaticParams() {
-  return FIGH_BOOKS.flatMap((book) =>
+  return ARABIC_BOOKS.flatMap((book) =>
     book.lessons.map((lesson) => ({
       bookId: String(book.id),
       lessonId: String(lesson.id),
@@ -20,13 +20,13 @@ export function generateStaticParams() {
   );
 }
 
-export default async function FighLessonPage({
+export default async function ArabicLessonPage({
   params,
 }: {
   params: Promise<{ bookId: string; lessonId: string }>;
 }) {
   const { bookId, lessonId } = await params;
-  const found = getFighLesson(Number(bookId), Number(lessonId));
+  const found = getArabicLesson(Number(bookId), Number(lessonId));
 
   if (!found) {
     notFound();
@@ -46,13 +46,13 @@ export default async function FighLessonPage({
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/figh">សៀវភៅទាំងអស់</Link>
+              <Link href="/arabic-language">ភាសាអារ៉ាប់</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href={`/figh/${book.id}`}>{book.khmer_title}</Link>
+              <Link href={`/arabic-language/${book.id}`}>{book.khmer_title}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />

@@ -90,3 +90,7 @@ export const DUAS: Dua[] = [
     khmer: "អល់ឡោះគឺគ្រប់គ្រាន់សម្រាប់យើង ហើយទ្រង់ជាអ្នកគាំពារដ៏ប្រសើរបំផុត។",
   },
 ];
+
+export function getDua(id: string): Dua | undefined {
+  return DUAS.find((dua) => dua.id === id);
+}

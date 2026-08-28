@@ -154,3 +154,7 @@ export const AKHLAQ_REFERENCES: AkhlaqReference[] = [
     source: "Al-Tirmidhī",
   },
 ];
+
+export function getAkhlaqVirtue(id: string): AkhlaqVirtue | undefined {
+  return AKHLAQ_VIRTUES.find((virtue) => virtue.id === id);
+}

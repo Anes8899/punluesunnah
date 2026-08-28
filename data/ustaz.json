@@ -24,45 +24,7 @@
     "featured": false,
     "specialization": "អាគីដា",
     "description": "អ្នកបង្រៀនដែលចេះច្បាស់...",
-    "social": {
-      "facebook": "https://facebook.com/yusuf",
-      "youtube": null
-    }
-  },
-  {
-    "id": 2,
-    "name": "អុស្តាហ៍ យូស៊ុប",
-    "slug": "yusuf",
-    "image": "/assets/ustaz/yusuf.jpg",
-    "featured": false,
-    "specialization": "អាគីដា",
-    "description": "អ្នកបង្រៀនដែលចេះច្បាស់...",
-    "social": {
-      "facebook": "https://facebook.com/yusuf",
-      "youtube": null
-    }
-  },
-  {
-    "id": 2,
-    "name": "អុស្តាហ៍ យូស៊ុប",
-    "slug": "yusuf",
-    "image": "/assets/ustaz/yusuf.jpg",
-    "featured": false,
-    "specialization": "អាគីដា",
-    "description": "អ្នកបង្រៀនដែលចេះច្បាស់...",
-    "social": {
-      "facebook": "https://facebook.com/yusuf",
-      "youtube": null
-    }
-  },
-  {
-    "id": 2,
-    "name": "អុស្តាហ៍ យូស៊ុប",
-    "slug": "yusuf",
-    "image": "/assets/ustaz/yusuf.jpg",
-    "featured": false,
-    "specialization": "អាគីដា",
-    "description": "អ្នកបង្រៀនដែលចេះច្បាស់...",
+    "videos": [],
     "social": {
       "facebook": "https://facebook.com/yusuf",
       "youtube": null

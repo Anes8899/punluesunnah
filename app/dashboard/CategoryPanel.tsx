@@ -33,14 +33,14 @@ const CategoryList = [
 ];
 
 const CardColors = [
-  "bg-peach",
-  "bg-blue-100",
-  "bg-emerald-100",
-  "bg-violet-100",
-  "bg-rose-100",
-  "bg-amber-100",
-  "bg-cyan-100",
-  "bg-lime-100",
+  "bg-tint-1",
+  "bg-tint-2",
+  "bg-tint-3",
+  "bg-tint-4",
+  "bg-tint-5",
+  "bg-tint-6",
+  "bg-tint-7",
+  "bg-tint-8",
 ];
 
 export default function CategoryPanel() {

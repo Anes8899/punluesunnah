@@ -9,16 +9,16 @@ const MAKKAH_LIVE_CHANNEL_ID = "UCos52azQNBgW63_9uDJoPDA";
 
 export default function MakkahLivePanel() {
   return (
-    <div className="rounded-lg bg-surface border border-[#e8d9bb] shadow-md flex flex-col p-5">
+    <div className="rounded-lg bg-surface border border-surface-border shadow-md flex flex-col p-5">
       <div className="flex items-center justify-between mb-4">
         <h1 className="scroll-m-20 text-lg font-extrabold tracking-tight text-balance">
           ការផ្សាយផ្ទាល់ពីម៉ាក្កា
         </h1>
         <Badge
           variant="destructive"
-          className="gap-1.5 bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-300"
+          className="gap-1.5 bg-destructive/10 text-destructive"
         >
-          <span className="size-1.5 rounded-full bg-red-600 animate-pulse" />
+          <span className="size-1.5 rounded-full bg-destructive animate-pulse" />
           LIVE
         </Badge>
       </div>

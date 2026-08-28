@@ -21,11 +21,11 @@ export function VideoThumbnail({
   return (
     <div
       key={video.id}
-      className="flex w-full gap-2 p-2 rounded-lg cursor-pointer hover:bg-black/5 transition-colors"
+      className="flex w-full gap-2 p-2 rounded-lg cursor-pointer hover:bg-surface transition-colors"
       onClick={onClick}
     >
       {/* Thumbnail */}
-      <div className="relative w-40 sm:w-42 lg:w-42 aspect-video rounded-md overflow-hidden shrink-0 bg-zinc-200">
+      <div className="relative w-40 sm:w-42 lg:w-42 aspect-video rounded-md overflow-hidden shrink-0 bg-surface">
         <Image
           src={`https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`}
           alt={video.title}
@@ -47,8 +47,8 @@ export function VideoThumbnail({
         <p className="text-sm font-medium line-clamp-2 leading-snug">
           {video.title}
         </p>
-        <p className="text-xs text-black/50 mt-1">{name}</p>
-        <p className="text-xs text-black/40">
+        <p className="text-xs text-ink-muted mt-1">{name}</p>
+        <p className="text-xs text-ink-muted/70">
           {index + 1} នៃ {videos.length}
         </p>
       </div>

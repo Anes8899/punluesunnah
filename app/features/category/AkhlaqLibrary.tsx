@@ -1,193 +1,173 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
-  AKHLAQ_REFERENCES,
-  AKHLAQ_VIRTUES,
-  type AkhlaqVirtue,
-} from "./akhlaqData";
+  BadgeCheck,
+  HeartHandshake,
+  Hourglass,
+  Scale,
+  Search,
+  ShieldCheck,
+  Sprout,
+  X,
+  type LucideIcon,
+} from "lucide-react";
+import { AKHLAQ_VIRTUES } from "./akhlaqData";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/app/ui/breadcrumb";
+
+const VIRTUE_META: Record<string, { icon: LucideIcon; gradient: string }> = {
+  sidq: {
+    icon: BadgeCheck,
+    gradient: "from-amber via-brand-soft to-brand",
+  },
+  sabr: {
+    icon: Hourglass,
+    gradient: "from-gold via-amber to-brand",
+  },
+  tawadu: { icon: Sprout, gradient: "from-brand-soft via-brand-soft to-brand" },
+  rahmah: {
+    icon: HeartHandshake,
+    gradient: "from-brand via-amber to-gold",
+  },
+  amanah: {
+    icon: ShieldCheck,
+    gradient: "from-brand-soft via-brand to-ink",
+  },
+  adl: { icon: Scale, gradient: "from-ink via-brand to-brand-soft" },
+};
+
+const FALLBACK_META = {
+  icon: BadgeCheck,
+  gradient: "from-brand via-brand-soft to-brand",
+};
 
 export default function AkhlaqLibrary() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected: AkhlaqVirtue | null =
-    AKHLAQ_VIRTUES.find((v) => v.id === selectedId) ?? null;
+  const [query, setQuery] = useState("");
+
+  const q = query.trim().toLowerCase();
+  const filteredVirtues = q
+    ? AKHLAQ_VIRTUES.filter(
+        (virtue) =>
+          virtue.title.toLowerCase().includes(q) ||
+          virtue.kicker.toLowerCase().includes(q) ||
+          virtue.short.toLowerCase().includes(q) ||
+          virtue.arabic.includes(query.trim()),
+      )
+    : AKHLAQ_VIRTUES;
 
   return (
-    <div className="overflow-hidden rounded-lg bg-surface">
-      {/* Hero */}
-      <section className="relative overflow-hidden px-6 py-16 sm:px-12 sm:py-20 lg:px-16 lg:py-24">
-        <div className="pointer-events-none absolute -top-28 -right-24 size-[340px] rounded-full bg-[#ffe1d0] opacity-55" />
-        <div className="pointer-events-none absolute -bottom-40 -left-24 size-[280px] rounded-full bg-[#e1eecc] opacity-50" />
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+      <Breadcrumb className="mb-3">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">ទំព័រដើម</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>សីលធម៌ទាំងអស់</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
-        <div className="relative max-w-3xl">
-          <span className="inline-block rounded-full bg-[#fff2eb] px-3 py-1 text-xs tracking-wide text-[#643312]">
-            Personal reference
-          </span>
-          <h1 className="font-arabic mt-4 text-right text-6xl leading-tight text-[#643312] sm:text-7xl lg:text-[88px]">
-            الأَخْلَاق
-          </h1>
-          <h2 className="font-khmer mt-3 text-xl font-semibold text-[#201e1d] sm:text-2xl">
-            សីលធម៌ក្នុងឥស្លាម (Akhlaq — Islamic Character)
-          </h2>
-          <p className="font-arabic mt-4 text-right text-lg leading-loose text-[#201e1d] sm:text-xl">
-            الأخلاقُ هي مجموعُ الصفاتِ والسجايا التي يتحلَّى بها الإنسانُ،
-            ظاهرةً كانت أو باطنة، وهي ثمرةُ الإيمانِ وعنوانُ صدقِه.
-          </p>
-          <p className="font-khmer mt-3 text-sm leading-relaxed text-[#201e1d] sm:text-base">
-            អាខ្លាក គឺជាបណ្តុំនៃលក្ខណៈសម្បត្តិ និងសីលធម៌ដែលមនុស្សម្នាក់កាន់កាប់
-            ទាំងខាងក្រៅ និងខាងក្នុង។ វាគឺជាផលផ្លែនៃជំនឿ
-            និងជាសញ្ញាបញ្ជាក់ពីភាពស្មោះត្រង់របស់វា។
-          </p>
-        </div>
-      </section>
+      <p className="font-arabic text-center text-3xl text-amber-ink">
+        الأَخْلَاق
+      </p>
 
-      <div className="mx-6 h-px bg-[#201e1d]/16 sm:mx-12 lg:mx-16" />
+      <div className="mt-1 mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+        <h1 className="text-2xl font-bold text-ink sm:text-3xl">
+          សីលធម៌ក្នុងឥស្លាម
+        </h1>
 
-      {/* Pillars */}
-      <section className="px-6 py-12 sm:px-12 lg:px-16">
-        <h6 className="text-xs font-semibold tracking-[0.08em] text-[#8c491a] uppercase">
-          ស្នូលចម្បង — Six Pillars
-        </h6>
-        <h3 className="mt-2 max-w-xl text-2xl font-bold text-[#201e1d] sm:text-3xl">
-          Virtues at the heart of good character
-        </h3>
-
-        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {AKHLAQ_VIRTUES.map((v) => (
+        <div className="group relative w-full sm:w-72 md:w-80">
+          <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-amber-ink" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Escape" && setQuery("")}
+            placeholder="ស្វែងរកសីលធម៌ ឬ តំណាង..."
+            className="w-full rounded-full border border-surface-border bg-surface-soft py-3 pr-11 pl-11 leading-relaxed text-ink shadow-sm outline-none transition-all placeholder:text-ink-muted/60 hover:border-amber/40 focus:border-amber/60 focus:bg-background focus:shadow-md focus:ring-4 focus:ring-amber/10"
+          />
+          {query && (
             <button
-              key={v.id}
               type="button"
-              onClick={() => setSelectedId(v.id)}
-              className="flex flex-col gap-2 rounded-[32px] bg-[#ebddc5] p-5 text-left shadow-[0_1px_2px_rgba(46,43,37,0.14)] transition hover:-translate-y-0.5 hover:shadow-[0_3px_10px_rgba(46,43,37,0.16)]"
+              onClick={() => setQuery("")}
+              aria-label="សម្អាតការស្វែងរក"
+              className="absolute top-1/2 right-3 flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface hover:text-amber-ink"
             >
-              <span className="text-[10px] font-medium tracking-[0.1em] text-[#c67139] uppercase">
-                {v.kicker}
-              </span>
-              <span className="font-arabic text-right text-3xl text-[#643312]">
-                {v.arabic}
-              </span>
-              <span className="font-khmer text-lg font-bold text-[#201e1d]">
-                {v.title}
-              </span>
-              <p className="font-khmer text-sm leading-relaxed text-[#201e1d]/80">
-                {v.short}
-              </p>
-              <span className="mt-1 inline-flex w-fit items-center rounded-full border border-[#c67139] px-3 py-1 text-xs text-[#c67139]">
-                Read more ›
-              </span>
+              <X className="size-4" />
             </button>
-          ))}
+          )}
         </div>
-      </section>
+      </div>
 
-      <div className="mx-6 h-px bg-[#201e1d]/16 sm:mx-12 lg:mx-16" />
+      <section className="rounded-3xl bg-surface-soft/60 p-4 sm:p-6">
+        <h2 className="mb-4 text-lg font-bold text-amber-ink sm:text-xl">
+          សីលធម៌សំខាន់ៗ
+        </h2>
 
-      {/* Qur'an & Hadith */}
-      <section className="px-6 py-12 sm:px-12 lg:px-16">
-        <h6 className="text-xs font-semibold tracking-[0.08em] text-[#56633f] uppercase">
-          ឯកសារយោង — References
-        </h6>
-        <h3 className="mt-2 max-w-xl text-2xl font-bold text-[#201e1d] sm:text-3xl">
-          From the Qur&apos;an and Sunnah
-        </h3>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+          {filteredVirtues.map((virtue) => {
+            const { icon: Icon, gradient } =
+              VIRTUE_META[virtue.id] ?? FALLBACK_META;
 
-        <div className="mt-8 flex flex-col gap-4">
-          {AKHLAQ_REFERENCES.map((r, i) => (
-            <div
-              key={i}
-              className="max-w-2xl rounded-[32px] bg-[#f9f4ed] p-5 shadow-[0_3px_10px_rgba(46,43,37,0.16)]"
-            >
-              <p className="font-arabic text-right text-2xl leading-loose text-[#643312]">
-                {r.arabic}
-              </p>
-              <p className="font-khmer mt-2 text-sm text-[#201e1d]">
-                {r.khmer}
-              </p>
-              <span className="mt-2 inline-flex items-center rounded-full bg-[#f0fae1] px-3 py-1 text-xs text-[#3d472b]">
-                {r.source}
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Closing */}
-      <section className="max-w-xl px-6 py-16 sm:px-12 lg:px-16">
-        <div className="mb-6 h-px bg-[#201e1d]/16" />
-        <p className="font-arabic text-right text-xl leading-relaxed text-[#643312]">
-          وَخَيْرُ النَّاسِ أَحْسَنُهُمْ خُلُقًا
-        </p>
-        <p className="font-khmer text-sm text-[#201e1d]/85">
-          មនុស្សល្អបំផុត គឺជាអ្នកដែលមានសីលធម៌ល្អបំផុត — ចូរធ្វើសីលធម៌នេះឲ្យក្លាយជាផ្នែកមួយនៃជីវិតប្រចាំថ្ងៃ។
-        </p>
-      </section>
-
-      {/* Detail dialog */}
-      {selected && (
-        <div
-          role="presentation"
-          onClick={() => setSelectedId(null)}
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[#2e2b25]/50 p-4 py-12"
-        >
-          <div
-            role="dialog"
-            aria-modal="true"
-            onClick={(e) => e.stopPropagation()}
-            className="flex w-full max-w-xl flex-col gap-3 rounded-[32px] bg-[#f5ead8] p-6 shadow-[0_12px_32px_rgba(46,43,37,0.22)]"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <span className="inline-flex items-center rounded-full bg-[#f0fae1] px-3 py-1 text-xs text-[#3d472b]">
-                  {selected.kicker}
-                </span>
-                <p className="font-arabic mt-2 text-right text-4xl text-[#643312]">
-                  {selected.arabic}
-                </p>
-                <h3 className="font-khmer mt-1 text-xl font-bold text-[#201e1d]">
-                  {selected.title}
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedId(null)}
-                aria-label="Close"
-                className="flex size-9 shrink-0 items-center justify-center rounded-full border border-[#201e1d]/16 text-[#201e1d] hover:bg-[#201e1d]/7"
+            return (
+              <Link
+                key={virtue.id}
+                href={`/akhlaq/${virtue.id}`}
+                className="group overflow-hidden rounded-2xl bg-background text-center no-underline shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
               >
-                ✕
-              </button>
-            </div>
-
-            <p className="font-khmer text-sm leading-relaxed text-[#201e1d]/85">
-              {selected.long}
-            </p>
-
-            <div className="h-px bg-[#201e1d]/16" />
-
-            <h6 className="text-xs font-semibold tracking-[0.08em] text-[#8c491a] uppercase">
-              ឯកសារយោង — Qur&apos;an &amp; Ḥadīth
-            </h6>
-
-            <div className="flex flex-col gap-3">
-              {selected.refs.map((r, i) => (
-                <div
-                  key={i}
-                  className="rounded-[32px] bg-[#f9f4ed] p-4 shadow-[0_1px_2px_rgba(46,43,37,0.14)]"
+                <span
+                  className={`relative flex h-28 flex-col items-center justify-center gap-1 bg-linear-to-br sm:h-32 ${gradient}`}
                 >
-                  <p className="font-arabic text-right text-xl leading-relaxed text-[#643312]">
-                    {r.arabic}
-                  </p>
-                  <p className="font-khmer mt-2 text-sm text-[#201e1d]">
-                    {r.khmer}
-                  </p>
-                  <span className="mt-2 inline-flex items-center rounded-full bg-[#f0fae1] px-3 py-1 text-xs text-[#3d472b]">
-                    {r.source}
+                  <Icon
+                    className="size-8 text-white drop-shadow-sm transition-transform group-hover:scale-110 sm:size-9"
+                    strokeWidth={1.5}
+                  />
+                  <span className="font-arabic text-xl text-white drop-shadow-sm sm:text-2xl">
+                    {virtue.arabic}
                   </span>
-                </div>
-              ))}
-            </div>
-          </div>
+                </span>
+                <span className="block px-3 py-3 text-sm font-semibold text-ink sm:text-base">
+                  {virtue.kicker}
+                </span>
+              </Link>
+            );
+          })}
         </div>
+      </section>
+      {filteredVirtues.length === 0 && (
+        <p className="py-10 text-center text-sm text-ink-muted">
+          មិនមានលទ្ធផលទេ
+        </p>
       )}
+
+      {/* <div className="mt-10">
+        <LessonContent
+          content={[
+            { type: "divider", text: "ឯកសារយោង" },
+            ...AKHLAQ_REFERENCES.map((r) => ({
+              type: "evidence" as const,
+              kind: /\d+:\d+/.test(r.source)
+                ? ("quran" as const)
+                : ("hadith" as const),
+              arabic: r.arabic,
+              source: r.source,
+              translation: r.khmer.replace(/^"|"$/g, ""),
+            })),
+          ]}
+        />
+      </div> */}
     </div>
   );
 }

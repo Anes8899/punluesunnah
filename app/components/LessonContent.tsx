@@ -23,7 +23,7 @@ export type ContentBlock =
     };
 
 const TONES: Record<Tone, string> = {
-  highlight: "bg-peach/50 text-amber",
+  highlight: "bg-peach/50 text-amber-ink",
   success: "bg-badge-green/50 text-badge-green-foreground",
 };
 
@@ -85,7 +85,7 @@ function Block({ block }: { block: ContentBlock }) {
             </p>
           )}
 
-          <p className="font-arabic text-center text-2xl leading-loose text-amber lg:text-3xl">
+          <p className="font-arabic text-center text-2xl leading-loose text-amber-ink lg:text-3xl">
             {wrapArabic(block.kind, block.arabic)}
           </p>
 

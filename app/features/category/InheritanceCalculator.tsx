@@ -20,6 +20,7 @@ interface HeirRow {
   arabic: string;
   count: number;
   shareLabel: string;
+  amount: number;
   amountFmt: string;
   eachFmt: string | null;
 }
@@ -40,7 +41,15 @@ interface CalcResult {
   totalAllocatedFmt: string;
 }
 
+type Currency = "KHR" | "USD";
+
+const CURRENCIES: Record<Currency, { symbol: string; label: string; caption: string; decimals: number }> = {
+  KHR: { symbol: "៛", label: "រៀល (៛)", caption: "រៀល (KHR)", decimals: 0 },
+  USD: { symbol: "$", label: "ដុល្លារ ($)", caption: "ដុល្លារ (USD)", decimals: 2 },
+};
+
 interface CalcState {
+  currency: Currency;
   gross: string;
   debts: string;
   funeral: string;
@@ -64,6 +73,7 @@ interface CalcState {
 }
 
 const initialState: CalcState = {
+  currency: "KHR",
   gross: "",
   debts: "",
   funeral: "",
@@ -112,10 +122,20 @@ const fstr = (a: Frac): string => {
   if (a.d === 1) return String(a.n);
   return `${a.n}/${a.d}`;
 };
-const fmt = (n: number) => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+const format = (n: number, currency: Currency) => {
+  const { symbol, decimals } = CURRENCIES[currency];
+  return (
+    symbol +
+    (n || 0).toLocaleString("en-US", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    })
+  );
+};
 
 function compute(s: CalcState): CalcResult {
   const num = (v: string) => Number(v) || 0;
+  const fmt = (n: number) => format(n, s.currency);
 
   const gross = num(s.gross);
   const debts = num(s.debts);
@@ -395,6 +415,7 @@ function compute(s: CalcState): CalcResult {
     arabic: h.arabic || "",
     count: h.count,
     shareLabel: h.asaba ? h.note || "ចំណែកនៅសល់ (អាសាបា)" : fstr(h.fraction) + (h.note ? ` — ${h.note}` : ""),
+    amount,
     amountFmt: fmt(amount),
     eachFmt: h.count > 1 ? fmt(amount / h.count) : null,
   }));
@@ -413,12 +434,28 @@ function compute(s: CalcState): CalcResult {
   };
 }
 
+
+const inputClass =
+  "w-full rounded-xl border border-surface-border bg-surface-soft px-3 py-2.5 text-sm text-ink transition placeholder:text-ink-muted/50 focus:border-amber focus:bg-card focus:outline-none focus:ring-1 focus:ring-amber";
+
+const SHARE_COLORS = [
+  "bg-chart-1",
+  "bg-chart-2",
+  "bg-chart-3",
+  "bg-chart-4",
+  "bg-chart-5",
+  "bg-chart-6",
+  "bg-chart-7",
+  "bg-chart-8",
+];
+
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="mb-1 block text-xs font-medium text-slate-500">
-        {label} {hint && <span className="text-slate-400">{hint}</span>}
-      </label>
+      <div className="mb-1.5 flex items-center gap-1">
+        <label className="text-xs font-medium text-ink">{label}</label>
+        {hint && <span className="text-[11px] text-ink-muted">{hint}</span>}
+      </div>
       {children}
     </div>
   );
@@ -448,21 +485,36 @@ function NumberInput({
         v = Math.max(min, Math.min(max, v));
         onChange(v);
       }}
-      className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 focus:border-[#00966b] focus:outline-none focus:ring-1 focus:ring-[#00966b]"
+      className={inputClass}
     />
   );
 }
 
-function MoneyInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+function MoneyInput({
+  value,
+  onChange,
+  suffix,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  suffix?: string;
+}) {
   return (
-    <input
-      type="number"
-      min={0}
-      placeholder="0"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 focus:border-[#00966b] focus:outline-none focus:ring-1 focus:ring-[#00966b]"
-    />
+    <div className="relative">
+      <input
+        type="number"
+        min={0}
+        placeholder="0"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={`${inputClass} ${suffix ? "pr-10" : ""}`}
+      />
+      {suffix && (
+        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[11px] text-ink-muted">
+          {suffix}
+        </span>
+      )}
+    </div>
   );
 }
 
@@ -478,31 +530,25 @@ function Segmented<T extends string>({
   onChange: (v: T) => void;
 }) {
   return (
-    <div role="radiogroup" aria-label={name} className="inline-flex overflow-hidden rounded-md border border-slate-200">
-      {options.map((opt, i) => (
+    <div
+      role="radiogroup"
+      aria-label={name}
+      className="inline-flex gap-1 rounded-xl border border-surface-border bg-surface-soft p-1"
+    >
+      {options.map((opt) => (
         <button
           key={opt.value}
           type="button"
           role="radio"
           aria-checked={value === opt.value}
           onClick={() => onChange(opt.value)}
-          className={`px-3 py-1.5 text-xs font-medium transition ${
-            i > 0 ? "border-l border-slate-200" : ""
-          } ${value === opt.value ? "bg-[#00966b] text-white" : "bg-white text-slate-600 hover:bg-slate-50"}`}
+          className={`rounded-lg px-3.5 py-1.5 text-xs font-medium transition ${
+            value === opt.value ? "bg-amber text-amber-foreground" : "text-ink-muted hover:bg-card"
+          }`}
         >
           {opt.label}
         </button>
       ))}
-    </div>
-  );
-}
-
-function Card({ kicker, title, children }: { kicker: string; title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-lg bg-white p-5 shadow-sm">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#00966b]">{kicker}</p>
-      <h3 className="mt-1 mb-3 text-base font-bold text-slate-800">{title}</h3>
-      {children}
     </div>
   );
 }
@@ -515,58 +561,72 @@ export default function InheritanceCalculator() {
 
   const result = useMemo(() => compute(state), [state]);
 
-  return (
-    <div className="mx-auto max-w-6xl">
-      <header className="rounded-lg bg-white p-6 shadow-sm sm:p-8">
-        <div className="flex flex-wrap items-baseline gap-3">
-          <h1 className="text-2xl font-bold text-slate-800 sm:text-3xl">ម៉ាស៊ីនគណនាមរតកឥស្លាម</h1>
-          <span className="inline-flex items-center rounded-full bg-[#00966b]/10 px-3 py-1 text-xs font-medium text-[#00966b]">
-            ហ្វារ៉ាអ៊ីត — Shafi&apos;i · Maliki · Hanbali
-          </span>
-        </div>
-        <p className="mt-2 max-w-[70ch] text-sm text-slate-500">
-          សូមបញ្ចូលទ្រព្យសម្បត្តិមរតក និងសាច់ញាតិដែលនៅរស់រានមានជីវិត។ ចំណែកថេរ (ហ្វារដ) និងចំណែកនៅសល់
-          (អាសាបា) នឹងត្រូវបានគណនាដោយស្វ័យប្រវត្តិ រួមទាំងការកែតម្រូវ Awl និង Radd ក្នុងករណីចាំបាច់។
-        </p>
-        <div className="mt-4 rounded-lg border border-[#00966b]/20 bg-[#00966b]/5 px-4 py-3">
-          <p className="text-xs leading-relaxed text-slate-600">
-            ឧបករណ៍នេះផ្តល់ការប៉ាន់ស្មានទូទៅតាមក្បួនហ្វារ៉ាអ៊ីតរបស់សុន្នី ហើយមិនអាចគ្របដណ្តប់រាល់ករណីពិសេស
-            ឬទស្សនៈអ្នកប្រាជ្ញនីមួយៗបានទេ (ឧ. សាច់ញាតិឆ្ងាយៗ)។ វាមិនមែនជាសាសនកិច្ចវិនិច្ឆ័យ (ហ្វាត់វ៉ា) ទេ
-            សូមពិគ្រោះជាមួយអ្នកប្រាជ្ញសាសនាដែលមានសមត្ថភាពជានិច្ច។
-          </p>
-        </div>
-      </header>
+  const bar = useMemo(() => {
+    const total = result.rows.reduce((a, r) => a + Math.max(r.amount, 0), 0);
+    return result.rows.map((r, i) => ({
+      key: r.key,
+      color: SHARE_COLORS[i % SHARE_COLORS.length],
+      width:
+        total > 0
+          ? `${Math.max((Math.max(r.amount, 0) / total) * 100, r.amount > 0 ? 3 : 0)}%`
+          : `${100 / result.rows.length}%`,
+    }));
+  }, [result]);
 
-      <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start">
-        <div className="flex min-w-0 flex-1 flex-col gap-4">
-          <Card kicker="ទ្រព្យសម្បត្តិ" title="តម្លៃ និងការកាត់ចេញ">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+  const symbol = CURRENCIES[state.currency].symbol;
+
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+      <div className="rounded-3xl bg-card p-5 shadow-sm sm:p-8 lg:p-10">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-ink sm:text-3xl">ម៉ាស៊ីនគណនាមរតកឥស្លាម</h1>
+                <p className="mt-1 text-[11.5px] text-ink-muted">
+                  ហ្វារ៉ាអ៊ីត — Shafi&apos;i · Maliki · Hanbali
+                </p>
+              </div>
+              <div className="sm:w-[210px]">
+                <label htmlFor="currency" className="mb-1.5 block text-[11px] text-ink-muted">
+                  ជ្រើសរើសរូបិយប័ណ្ណ
+                </label>
+                <select
+                  id="currency"
+                  value={state.currency}
+                  onChange={(e) => patch("currency", e.target.value as Currency)}
+                  className="w-full rounded-xl border border-surface-border bg-card px-3 py-2.5 text-sm text-ink focus:border-amber focus:outline-none focus:ring-1 focus:ring-amber"
+                >
+                  <option value="KHR">{CURRENCIES.KHR.label}</option>
+                  <option value="USD">{CURRENCIES.USD.label}</option>
+                </select>
+              </div>
+            </div>
+
+            <h2 className="mt-8 mb-4 text-xl font-bold text-ink">ទ្រព្យសម្បត្តិ និងការកាត់ចេញ</h2>
+            <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
               <Field label="តម្លៃទ្រព្យសរុប">
-                <MoneyInput value={state.gross} onChange={(v) => patch("gross", v)} />
+                <MoneyInput value={state.gross} onChange={(v) => patch("gross", v)} suffix={symbol} />
               </Field>
               <Field label="បំណុលនៅសល់">
-                <MoneyInput value={state.debts} onChange={(v) => patch("debts", v)} />
+                <MoneyInput value={state.debts} onChange={(v) => patch("debts", v)} suffix={symbol} />
               </Field>
               <Field label="ចំណាយបុណ្យសព">
-                <MoneyInput value={state.funeral} onChange={(v) => patch("funeral", v)} />
+                <MoneyInput value={state.funeral} onChange={(v) => patch("funeral", v)} suffix={symbol} />
               </Field>
-              <Field label="ព័ន្ធកិច្ច / Wasiyyah (អតិបរមា ១/៣)">
-                <MoneyInput value={state.bequest} onChange={(v) => patch("bequest", v)} />
+              <Field label="ព័ន្ធកិច្ច / Wasiyyah" hint="(អតិបរមា ១/៣)">
+                <MoneyInput value={state.bequest} onChange={(v) => patch("bequest", v)} suffix={symbol} />
               </Field>
             </div>
             {result.bequestClamped && (
-              <p className="mt-2 text-xs text-[#00966b]">
+              <p className="mt-3 rounded-xl border border-surface-border bg-surface-soft px-3 py-2 text-[11.5px] leading-relaxed text-ink-muted">
                 ព័ន្ធកិច្ចត្រូវបានកំណត់ត្រឹម ១/៣ នៃទ្រព្យបន្ទាប់ពីកាត់បំណុល និងចំណាយបុណ្យសព ({result.bequestCapFmt}) —
                 Wasiyyah មិនអាចលើសពីនេះបានទេ បើគ្មានការយល់ព្រមពីអ្នកទទួលមរតក។
               </p>
             )}
-            <p className="mt-3 border-t border-slate-100 pt-3 text-sm text-slate-600">
-              ទ្រព្យសរុបសម្រាប់ចែក៖ <strong className="text-lg text-slate-800">{result.netFmt}</strong>
-            </p>
-          </Card>
 
-          <Card kicker="អ្នកទទួលមរណភាព" title="ប្តី/ប្រពន្ធដែលនៅរស់">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <h2 className="mt-8 mb-4 text-xl font-bold text-ink">ប្តី/ប្រពន្ធ និងជំនាន់មុន</h2>
+            <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
               <Field label="អ្នកទទួលមរណភាពជា">
                 <Segmented
                   name="gender"
@@ -579,7 +639,7 @@ export default function InheritanceCalculator() {
                 />
               </Field>
               {state.gender === "male" ? (
-                <Field label="ប្រពន្ធនៅរស់ (០–៤ នាក់)">
+                <Field label="ប្រពន្ធនៅរស់" hint="(០–៤ នាក់)">
                   <NumberInput value={state.wives} max={4} onChange={(v) => patch("wives", v)} />
                 </Field>
               ) : (
@@ -595,11 +655,6 @@ export default function InheritanceCalculator() {
                   />
                 </Field>
               )}
-            </div>
-          </Card>
-
-          <Card kicker="មាតាបិតា និងជីដូនជីតា" title="អ្នកជំនាន់មុន">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Field label="ឪពុក">
                 <Segmented
                   name="father"
@@ -637,30 +692,28 @@ export default function InheritanceCalculator() {
                 <NumberInput value={state.grandmothers} max={2} onChange={(v) => patch("grandmothers", v)} />
               </Field>
             </div>
-          </Card>
 
-          <Card kicker="កូនចៅ" title="កូន និងចៅតាមកូនប្រុស">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <h2 className="mt-8 mb-4 text-xl font-bold text-ink">កូន និងចៅ</h2>
+            <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
               <Field label="កូនប្រុស">
                 <NumberInput value={state.sons} onChange={(v) => patch("sons", v)} />
               </Field>
               <Field label="កូនស្រី">
                 <NumberInput value={state.daughters} onChange={(v) => patch("daughters", v)} />
               </Field>
-              <Field label="ចៅប្រុស (តាមកូនប្រុស)">
+              <Field label="ចៅប្រុស" hint="(តាមកូនប្រុស)">
                 <NumberInput value={state.gsons} onChange={(v) => patch("gsons", v)} />
               </Field>
-              <Field label="ចៅស្រី (តាមកូនប្រុស)">
+              <Field label="ចៅស្រី" hint="(តាមកូនប្រុស)">
                 <NumberInput value={state.gdaughters} onChange={(v) => patch("gdaughters", v)} />
               </Field>
             </div>
-            <p className="mt-2 text-xs text-slate-400">
+            <p className="mt-3 text-[11px] leading-relaxed text-ink-muted">
               មានតែចៅតាមកូនប្រុសទេដែលរាប់ជាអ្នកទទួលមរតក (ច្បាប់ហ្វារ៉ាអ៊ីតសុន្នីមិនរាប់ចៅតាមកូនស្រីទេ)។
             </p>
-          </Card>
 
-          <Card kicker="បងប្អូន" title="បងប្អូនប្រុសស្រី">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <h2 className="mt-8 mb-4 text-xl font-bold text-ink">បងប្អូនប្រុសស្រី</h2>
+            <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
               <Field label="បងប្អូនប្រុសបង្កើត">
                 <NumberInput value={state.fullBrothers} onChange={(v) => patch("fullBrothers", v)} />
               </Field>
@@ -677,98 +730,108 @@ export default function InheritanceCalculator() {
                 <NumberInput value={state.maternalSibs} onChange={(v) => patch("maternalSibs", v)} />
               </Field>
             </div>
-          </Card>
+          </div>
 
-          <button
-            type="button"
-            onClick={() => setState(initialState)}
-            className="w-fit rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50"
-          >
-            កំណត់ឡើងវិញទាំងអស់
-          </button>
-        </div>
-
-        <div className="flex w-full flex-col gap-3 lg:sticky lg:top-4 lg:w-[380px]">
-          <div className="rounded-lg bg-white p-5 shadow-md">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#00966b]">លទ្ធផល</p>
-            <h3 className="mt-1 text-base font-bold text-slate-800">ការបែងចែកចំណែក</h3>
-            <p className="mt-1 mb-3 text-xs text-slate-500">
-              ទ្រព្យសរុប៖ <strong>{result.netFmt}</strong>
-            </p>
+          <aside className="w-full rounded-3xl bg-surface-soft p-4 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:w-[360px] lg:overflow-y-auto">
+            <div className="rounded-2xl bg-card p-5 text-center shadow-sm">
+              <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-ink-muted">
+                {CURRENCIES[state.currency].caption}
+              </p>
+              <p className="mt-2 text-4xl font-bold text-ink">{result.netFmt}</p>
+              <p className="mt-3 text-sm font-semibold text-ink">ទ្រព្យសរុបសម្រាប់ចែក</p>
+              <p className="mt-1 text-[11px] text-ink-muted">
+                បន្ទាប់ពីកាត់បំណុល ចំណាយបុណ្យសព និងព័ន្ធកិច្ច
+              </p>
+            </div>
 
             {result.hasAnyHeir ? (
               <>
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse text-sm">
-                    <thead>
-                      <tr>
-                        <th className="border-b border-slate-200 px-2 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                          អ្នកទទួលមរតក
-                        </th>
-                        <th className="border-b border-slate-200 px-2 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                          ចំណែក (ហ្វារដ)
-                        </th>
-                        <th className="border-b border-slate-200 px-2 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                          ចំនួនទឹកប្រាក់
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {result.rows.map((r) => (
-                        <tr key={r.key} className="hover:bg-slate-50">
-                          <td className="border-b border-slate-100 px-2 py-2 align-top">
-                            {r.label}
-                            <div className="text-[11px] text-slate-400">{r.arabic}</div>
-                          </td>
-                          <td className="border-b border-slate-100 px-2 py-2 align-top text-slate-600">{r.shareLabel}</td>
-                          <td className="border-b border-slate-100 px-2 py-2 align-top text-slate-800">
-                            {r.amountFmt}
-                            {r.eachFmt && <div className="text-[11px] text-slate-400">ម្នាក់ៗ {r.eachFmt}</div>}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="mt-4 flex h-1.5 gap-1 overflow-hidden">
+                  {bar.map((p) => (
+                    <span
+                      key={p.key}
+                      style={{ width: p.width }}
+                      className={`rounded-full ${p.color}`}
+                      aria-hidden
+                    />
+                  ))}
                 </div>
-                <p className="mt-2 text-right text-xs text-slate-400">សរុបបានបែងចែក៖ {result.totalAllocatedFmt}</p>
+
+                <div className="mt-4 flex flex-col gap-2">
+                  {result.rows.map((r, i) => (
+                    <div
+                      key={r.key}
+                      className="rounded-xl border border-surface-border bg-card px-3 py-2.5"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="flex min-w-0 items-center gap-1.5 text-xs font-semibold text-ink">
+                          <span
+                            className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                              SHARE_COLORS[i % SHARE_COLORS.length]
+                            }`}
+                            aria-hidden
+                          />
+                          <span className="truncate">{r.label}</span>
+                        </p>
+                        <p className="shrink-0 text-sm font-semibold text-ink">{r.amountFmt}</p>
+                      </div>
+                      <div className="mt-1 flex items-start justify-between gap-2 text-[10.5px] text-ink-muted">
+                        <span className="min-w-0 flex-1">
+                          {r.arabic && <span className="mr-1">{r.arabic} ·</span>}
+                          {r.shareLabel}
+                        </span>
+                        {r.eachFmt && <span className="shrink-0">ម្នាក់ៗ {r.eachFmt}</span>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="mt-3 text-center text-[11px] text-ink-muted">
+                  សរុបបានបែងចែក៖ {result.totalAllocatedFmt}
+                </p>
               </>
             ) : (
-              <p className="text-sm text-slate-400">សូមបញ្ចូលព័ត៌មានសាច់ញាតិដើម្បីមើលការបែងចែក។</p>
-            )}
-          </div>
-
-          {result.notes.length > 0 && (
-            <div className="rounded-lg border border-[#00966b]/20 bg-[#00966b]/5 p-5">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#00966b]">ការកែតម្រូវដែលបានអនុវត្ត</p>
-              {result.notes.map((n, i) => (
-                <p key={i} className="mt-2 text-xs leading-relaxed text-slate-600">
-                  {n}
-                </p>
-              ))}
-            </div>
-          )}
-
-          {result.excluded.length > 0 && (
-            <div className="rounded-lg bg-white p-5 shadow-sm">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#00966b]">
-                អ្នកទទួលមរតកដែលត្រូវបានរាំង (ហាជាប៊ុ)
+              <p className="mt-4 text-center text-[11.5px] leading-relaxed text-ink-muted">
+                សូមបញ្ចូលព័ត៌មានសាច់ញាតិដើម្បីមើលការបែងចែកចំណែក។
               </p>
-              {result.excluded.map((x, i) => (
-                <div key={i} className="mt-2 flex items-baseline gap-2">
-                  <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-slate-500">ត្រូវបានរាំង</span>
-                  <p className="text-xs leading-relaxed text-slate-600">
-                    <strong className="text-slate-700">{x.label}</strong> — {x.reason}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
+            )}
 
-          <p className="px-2 text-[11.5px] leading-relaxed text-slate-400">
-            ឧបករណ៍នេះមានគោលបំណងអប់រំតែប៉ុណ្ណោះ ដោយផ្អែកលើក្បួនហ្វារ៉ាអ៊ីតស្តង់ដារនៃគណិកា Shafi&apos;i/Maliki/Hanbali។
-            វាមិនមែនជាសាសនកិច្ចវិនិច្ឆ័យ (ហ្វាត់វ៉ា) ទេ ហើយអាចនឹងមិនឆ្លុះបញ្ចាំងគ្រប់ស្ថានភាពគ្រួសារ ឬទស្សនៈអ្នកប្រាជ្ញភាគតិចទាំងអស់នោះទេ —
-            សូមផ្ទៀងផ្ទាត់ការបែងចែកមរតកជាក់ស្តែងជាមួយអ្នកប្រាជ្ញសាសនាដែលមានសមត្ថភាពជានិច្ច។
-          </p>
+            {result.notes.length > 0 && (
+              <div className="mt-4 rounded-2xl border border-surface-border bg-card p-4">
+                <p className="text-[11px] font-semibold text-ink">ការកែតម្រូវដែលបានអនុវត្ត</p>
+                {result.notes.map((n, i) => (
+                  <p key={i} className="mt-2 text-[11px] leading-relaxed text-ink-muted">
+                    {n}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            {result.excluded.length > 0 && (
+              <div className="mt-3 rounded-2xl border border-surface-border bg-card p-4">
+                <p className="text-[11px] font-semibold text-ink">អ្នកទទួលមរតកដែលត្រូវបានរាំង (ហាជាប៊ុ)</p>
+                {result.excluded.map((x, i) => (
+                  <p key={i} className="mt-2 text-[11px] leading-relaxed text-ink-muted">
+                    <strong className="font-semibold text-ink">{x.label}</strong> — {x.reason}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setState((prev) => ({ ...initialState, currency: prev.currency }))}
+              className="mt-4 w-full rounded-full bg-amber px-4 py-3 text-sm font-semibold text-amber-foreground transition hover:opacity-90"
+            >
+              គណនាឡើងវិញ
+            </button>
+
+            <p className="mt-4 text-center text-[10.5px] leading-relaxed text-ink-muted">
+              ឧបករណ៍នេះមានគោលបំណងអប់រំតែប៉ុណ្ណោះ ដោយផ្អែកលើក្បួនហ្វារ៉ាអ៊ីតស្តង់ដារនៃគណិកា
+              Shafi&apos;i/Maliki/Hanbali។ វាមិនមែនជាសាសនកិច្ចវិនិច្ឆ័យ (ហ្វាត់វ៉ា) ទេ
+              ហើយអាចនឹងមិនឆ្លុះបញ្ចាំងគ្រប់ស្ថានភាពគ្រួសារ — សូមផ្ទៀងផ្ទាត់ជាមួយអ្នកប្រាជ្ញសាសនាដែលមានសមត្ថភាពជានិច្ច។
+            </p>
+          </aside>
         </div>
       </div>
     </div>
