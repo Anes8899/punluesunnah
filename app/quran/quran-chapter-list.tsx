@@ -22,7 +22,7 @@ export default function QuranChapterList({ chapters }: QuranChapterListProps) {
     : chapters;
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 px-6 pb-10 sm:px-8">
       <input
         type="text"
         value={query}

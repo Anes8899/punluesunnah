@@ -7,23 +7,8 @@ import PrayerPanel from "./dashboard/PrayerPanel";
 export default function Home() {
   return (
     <>
-      {/* The prayer panel is full-bleed on desktop, so it sits outside the
-          centred column the rest of the dashboard lives in. This box takes its
-          height from the panel, which from `xl` up is locked to the frame's
-          own aspect ratio, so the two match without the art being scaled
-          unevenly. */}
       <div className="relative">
         <PrayerPanel />
-
-        {/* Ornamental mandala frame around the desktop panel: the art sits on
-            a near-white sheet, so it is multiplied into the cream surface
-            instead of masked. Only its width is responsive — `object-contain`
-            keeps the height tied to that width at the art's own ratio, since
-            scaling the two axes apart visibly warps the corner motifs. The
-            panel carries the matching aspect ratio, so the frame still lands
-            on its edges. It follows the panel in the markup so it paints over
-            the panel's surface colour, while the panel's content stays above
-            it on z-10. */}
         <Image
           src="/assets/mandala-frame.svg"
           alt=""
