@@ -96,11 +96,14 @@ export default function PrayerPanel() {
   ];
 
   return (
-    <div className="mx-6 mt-6 overflow-hidden rounded-[28px] bg-surface md:mx-0 md:mt-0 md:flex md:min-h-[calc(100dvh-132px)] md:flex-col md:justify-center md:rounded-none md:px-[clamp(2.5rem,7vw,8rem)] md:py-[clamp(2.5rem,5vw,5rem)]">
-      {/* The mandala frame is a sibling in app/page.tsx: it stretches to this
-          panel's box, so the padding here is what keeps the content clear of
-          the frame's border — scaled with the viewport the same way the
-          stretched art is. */}
+    <div className="mx-6 mt-6 overflow-hidden rounded-[28px] bg-surface md:mx-0 md:mt-0 md:flex md:min-h-[27rem] md:flex-col md:justify-center md:overflow-visible md:rounded-none md:px-10 md:py-9 xl:aspect-[6912/3000] xl:min-h-0 xl:px-[5%] xl:py-[3%]">
+      {/* The mandala frame is a sibling in app/page.tsx and keeps its own
+          aspect ratio, so from `xl` up this panel carries that ratio too and
+          the frame lands exactly on its edges. Narrower than that the art is
+          too wide to box this much content, so the panel keeps a min-height
+          and the frame centres inside it instead. The `xl` padding is a
+          percentage of the width, matching how the art scales, and keeps
+          content inside the frame's border. */}
       <div className="relative z-10 w-full md:mx-auto md:max-w-7xl">
         {/* ── desktop header ───────────────────────────────────────────── */}
         <div className="hidden md:flex items-start justify-between gap-6 mb-[26px]">
