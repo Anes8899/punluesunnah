@@ -1,19 +1,14 @@
 "use client";
 
-import {
-  Clock,
-  CloudSun,
-  MapPin,
-  Moon,
-  Sun,
-  Sunrise,
-  Sunset,
-  type LucideIcon,
-} from "lucide-react";
+import { CloudSun, MapPin, Moon, Sun, Sunrise, Sunset } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { getHijriDate } from "@/lib/hijri";
 import { formatKhmerDate } from "@/lib/khmerFormatDate";
 import PrayerCard from "../features/prayer/PrayerCard";
+import CountdownPill from "../features/prayer/CountdownPill";
+import DesktopPrayerHero from "../features/prayer/DesktopPrayerHero";
+import NextKicker from "../features/prayer/NextKicker";
+import SunCard from "../features/prayer/SunCard";
 import { formatCountdown } from "@/lib/formatCountdown";
 import { usePrayerTimes } from "@/app/hook/usePrayerTimes";
 import { useGetCurrentLocation } from "@/app/hook/useGetCurrentLocation";
@@ -53,75 +48,6 @@ function MosqueMark({ className }: { className?: string }) {
     >
       <path d="M4 21v-8a8 8 0 0 1 16 0v8M12 5V2M9 21v-4a3 3 0 0 1 6 0v4" />
     </svg>
-  );
-}
-
-/** "បន្ទាប់ · MAGHRIB" — the kicker above the hero time. */
-function NextKicker({ label, size }: { label: string; size: "sm" | "md" }) {
-  const text = size === "sm" ? "text-[11px]" : "text-xs";
-  return (
-    <div className="flex items-center gap-2">
-      <span className={`${text} font-black tracking-[0.06em] opacity-80`}>
-        បន្ទាប់
-      </span>
-      <span className="w-1 h-1 rounded-full bg-current opacity-50" />
-      <span className={`${text} font-black tracking-[0.1em] uppercase opacity-80`}>
-        {label}
-      </span>
-    </div>
-  );
-}
-
-function CountdownPill({
-  countdown,
-  size,
-}: {
-  countdown: string;
-  size: "sm" | "md";
-}) {
-  return (
-    <div
-      className={`inline-flex items-center gap-[9px] rounded-full bg-white/15 ${
-        size === "sm" ? "px-[15px] py-2" : "px-4 py-[9px]"
-      }`}
-    >
-      <Clock
-        strokeWidth={2.75}
-        className={size === "sm" ? "w-[15px] h-[15px]" : "w-4 h-4"}
-      />
-      <span
-        className={`font-black tabular-nums text-white ${
-          size === "sm" ? "text-[17px]" : "text-xl"
-        }`}
-      >
-        {countdown}
-      </span>
-    </div>
-  );
-}
-
-function SunCard({
-  icon: Icon,
-  label,
-  time,
-}: {
-  icon: LucideIcon;
-  label: string;
-  time: string;
-}) {
-  return (
-    <div className="flex flex-1 items-center gap-[11px] rounded-2xl bg-peach px-4 py-[13px] md:py-3.5">
-      <Icon
-        strokeWidth={2.75}
-        className="w-[17px] h-[17px] md:w-[19px] md:h-[19px] shrink-0 text-amber-ink/75"
-      />
-      <div>
-        <div className="text-[11px] leading-[1.3] text-ink-muted">{label}</div>
-        <div className="text-sm font-bold tabular-nums text-amber-ink">
-          {time}
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -170,109 +96,99 @@ export default function PrayerPanel() {
   ];
 
   return (
-    <div className="overflow-hidden rounded-[28px] bg-surface md:px-[30px] md:pt-[30px] md:pb-8">
-      {/* ── desktop header ───────────────────────────────────────────── */}
-      <div className="hidden md:flex items-start justify-between gap-6 mb-[26px]">
-        <div className="flex items-center gap-3.5">
-          <div className="flex w-[52px] h-[52px] shrink-0 items-center justify-center rounded-full bg-sage-soft text-sage-ink">
-            <MosqueMark className="w-[26px] h-[26px]" />
+    <div className="mx-6 mt-6 overflow-hidden rounded-[28px] bg-surface md:mx-0 md:mt-0 md:flex md:min-h-[calc(100dvh-132px)] md:flex-col md:justify-center md:rounded-none md:px-[clamp(2.5rem,7vw,8rem)] md:py-[clamp(2.5rem,5vw,5rem)]">
+      {/* The mandala frame is a sibling in app/page.tsx: it stretches to this
+          panel's box, so the padding here is what keeps the content clear of
+          the frame's border — scaled with the viewport the same way the
+          stretched art is. */}
+      <div className="relative z-10 w-full md:mx-auto md:max-w-7xl">
+        {/* ── desktop header ───────────────────────────────────────────── */}
+        <div className="hidden md:flex items-start justify-between gap-6 mb-[26px]">
+          <div className="flex items-center gap-3.5">
+            <div className="flex w-[52px] h-[52px] shrink-0 items-center justify-center rounded-full bg-sage-soft text-sage-ink">
+              <MosqueMark className="w-[26px] h-[26px]"/>
+            </div>
+            <div>
+              <h1 className="font-heading text-[28px] font-bold leading-[1.15] text-ink">
+                ម៉ោងសឡាត
+              </h1>
+              <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-peach px-2.5 py-1 text-[12.5px] font-semibold text-amber-ink">
+                <MapPin strokeWidth={2.75} className="w-[13px] h-[13px]" />
+                {place}
+              </span>
+            </div>
           </div>
-          <div>
-            <h1 className="font-heading text-[28px] font-bold leading-[1.15] text-ink">
-              ម៉ោងសឡាត
-            </h1>
-            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-peach px-2.5 py-1 text-[12.5px] font-semibold text-amber-ink">
-              <MapPin strokeWidth={2.75} className="w-[13px] h-[13px]" />
-              {place}
-            </span>
-          </div>
-        </div>
-        <div className="text-right">
-          <div className="mb-1 text-[11px] tracking-[0.06em] uppercase text-ink-muted">
-            ថ្ងៃនេះ
-          </div>
-          <div className="text-sm font-semibold text-ink">{KhmerDate}</div>
-          <div className="mt-0.5 text-[13px] text-ink-muted">
-            {getHijriDate()}
-          </div>
-        </div>
-      </div>
-
-      {/* ── mobile hero (header lives inside it) ─────────────────────── */}
-      <div className="md:hidden relative overflow-hidden rounded-b-[28px] bg-sage px-[22px] pt-5 pb-7 text-sage-foreground">
-        <div className="pointer-events-none absolute -right-[50px] -top-14 w-[180px] h-[180px] rounded-full bg-white/[0.07]" />
-        <div className="relative flex items-center gap-[11px]">
-          <div className="flex w-9 h-9 shrink-0 items-center justify-center rounded-full bg-white/15 text-white">
-            <MosqueMark className="w-[19px] h-[19px]" />
-          </div>
-          <div>
-            <h1 className="font-heading text-[19px] font-bold leading-[1.2] text-white">
-              ម៉ោងសឡាត
-            </h1>
-            <div className="mt-0.5 flex items-center gap-1.5 opacity-85">
-              <MapPin strokeWidth={2.75} className="w-3 h-3 shrink-0" />
-              <span className="text-xs font-semibold">{place}</span>
+          <div className="text-right">
+            <div className="mb-1 text-[11px] tracking-[0.06em] uppercase text-ink-muted">
+              ថ្ងៃនេះ
+            </div>
+            <div className="text-sm font-semibold text-ink">{KhmerDate}</div>
+            <div className="mt-0.5 text-[13px] text-ink-muted">
+              {getHijriDate()}
             </div>
           </div>
         </div>
-        <div className="relative mt-6">
-          <NextKicker label={next.label} size="sm" />
-          <div className="mt-1.5 font-numeral text-[44px] leading-none text-white tabular-nums">
-            {formatTime(times[next.key])}
-          </div>
-          <div className="mt-3.5">
-            <CountdownPill countdown={countdown} size="sm" />
-          </div>
-        </div>
-      </div>
 
-      {/* ── desktop hero + sunrise/sunset column ─────────────────────── */}
-      <div className="hidden md:flex items-stretch gap-3.5 mb-3.5">
-        <div className="relative flex flex-1 items-center justify-between gap-5 overflow-hidden rounded-[28px] bg-sage px-7 py-[26px] text-sage-foreground">
-          <div className="pointer-events-none absolute -right-[38px] -bottom-14 w-[180px] h-[180px] rounded-full bg-white/[0.06]" />
-          <div className="relative">
-            <NextKicker label={next.label} size="md" />
-            <div className="mt-2 font-numeral text-[46px] leading-none text-white tabular-nums">
+        {/* ── mobile hero (header lives inside it) ─────────────────────── */}
+        <div className="md:hidden relative overflow-hidden rounded-b-[28px] bg-sage px-[22px] pt-5 pb-7 text-sage-foreground">
+          <div className="pointer-events-none absolute -right-[50px] -top-14 w-[180px] h-[180px] rounded-full bg-white/[0.07]" />
+          <div className="relative flex items-center gap-[11px]">
+            <div className="flex w-9 h-9 shrink-0 items-center justify-center rounded-full bg-white/15 text-white">
+              <MosqueMark className="w-[19px] h-[19px]" />
+            </div>
+            <div>
+              <h1 className="font-heading text-[19px] font-bold leading-[1.2] text-white">
+                ម៉ោងសឡាត
+              </h1>
+              <div className="mt-0.5 flex items-center gap-1.5 opacity-85">
+                <MapPin strokeWidth={2.75} className="w-3 h-3 shrink-0" />
+                <span className="text-xs font-semibold">{place}</span>
+              </div>
+            </div>
+          </div>
+          <div className="relative mt-6">
+            <NextKicker label={next.label} size="sm" />
+            <div className="mt-1.5 font-numeral text-[44px] leading-none text-white tabular-nums">
               {formatTime(times[next.key])}
             </div>
-          </div>
-          <div className="relative text-right">
-            <div className="mb-1.5 text-[11px] tracking-[0.06em] opacity-80">
-              ក្នុងរយៈពេល
+            <div className="mt-3.5">
+              <CountdownPill countdown={countdown} size="sm" />
             </div>
-            <CountdownPill countdown={countdown} size="md" />
           </div>
         </div>
-        <div className="flex w-[186px] shrink-0 flex-col gap-2.5">
-          {sun.map((s) => (
-            <SunCard key={s.label} {...s} />
-          ))}
-        </div>
-      </div>
 
-      {/* ── the remaining prayers ────────────────────────────────────── */}
-      <div className="px-[22px] pt-5 pb-[22px] md:p-0">
-        <div className="mb-3.5 md:hidden">
-          <div className="text-[13px] font-semibold text-ink">{KhmerDate}</div>
-          <div className="text-xs text-ink-muted">{getHijriDate()}</div>
-        </div>
+        {/* ── desktop hero + sunrise/sunset column ─────────────────────── */}
+        <DesktopPrayerHero
+          nextLabel={next.label}
+          nextTime={formatTime(times[next.key])}
+          countdown={countdown}
+          sun={sun}
+        />
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3.5">
-          {rest.map(({ key, label, icon }) => (
-            <PrayerCard
-              key={key}
-              icon={icon}
-              nameTimePrayer={label}
-              timePrayer={formatTime(times[key])}
-              toned={key === "isha"}
-            />
-          ))}
-        </div>
+        {/* ── the remaining prayers ────────────────────────────────────── */}
+        <div className="px-[22px] pt-5 pb-[22px] md:p-0">
+          <div className="mb-3.5 md:hidden">
+            <div className="text-[13px] font-semibold text-ink">{KhmerDate}</div>
+            <div className="text-xs text-ink-muted">{getHijriDate()}</div>
+          </div>
 
-        <div className="mt-2.5 flex gap-2.5 md:hidden">
-          {sun.map((s) => (
-            <SunCard key={s.label} {...s} />
-          ))}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3.5 lg:gap-4">
+            {rest.map(({ key, label, icon }) => (
+              <PrayerCard
+                key={key}
+                icon={icon}
+                nameTimePrayer={label}
+                timePrayer={formatTime(times[key])}
+                toned={key === "isha"}
+              />
+            ))}
+          </div>
+
+          <div className="mt-2.5 flex gap-2.5 md:hidden">
+            {sun.map((s) => (
+              <SunCard key={s.label} {...s} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
