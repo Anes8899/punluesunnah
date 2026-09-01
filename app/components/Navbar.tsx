@@ -25,6 +25,9 @@ export default function Navbar() {
     setOpen(false);
   }, [pathname]);
 
+  // The admin dashboard ships its own sidebar shell.
+  if (pathname.startsWith("/admin")) return null;
+
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
 
