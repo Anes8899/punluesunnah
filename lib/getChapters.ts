@@ -28,6 +28,8 @@ export async function getChapters(): Promise<Chapter[]> {
         "x-auth-token": access_token,
         "x-client-id": clientId,
       },
+      // The 114 chapters are effectively static; don't refetch them per request.
+      next: { revalidate: 86400 },
     },
   );
 
