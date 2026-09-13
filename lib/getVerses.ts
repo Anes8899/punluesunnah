@@ -49,6 +49,5 @@ export async function getVerses(chapterId: number): Promise<Verse[]> {
   }
 
   const { verses } = await res.json();
-  console.log(verses, "vvvvv");
   return verses;
 }

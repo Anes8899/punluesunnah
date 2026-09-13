@@ -7,6 +7,7 @@ import {
   getTajweedPaletteName,
 } from "@/lib/tajweedFont";
 import type { MushafLine } from "@/lib/mushafLines";
+import { Skeleton } from "../../ui/skeleton";
 import AyahMarker from "./AyahMarker";
 
 interface MushafPageProps {
@@ -33,11 +34,15 @@ export default function MushafPage({
     };
   }, [lines]);
 
+  // Keep the line boxes at their final height while the page fonts load so
+  // the swap to real glyphs doesn't shift the layout.
   if (!ready) {
     return (
       <>
         {lines.map((line) => (
-          <div key={line.key} className="h-10 md:h-14" />
+          <div key={line.key} className="flex h-10 items-center md:h-14">
+            <Skeleton className="h-4 w-full md:h-5" />
+          </div>
         ))}
       </>
     );
