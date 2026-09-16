@@ -1,0 +1,24 @@
+{
+  "name": "@punluesunnah/prayer-service",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Prayer times (adhan, Cambodia adjustments) and Hijri dates.",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "adhan": "^4.4.4",
+    "fastify": "^5.6.1"
+  },
+  "devDependencies": {
+    "@punluesunnah/shared-types": "*",
+    "@types/node": "^22",
+    "tsx": "^4.20.6",
+    "typescript": "^5"
+  }
+}

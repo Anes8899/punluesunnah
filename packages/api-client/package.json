@@ -1,0 +1,22 @@
+{
+  "name": "@punluesunnah/api-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Server-side clients for the services, shared by the Next.js apps (consumed as TypeScript source via transpilePackages).",
+  "exports": {
+    "./content": "./src/content.ts",
+    "./quran": "./src/quran.ts",
+    "./prayer": "./src/prayer.ts",
+    "./client": "./src/client.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@punluesunnah/shared-types": "*",
+    "typescript": "^5"
+  }
+}

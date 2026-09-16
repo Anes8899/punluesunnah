@@ -1,0 +1,20 @@
+{
+  "name": "@punluesunnah/shared-types",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Types shared by the web app and the services. Types only — nothing here runs at runtime.",
+  "types": "./src/index.ts",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}

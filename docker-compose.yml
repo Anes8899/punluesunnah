@@ -1,0 +1,105 @@
+# Full stack: `docker compose up --build`. Only the web app (:3000) and the
+# admin app (:3001) are published on the host; the services talk to each other
+# on the internal network.
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-punluesunnah}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-punluesunnah}
+      POSTGRES_DB: ${POSTGRES_DB:-punluesunnah}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-punluesunnah} -d ${POSTGRES_DB:-punluesunnah}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  content-service:
+    build:
+      context: .
+      dockerfile: services/content-service/Dockerfile
+    environment:
+      PORT: 4001
+      DATABASE_URL: postgres://${POSTGRES_USER:-punluesunnah}:${POSTGRES_PASSWORD:-punluesunnah}@postgres:5432/${POSTGRES_DB:-punluesunnah}
+      CONTENT_API_KEY: ${CONTENT_API_KEY:?set CONTENT_API_KEY in .env}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:4001/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # One-shot: loads the initial content, then exits. Safe to re-run.
+  content-seed:
+    build:
+      context: .
+      dockerfile: services/content-service/Dockerfile
+    command: ["npm", "run", "db:seed"]
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-punluesunnah}:${POSTGRES_PASSWORD:-punluesunnah}@postgres:5432/${POSTGRES_DB:-punluesunnah}
+    depends_on:
+      content-service:
+        condition: service_healthy
+    restart: "no"
+
+  quran-service:
+    build:
+      context: .
+      dockerfile: services/quran-service/Dockerfile
+    environment:
+      PORT: 4002
+      QURAN_CLIENT_ID: ${QURAN_CLIENT_ID:?set QURAN_CLIENT_ID in .env}
+      QURAN_CLIENT_SECRET: ${QURAN_CLIENT_SECRET:?set QURAN_CLIENT_SECRET in .env}
+
+  prayer-service:
+    build:
+      context: .
+      dockerfile: services/prayer-service/Dockerfile
+    environment:
+      PORT: 4003
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      CONTENT_SERVICE_URL: http://content-service:4001
+      QURAN_SERVICE_URL: http://quran-service:4002
+      PRAYER_SERVICE_URL: http://prayer-service:4003
+      REVALIDATE_SECRET: ${REVALIDATE_SECRET:?set REVALIDATE_SECRET in .env}
+    depends_on:
+      content-service:
+        condition: service_healthy
+      quran-service:
+        condition: service_started
+      prayer-service:
+        condition: service_started
+
+  admin:
+    build:
+      context: .
+      dockerfile: apps/admin/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      CONTENT_SERVICE_URL: http://content-service:4001
+      CONTENT_API_KEY: ${CONTENT_API_KEY:?set CONTENT_API_KEY in .env}
+      WEB_URL: http://web:3000
+      REVALIDATE_SECRET: ${REVALIDATE_SECRET:?set REVALIDATE_SECRET in .env}
+    depends_on:
+      content-service:
+        condition: service_healthy
+      web:
+        condition: service_started
+
+volumes:
+  pgdata:

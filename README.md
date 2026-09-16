@@ -1,77 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ពន្លឺស៊ុណ្ណះ (Punlue Sunnah)
 
-## Getting Started
+Islamic content in Khmer: prayer times, Quran, hadith, dua, khutbah, tazkiyah,
+akhlaq, and lesson books (aqidah, figh, arabic) — with an admin dashboard for
+editing the content.
 
-First, run the development server:
+## Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+   browser ─────────────────────────┐          ┌───────────────── editors
+                                    ▼          ▼
+                     ┌──────────────────┐   ┌──────────────────┐
+                     │ apps/web  :3000  │◀──│ apps/admin :3001 │  POST /api/revalidate
+                     │ public site      │   │ dashboard (CRUD) │  after every save
+                     └──┬──────┬──────┬─┘   └────────┬─────────┘
+                        │      │      │  server-side │ fetch only (x-api-key on writes)
+          ┌─────────────▼┐  ┌──▼───────┐ ┌▼──────────▼───┐
+          │prayer-service│  │quran-svc │ │content-service │
+          │ :4003        │  │ :4002    │ │ :4001          │
+          │ Fastify+adhan│  │ Fastify  │ │ Fastify+Drizzle│
+          └──────────────┘  └────┬─────┘ └───────┬────────┘
+                                 │               │
+                        quran.foundation    ┌────▼───────┐
+                        (OAuth creds)       │ PostgreSQL │
+                                            └────────────┘
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Package | Role |
+| --- | --- |
+| `apps/web` | Next.js 16 public site. Read-only: talks to the services from Server Components and Route Handlers; service URLs never reach the browser. Exposes `POST /api/revalidate` for the admin app. |
+| `apps/admin` | Next.js 16 admin dashboard on its own port. Server Actions write to content-service with the API key, then expire the tag locally (`updateTag`) and on the web app (webhook). Copies the shadcn primitives it needs; the two apps share no React code. |
+| `services/content-service` | All editable content (hadith, dua, khutbah, tazkiyah, akhlaq, books/lessons, ustaz). REST over Postgres via Drizzle; writes require `x-api-key`. Runs its migrations on boot. |
+| `services/quran-service` | Proxy for quran.foundation. Owns the OAuth credentials and caches the token, chapter list and verses in memory. |
+| `services/prayer-service` | Prayer times (adhan, Shafi, Cambodia adjustments) and Hijri dates. Stateless. |
+| `packages/shared-types` | TypeScript contracts shared by the apps and services. Types only. |
+| `packages/api-client` | Server-only fetch clients for the three services, used by both Next.js apps (via `transpilePackages`). |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Each service exposes `GET /health`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Caching
 
-## Learn More
+Both Next.js apps fetch through their own data cache with a tag per resource
+(`hadiths`, `books`, …). After a write, an admin Server Action calls
+`updateTag` (its own cache) and `POST $WEB_URL/api/revalidate` with
+`REVALIDATE_SECRET` (the web app's cache, `revalidateTag(tag, { expire: 0 })`),
+so edits show on the public site on the next request while normal traffic never
+touches the services. If the webhook is unreachable the write still succeeds
+and the web cache expires on its own within the hour.
 
-To learn more about Next.js, take a look at the following resources:
+## Running locally
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Prerequisites: Node 22+, Docker.
 
 ```bash
-my-islamic-app/
-├── public/                  # Static assets (images, SVGs, fonts)
-│   ├── icons/
-│   └── images/
-├── src/                     # Main source directory
-│   ├── app/                 # App Router (Pages & Routing)
-│   │   ├── layout.tsx       # Global layout (HTML wrapper, Navbar, Footer)
-│   │   ├── page.tsx         # Homepage dashboard (Where the panels sit)
-│   │   └── globals.css      # Global styles (Tailwind directives, custom font loading)
-│   │
-│   ├── components/          # Reusable UI Components
-│   │   ├── ui/              # Atom/Primitive design system elements
-│   │   │   ├── button.tsx
-│   │   │   └── card.tsx
-│   │   │
-│   │   ├── dashboard/       # Feature-specific layout containers
-│   │   │   ├── prayer-panel.tsx  # Wraps the row of cards
-│   │   │   └── hadith-panel.tsx  # Right-side card containing Arabic text
-│   │   │
-│   │   └── features/        # Business-logic UI components
-│   │       └── prayer/
-│   │           ├── prayer-time-card.tsx      <-- Your Neumorphic component!
-│   │           └── prayer-time-card.test.tsx # UI Automation / Unit tests
-│   │
-│   ├── hooks/               # Custom React hooks (e.g., usePrayerTimer)
-│   │   └── use-prayer-timer.ts
-│   │
-│   ├── lib/                 # Third-party configurations or core utils
-│   │   ├── utils.ts         # Tailwind merging helpers (clsx + tailwind-merge)
-│   │   └── prayer-calc.ts   # Calculations for times if done client-side
-│   │
-│   └── types/               # TypeScript type definitions
-│       └── index.ts
-│
-├── .env.local               # Environment variables
-├── docker-compose.yml       # Dev/Prod orchestration environment
-├── Dockerfile               # Multi-stage production build configuration
-├── next.config.js           # Next.js specific configuration
-├── package.json             # Core dependencies and test scripts
-└── tsconfig.json            # TypeScript rules
+cp .env.example .env        # fill in QURAN_CLIENT_ID / QURAN_CLIENT_SECRET
+npm install
+npm run db:up               # Postgres in Docker (host port POSTGRES_PORT)
+npm run db:seed             # migrate + load the initial content (idempotent)
+npm run dev                 # web :3000, admin :3001 + the three services, with hot reload
 ```
+
+One `.env` at the repo root feeds everything: the services walk up from their
+folder to find it, and the web app's scripts inject it with `dotenv -e`.
+
+Useful scripts:
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev:web` / `dev:admin` / `dev:content` / `dev:quran` / `dev:prayer` | run one process |
+| `npm run typecheck` | `tsc --noEmit` in every workspace |
+| `npm run build` | production build of every workspace |
+| `npm run db:seed -- --force` | wipe and reload the seed content from `services/content-service/seed/data` |
+| `npm run db:generate -w services/content-service` | create a migration after editing `src/db/schema.ts` |
+
+## Running with Docker Compose
+
+```bash
+docker compose up --build
+```
+
+Brings up Postgres, the three services, a one-shot `content-seed` job, the web
+app on http://localhost:3000 and the admin app on http://localhost:3001. Only
+those two apps and Postgres are published on the host; the services talk over
+the compose network.
+
+## Content service API
+
+| Method | Path | Notes |
+| --- | --- | --- |
+| GET | `/hadiths`, `/hadiths/:id` | |
+| GET | `/duas?category=`, `/duas/:id`, `/duas/categories` | |
+| GET | `/khutbahs`, `/khutbahs/:id`, `/khutbahs/topics` | |
+| GET | `/tazkiyah`, `/tazkiyah/:id` | |
+| GET | `/akhlaq`, `/akhlaq/:id`, `/akhlaq/references` | |
+| GET | `/books?subject=`, `/books/:key`, `/books/:key/lessons/:id` | key = `${subject}-${id}` |
+| GET | `/ustaz`, `/ustaz/:id` | |
+| GET | `/stats` | row counts for the admin overview |
+| POST/PUT/DELETE | same resources | require header `x-api-key: $CONTENT_API_KEY` |
+
+## Notes
+
+- This Next.js version differs from older releases; see `AGENTS.md` before
+  writing code in `apps/web`.
+- There is no login on the admin app yet. Add an auth check to the Server
+  Actions in `apps/admin/app/_actions.ts` (and put the app behind a VPN or
+  reverse-proxy auth) before exposing it publicly.
