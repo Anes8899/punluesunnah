@@ -16,9 +16,10 @@ export default function BookCard({
   return (
     <Link
       href={href}
-      className="flex h-full flex-col gap-2 rounded-[32px] bg-[#ebddc5] p-5 text-left no-underline shadow-[0_1px_2px_rgba(46,43,37,0.14)] transition hover:-translate-y-0.5 hover:shadow-[0_3px_10px_rgba(46,43,37,0.16)]"
+      className="group hover-lift press relative flex h-full flex-col gap-2 overflow-hidden rounded-[32px] bg-[#ebddc5] p-5 text-left no-underline shadow-[0_1px_2px_rgba(46,43,37,0.14)] hover:shadow-[0_10px_24px_rgba(46,43,37,0.18)]"
     >
-      <span className="flex size-[52px] shrink-0 items-center justify-center rounded-full bg-[#f0fae1] text-lg font-bold text-[#56633f]">
+      <span className="sheen" aria-hidden />
+      <span className="flex size-[52px] shrink-0 items-center justify-center rounded-full bg-[#f0fae1] text-lg font-bold text-[#56633f] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
         {badge}
       </span>
       <span className="font-arabic text-2xl leading-relaxed text-[#8c491a]">

@@ -47,7 +47,7 @@ export default function CategoryPanel() {
     const router = useRouter();
 
   return (
-    <div className="grid w-full gap-4 grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
+    <div className="motion-reveal motion-stagger grid w-full gap-4 grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
       {CategoryList.map((cat, index) => (
         <CategoryCard
           key={cat.label}

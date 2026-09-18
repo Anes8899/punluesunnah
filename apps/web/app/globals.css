@@ -255,6 +255,82 @@
   }
 }
 
+/* ───────────────────────────────────────────────────────────────────────────
+   Motion system
+
+   Three kinds of movement, kept deliberately small so the content stays the
+   subject: entrances (content arriving), reactions (hover / press / focus) and
+   ambient loops (a countdown breathing, a skeleton shimmering).
+
+   Entrances are `both`-filled, so an element is invisible until its animation
+   runs — never apply one to something that must render without JS/CSS paint.
+   `prefers-reduced-motion` collapses every duration at the bottom of the file.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Decelerating — for things arriving on screen. */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Slight overshoot — for things responding to a pointer. */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --motion-step: 42ms;
+}
+
+@keyframes motion-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes motion-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes motion-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes motion-slide-start {
+  from {
+    opacity: 0;
+    transform: translate3d(-18px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes motion-blur-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+/* Ambient loops. */
 @keyframes pulse-ring {
   0%,
   100% {
@@ -262,5 +338,253 @@
   }
   50% {
     box-shadow: 0 0 0 10px rgba(255, 170, 0, 0);
+  }
+}
+
+@keyframes motion-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes motion-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes motion-sheen {
+  from {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  to {
+    transform: translateX(240%) skewX(-18deg);
+  }
+}
+
+@layer utilities {
+  /* ── entrances ─────────────────────────────────────────────────────────
+     `--motion-delay` (or `--motion-i` with the stagger container) offsets the
+     start; `--motion-dur` overrides the length. */
+  .motion-rise,
+  .motion-fade,
+  .motion-pop,
+  .motion-slide-start,
+  .motion-blur-in {
+    animation-duration: var(--motion-dur, 560ms);
+    animation-timing-function: var(--ease-out-soft);
+    animation-delay: var(--motion-delay, 0ms);
+    animation-fill-mode: both;
+  }
+  .motion-rise {
+    animation-name: motion-rise;
+  }
+  .motion-fade {
+    animation-name: motion-fade;
+  }
+  .motion-pop {
+    animation-name: motion-pop;
+    animation-timing-function: var(--ease-spring);
+  }
+  .motion-slide-start {
+    animation-name: motion-slide-start;
+  }
+  .motion-blur-in {
+    animation-name: motion-blur-in;
+  }
+
+  /* Every direct child rises in turn. `--motion-i` comes from nth-child below,
+     so a plain `<div class="motion-stagger">` grid needs no per-item markup. */
+  .motion-stagger > * {
+    animation: motion-rise var(--motion-dur, 560ms) var(--ease-out-soft) both;
+    animation-delay: calc(var(--motion-step) * var(--motion-i, 0) + var(--motion-delay, 0ms));
+  }
+  .motion-stagger > *:nth-child(1) {
+    --motion-i: 0;
+  }
+  .motion-stagger > *:nth-child(2) {
+    --motion-i: 1;
+  }
+  .motion-stagger > *:nth-child(3) {
+    --motion-i: 2;
+  }
+  .motion-stagger > *:nth-child(4) {
+    --motion-i: 3;
+  }
+  .motion-stagger > *:nth-child(5) {
+    --motion-i: 4;
+  }
+  .motion-stagger > *:nth-child(6) {
+    --motion-i: 5;
+  }
+  .motion-stagger > *:nth-child(7) {
+    --motion-i: 6;
+  }
+  .motion-stagger > *:nth-child(8) {
+    --motion-i: 7;
+  }
+  .motion-stagger > *:nth-child(9) {
+    --motion-i: 8;
+  }
+  .motion-stagger > *:nth-child(10) {
+    --motion-i: 9;
+  }
+  .motion-stagger > *:nth-child(11) {
+    --motion-i: 10;
+  }
+  .motion-stagger > *:nth-child(12) {
+    --motion-i: 11;
+  }
+  .motion-stagger > *:nth-child(13) {
+    --motion-i: 12;
+  }
+  .motion-stagger > *:nth-child(14) {
+    --motion-i: 13;
+  }
+  .motion-stagger > *:nth-child(15) {
+    --motion-i: 14;
+  }
+  .motion-stagger > *:nth-child(16) {
+    --motion-i: 15;
+  }
+  .motion-stagger > *:nth-child(17) {
+    --motion-i: 16;
+  }
+  .motion-stagger > *:nth-child(18) {
+    --motion-i: 17;
+  }
+  .motion-stagger > *:nth-child(19) {
+    --motion-i: 18;
+  }
+  .motion-stagger > *:nth-child(20) {
+    --motion-i: 19;
+  }
+  .motion-stagger > *:nth-child(21) {
+    --motion-i: 20;
+  }
+  .motion-stagger > *:nth-child(22) {
+    --motion-i: 21;
+  }
+  .motion-stagger > *:nth-child(23) {
+    --motion-i: 22;
+  }
+  .motion-stagger > *:nth-child(24) {
+    --motion-i: 23;
+  }
+  /* Long lists (the 114 Qur'an chapters) stop fanning out after two dozen
+     items instead of making the tail wait a second and a half. */
+  .motion-stagger > *:nth-child(n + 25) {
+    --motion-i: 24;
+  }
+
+  /* ── reactions ─────────────────────────────────────────────────────────── */
+  .hover-lift {
+    transition:
+      transform 260ms var(--ease-out-soft),
+      box-shadow 260ms var(--ease-out-soft);
+    will-change: transform;
+  }
+  .hover-lift:hover {
+    transform: translateY(-3px);
+  }
+
+  /* Pointer press: the element gives, then springs back on release. */
+  .press {
+    transition: transform 160ms var(--ease-out-soft);
+  }
+  .press:active {
+    transform: scale(0.97);
+    transition-duration: 90ms;
+  }
+  .hover-lift.press:active {
+    transform: translateY(-1px) scale(0.98);
+  }
+
+  /* A light sweeping across a card on hover. The parent needs `group`,
+     `relative` and `overflow-hidden`. */
+  .sheen {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 45%;
+    background: linear-gradient(
+      100deg,
+      transparent,
+      rgba(255, 255, 255, 0.35),
+      transparent
+    );
+    opacity: 0;
+    pointer-events: none;
+  }
+  .group:hover .sheen::after {
+    opacity: 1;
+    animation: motion-sheen 900ms var(--ease-out-soft);
+  }
+
+  /* ── ambient ───────────────────────────────────────────────────────────── */
+  .motion-float {
+    animation: motion-float 3.6s ease-in-out infinite;
+  }
+  .motion-pulse-ring {
+    animation: pulse-ring 2.4s ease-in-out infinite;
+  }
+  .motion-shimmer {
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklab, var(--color-background) 65%, transparent) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: motion-shimmer 1.6s linear infinite;
+  }
+
+  /* ── scroll reveal ─────────────────────────────────────────────────────
+     Scroll-driven, so a section below the fold animates when it is actually
+     reached rather than while off screen. Browsers without scroll timelines
+     skip the whole block and render the section statically — which is why the
+     rule lives here and not on the element by default. */
+  @supports (animation-timeline: view()) {
+    .motion-reveal {
+      animation: motion-rise 1s linear both;
+      animation-timeline: view();
+      /* Finishes while the element is still entering, so a tall section at the
+         end of a page can never strand itself half-faded at the scroll floor. */
+      animation-range: entry 0% entry 80%;
+    }
+    /* Children each ride their own timeline: a grid row fades up as it is
+       reached, which reads as a stagger without any delay bookkeeping. */
+    .motion-reveal.motion-stagger > * {
+      animation: motion-rise 1s linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+/* Motion sensitivity: keep the state changes, drop the movement. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

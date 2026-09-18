@@ -21,9 +21,13 @@ export default function Home() {
         />
       </div>
       <div className="flex flex-col gap-5 max-w-7xl mx-auto px-6 py-6">
-        <HadithCard />
+        <div className="motion-reveal motion-rise">
+          <HadithCard />
+        </div>
         <CategoryPanel />
-        <MakkahLivePanel />
+        <div className="motion-reveal motion-rise">
+          <MakkahLivePanel />
+        </div>
       </div>
     </>
   );

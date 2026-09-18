@@ -16,11 +16,11 @@ export default function PrayerCard({
   toned = false,
 }: PrayerCardProps) {
   return (
-    <div className="flex items-center gap-[11px] md:gap-3 rounded-2xl bg-surface-soft px-4 py-3.5 md:px-[18px] md:py-4">
+    <div className="group hover-lift flex items-center gap-[11px] md:gap-3 rounded-2xl bg-surface-soft px-4 py-3.5 hover:bg-surface md:px-[18px] md:py-4">
       <Icon
         strokeWidth={2.75}
         className={cn(
-          "w-[18px] h-[18px] md:w-5 md:h-5 shrink-0",
+          "w-[18px] h-[18px] md:w-5 md:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110",
           toned ? "text-sage-mid" : "text-ink-muted",
         )}
       />

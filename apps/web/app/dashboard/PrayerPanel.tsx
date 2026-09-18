@@ -174,7 +174,7 @@ export default function PrayerPanel() {
             <div className="text-xs text-ink-muted">{data.hijri}</div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3.5 lg:gap-4">
+          <div className="motion-stagger grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3.5 lg:gap-4">
             {rest.map(({ key, label, icon }) => (
               <PrayerCard
                 key={key}

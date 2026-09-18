@@ -2,14 +2,10 @@
 FROM node:22-alpine AS deps
 WORKDIR /repo
 COPY package.json package-lock.json ./
-COPY packages/shared-types/package.json packages/shared-types/
-COPY packages/api-client/package.json packages/api-client/
 COPY apps/admin/package.json apps/admin/
 RUN npm ci --workspace apps/admin --include-workspace-root=false
 
 FROM deps AS build
-COPY packages/shared-types packages/shared-types
-COPY packages/api-client packages/api-client
 COPY apps/admin apps/admin
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build -w apps/admin

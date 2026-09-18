@@ -379,7 +379,11 @@ export default function HadithLibrary({ hadiths: HADITHS }: { hadiths: Hadith[] 
         ))}
       </div>
 
-      <div className="rounded-b-2xl border border-t-0 border-surface-border bg-surface-soft px-4 sm:px-6">
+      <div
+        key={currentPage}
+        className="motion-stagger rounded-b-2xl border border-t-0 border-surface-border bg-surface-soft px-4 sm:px-6"
+        style={{ "--motion-step": "35ms" } as React.CSSProperties}
+      >
         {pageItems.map((h, index) => {
           const position = (currentPage - 1) * PAGE_SIZE + index + 1;
           return (

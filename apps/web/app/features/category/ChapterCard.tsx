@@ -8,10 +8,10 @@ interface ChapterCardProps {
 
 export default function ChapterCard({ chapter }: ChapterCardProps) {
   return (
-    <Link href={`/quran/${chapter.id}`}>
-      <Card className="cursor-pointer transition hover:shadow-md">
+    <Link href={`/quran/${chapter.id}`} className="group block">
+      <Card className="hover-lift press cursor-pointer hover:border-brand/30 hover:shadow-lg">
         <CardContent className="flex items-center gap-4">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand text-sm font-semibold text-brand-foreground">
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand text-sm font-semibold text-brand-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
             {chapter.id}
           </div>
 
@@ -25,7 +25,7 @@ export default function ChapterCard({ chapter }: ChapterCardProps) {
           </div>
 
           <div className="shrink-0 text-right">
-            <p className="font-arabic text-lg text-brand">
+            <p className="font-arabic text-lg text-brand transition-transform duration-300 group-hover:-translate-x-0.5">
               {chapter.name_arabic}
             </p>
             <p className="text-xs text-ink-muted/70">

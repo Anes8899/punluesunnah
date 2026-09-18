@@ -78,7 +78,7 @@ export default function TazkiyahLibrary({
         </div>
       </div>
 
-      <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
+      <div className="motion-stagger grid w-full grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
         {filteredTopics.map((topic) => (
           <BookCard
             key={topic.id}

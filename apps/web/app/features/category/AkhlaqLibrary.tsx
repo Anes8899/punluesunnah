@@ -120,7 +120,7 @@ export default function AkhlaqLibrary({
           សីលធម៌សំខាន់ៗ
         </h2>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+        <div className="motion-stagger grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
           {filteredVirtues.map((virtue) => {
             const { icon: Icon, gradient } =
               VIRTUE_META[virtue.id] ?? FALLBACK_META;
@@ -129,13 +129,13 @@ export default function AkhlaqLibrary({
               <Link
                 key={virtue.id}
                 href={`/akhlaq/${virtue.id}`}
-                className="group overflow-hidden rounded-2xl bg-background text-center no-underline shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                className="group hover-lift press overflow-hidden rounded-2xl bg-background text-center no-underline shadow-sm hover:shadow-lg"
               >
                 <span
                   className={`relative flex h-28 flex-col items-center justify-center gap-1 bg-linear-to-br sm:h-32 ${gradient}`}
                 >
                   <Icon
-                    className="size-8 text-white drop-shadow-sm transition-transform group-hover:scale-110 sm:size-9"
+                    className="size-8 text-white drop-shadow-sm transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:scale-125 sm:size-9"
                     strokeWidth={1.5}
                   />
                   <span className="font-arabic text-xl text-white drop-shadow-sm sm:text-2xl">

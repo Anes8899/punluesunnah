@@ -9,8 +9,6 @@ const nextConfig: NextConfig = {
   // Self-contained build for the Docker image (see apps/admin/Dockerfile).
   output: "standalone",
   outputFileTracingRoot: monorepoRoot,
-  // Shared TypeScript source packages, compiled as part of this app.
-  transpilePackages: ["@punluesunnah/api-client"],
 };
 
 export default nextConfig;

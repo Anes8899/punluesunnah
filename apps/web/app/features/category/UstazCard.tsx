@@ -80,7 +80,7 @@ export default function UstazCard({
       </CardHeader>
       <CardFooter className="p-0">
         <Button
-          className="w-full h-full py-4 rounded-t-none rounded-b-xl cursor-pointer font-semibold transition hover:bg-primary/85 active:bg-primary/75"
+          className="press w-full h-full py-4 rounded-t-none rounded-b-xl cursor-pointer font-semibold transition hover:bg-primary/85 active:bg-primary/75"
           onClick={() => router.push(`/ustaz/${id}`)}
         >
           ចុចត្រុងនេះ

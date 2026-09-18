@@ -179,12 +179,12 @@ export default function KhutbahLibrary({
         <h2 className="mt-8 text-xs font-semibold tracking-wide text-ink-muted/70 uppercase">
           សុន្ទរកថាទាក់ទង
         </h2>
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="motion-stagger mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
           {related.map((r) => (
             <button
               key={r.id}
               onClick={() => openDetail(r.id)}
-              className="rounded-lg bg-card p-4 text-left shadow-sm transition hover:shadow-md"
+              className="hover-lift press rounded-lg bg-card p-4 text-left shadow-sm hover:shadow-lg"
             >
               <span className="mb-2 inline-block rounded-full bg-brand/10 px-2 py-0.5 text-[11px] font-medium text-brand">
                 {r.topicKm}
@@ -272,12 +272,12 @@ export default function KhutbahLibrary({
 
       <p className="mt-6 text-xs text-ink-muted/70">{filtered.length} សុន្ទរកថា</p>
 
-      <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="motion-stagger mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((k) => (
           <button
             key={k.id}
             onClick={() => openDetail(k.id)}
-            className="flex flex-col overflow-hidden rounded-lg bg-card text-left shadow-sm transition hover:shadow-md"
+            className="hover-lift press flex flex-col overflow-hidden rounded-lg bg-card text-left shadow-sm hover:shadow-lg"
           >
             <div className="flex aspect-video items-center justify-center bg-gradient-to-br from-brand/15 to-brand/5">
               <BookOpen className="text-brand/40" size={32} strokeWidth={1.5} />

@@ -87,7 +87,7 @@ export default function DuaLibrary({
             លទ្ធផលស្វែងរក
           </h2>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+          <div className="motion-stagger grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
             {matchedDuas.map((dua) => (
               <DuaCard key={dua.id} dua={dua} />
             ))}
@@ -105,7 +105,7 @@ export default function DuaLibrary({
             ប្រភេទទូអា
           </h2>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
+          <div className="motion-stagger grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
             {DUA_CATEGORIES.map((cat) => {
               const { slug, icon: Icon, gradient } = getCategoryMeta(cat);
               const count = DUAS.filter((dua) => dua.category === cat).length;
@@ -114,13 +114,13 @@ export default function DuaLibrary({
                 <Link
                   key={cat}
                   href={`/dua/category/${slug}`}
-                  className="group overflow-hidden rounded-2xl bg-background text-center no-underline shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                  className="group hover-lift press overflow-hidden rounded-2xl bg-background text-center no-underline shadow-sm hover:shadow-lg"
                 >
                   <span
                     className={`flex h-24 items-center justify-center bg-linear-to-br sm:h-28 ${gradient}`}
                   >
                     <Icon
-                      className="size-9 text-white drop-shadow-sm transition-transform group-hover:scale-110 sm:size-10"
+                      className="size-9 text-white drop-shadow-sm transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:scale-125 sm:size-10"
                       strokeWidth={1.5}
                     />
                   </span>

@@ -50,7 +50,7 @@ export default async function FighBookPage({
         {book.khmer_title}
       </h1>
 
-      <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
+      <div className="motion-stagger grid w-full grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
         {book.lessons.map((lesson) => (
           <BookCard
             key={lesson.id}

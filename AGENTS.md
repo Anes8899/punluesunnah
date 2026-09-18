@@ -4,7 +4,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # Monorepo layout
 
-- `apps/web` — Next.js public site (read-only). `apps/admin` — Next.js admin dashboard, separate app on :3001. Neither imports a database or content data directly; both call the services through `packages/api-client` (server only). They share no React components — each keeps its own copy of the shadcn primitives under `app/ui`.
+- `apps/web` — Next.js public site (read-only). It never imports a database or content data directly; it calls the services through `packages/api-client` (server only). `apps/admin` — Next.js app on :3001, currently an empty shell.
 - `services/content-service` — Fastify + Drizzle + Postgres. Editable content and its seed data.
 - `services/quran-service`, `services/prayer-service` — Fastify.
 - `packages/shared-types` — API contracts. Types only; keep it free of runtime code.

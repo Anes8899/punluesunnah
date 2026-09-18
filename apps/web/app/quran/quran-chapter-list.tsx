@@ -28,17 +28,20 @@ export default function QuranChapterList({ chapters }: QuranChapterListProps) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="ស្វែងរកឈ្មោះ ឬលេខជំពូក"
-        className="w-full max-w-xs rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-800 outline-none focus:border-[#00966b] sm:w-72"
+        className="w-full max-w-xs rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-800 outline-none transition-all duration-300 focus:border-[#00966b] focus:shadow-md focus:ring-4 focus:ring-[#00966b]/10 sm:w-72"
       />
 
-      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div
+        key={q}
+        className="motion-stagger mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
+      >
         {filteredChapters.map((chapter) => (
           <ChapterCard key={chapter.id} chapter={chapter} />
         ))}
       </div>
 
       {filteredChapters.length === 0 && (
-        <p className="py-10 text-center text-sm text-slate-500">
+        <p className="motion-pop py-10 text-center text-sm text-slate-500">
           គ្មានជំពូកត្រូវនឹង &quot;{query}&quot; ទេ
         </p>
       )}

@@ -68,7 +68,7 @@ export default function ArabicBookList({ books: ARABIC_BOOKS }: { books: BookSum
         </div>
       </div>
 
-      <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
+      <div className="motion-stagger grid w-full grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
         {filteredBooks.map((book) => (
           <BookCard
             key={book.id}
