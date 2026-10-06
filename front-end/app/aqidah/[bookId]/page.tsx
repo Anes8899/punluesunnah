@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import BookCard from "@/app/components/BookCard";
+import LessonList from "./lesson-list";
+import { sectionEntries } from "@/lib/sectionEntries";
 import { bookKey, getBook } from "@/content";
 import {
   Breadcrumb,
@@ -45,22 +46,31 @@ export default async function AqidahBookPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <p className="font-arabic text-3xl text-amber-ink text-center">{book.arabic_title}</p>
+      <p className="font-arabic text-3xl text-amber-ink text-center">
+        {book.arabic_title}
+      </p>
       <h1 className="mt-1 mb-6 text-2xl font-bold text-ink sm:text-3xl">
         {book.khmer_title}
       </h1>
 
-      <div className="motion-stagger grid w-full grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
-        {book.lessons.map((lesson) => (
-          <BookCard
-            key={lesson.id}
-            href={`/aqidah/${book.id}/${lesson.id}`}
-            badge={lesson.id}
-            arabicTitle={lesson.arabic_title}
-            khmerTitle={lesson.khmer_title}
-          />
-        ))}
-      </div>
+      {book.lessons.length > 0 && (
+        <LessonList
+          items={book.lessons.map((lesson) => {
+            const href = `/aqidah/${book.id}/${lesson.id}`;
+            const sections = sectionEntries(lesson.content, href);
+            return {
+              id: lesson.id,
+              href,
+              arabicTitle: lesson.arabic_title,
+              khmerTitle: lesson.khmer_title,
+              meta:
+                sections.length > 0 ? `${sections.length} ផ្នែក` : undefined,
+              openLabel: "អានមេរៀន",
+              entries: sections,
+            };
+          })}
+        />
+      )}
 
       {book.lessons.length === 0 && (
         <p className="py-10 text-center text-sm text-ink-muted">
