@@ -13,6 +13,10 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import CardCollection, {
+  ViewToggle,
+  type View,
+} from "@/app/components/CardCollection";
 import type { AkhlaqVirtue } from "@/types";
 import {
   Breadcrumb,
@@ -55,6 +59,7 @@ export default function AkhlaqLibrary({
   virtues: AkhlaqVirtue[];
 }) {
   const [query, setQuery] = useState("");
+  const [view, setView] = useState<View>("grid");
 
   const q = query.trim().toLowerCase();
   const filteredVirtues = q
@@ -92,64 +97,92 @@ export default function AkhlaqLibrary({
           សីលធម៌ក្នុងឥស្លាម
         </h1>
 
-        <div className="group relative w-full sm:w-72 md:w-80">
-          <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-amber-ink" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Escape" && setQuery("")}
-            placeholder="ស្វែងរកសីលធម៌ ឬ តំណាង..."
-            className="w-full rounded-full border border-surface-border bg-surface-soft py-3 pr-11 pl-11 leading-relaxed text-ink shadow-sm outline-none transition-all placeholder:text-ink-muted/60 hover:border-amber/40 focus:border-amber/60 focus:bg-background focus:shadow-md focus:ring-4 focus:ring-amber/10"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              aria-label="សម្អាតការស្វែងរក"
-              className="absolute top-1/2 right-3 flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface hover:text-amber-ink"
-            >
-              <X className="size-4" />
-            </button>
-          )}
+        <div className="flex w-full items-center gap-3 sm:w-auto">
+          <div className="group relative w-full sm:w-72 md:w-80">
+            <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-amber-ink" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Escape" && setQuery("")}
+              placeholder="ស្វែងរកសីលធម៌ ឬ តំណាង..."
+              className="w-full rounded-full border border-surface-border bg-surface-soft py-3 pr-11 pl-11 leading-relaxed text-ink shadow-sm outline-none transition-all placeholder:text-ink-muted/60 hover:border-amber/40 focus:border-amber/60 focus:bg-background focus:shadow-md focus:ring-4 focus:ring-amber/10"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="សម្អាតការស្វែងរក"
+                className="absolute top-1/2 right-3 flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface hover:text-amber-ink"
+              >
+                <X className="size-4" />
+              </button>
+            )}
+          </div>
+
+          <ViewToggle view={view} onChange={setView} />
         </div>
       </div>
 
-      <section className="rounded-3xl bg-surface-soft/60 p-4 sm:p-6">
-        <h2 className="mb-4 text-lg font-bold text-amber-ink sm:text-xl">
-          សីលធម៌សំខាន់ៗ
-        </h2>
+      {view === "grid" ? (
+        <section className="rounded-3xl bg-surface-soft/60 p-4 sm:p-6">
+          <h2 className="mb-4 text-lg font-bold text-amber-ink sm:text-xl">
+            សីលធម៌សំខាន់ៗ
+          </h2>
 
-        <div className="motion-stagger grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-          {filteredVirtues.map((virtue) => {
-            const { icon: Icon, gradient } =
-              VIRTUE_META[virtue.id] ?? FALLBACK_META;
+          <div className="motion-stagger grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+            {filteredVirtues.map((virtue) => {
+              const { icon: Icon, gradient } =
+                VIRTUE_META[virtue.id] ?? FALLBACK_META;
 
-            return (
-              <Link
-                key={virtue.id}
-                href={`/akhlaq/${virtue.id}`}
-                className="group hover-lift press overflow-hidden rounded-2xl bg-background text-center no-underline shadow-sm hover:shadow-lg"
-              >
-                <span
-                  className={`relative flex h-28 flex-col items-center justify-center gap-1 bg-linear-to-br sm:h-32 ${gradient}`}
+              return (
+                <Link
+                  key={virtue.id}
+                  href={`/akhlaq/${virtue.id}`}
+                  className="group hover-lift press overflow-hidden rounded-2xl bg-background text-center no-underline shadow-sm hover:shadow-lg"
                 >
-                  <Icon
-                    className="size-8 text-white drop-shadow-sm transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:scale-125 sm:size-9"
-                    strokeWidth={1.5}
-                  />
-                  <span className="font-arabic text-xl text-white drop-shadow-sm sm:text-2xl">
-                    {virtue.arabic}
+                  <span
+                    className={`relative flex h-28 flex-col items-center justify-center gap-1 bg-linear-to-br sm:h-32 ${gradient}`}
+                  >
+                    <Icon
+                      className="size-8 text-white drop-shadow-sm transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:scale-125 sm:size-9"
+                      strokeWidth={1.5}
+                    />
+                    <span className="font-arabic text-xl text-white drop-shadow-sm sm:text-2xl">
+                      {virtue.arabic}
+                    </span>
                   </span>
-                </span>
-                <span className="block px-3 py-3 text-sm font-semibold text-ink sm:text-base">
-                  {virtue.kicker}
-                </span>
-              </Link>
-            );
+                  <span className="block px-3 py-3 text-sm font-semibold text-ink sm:text-base">
+                    {virtue.kicker}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      ) : (
+        <CardCollection
+          view="accordion"
+          items={filteredVirtues.map((virtue) => {
+            const href = `/akhlaq/${virtue.id}`;
+            return {
+              id: virtue.id,
+              badge: AKHLAQ_VIRTUES.indexOf(virtue) + 1,
+              href,
+              arabicTitle: virtue.arabic,
+              khmerTitle: virtue.kicker,
+              meta: `${virtue.refs.length} ឯកសារយោង`,
+              openLabel: "អានបន្ថែម",
+              entries: virtue.refs.map((ref, i) => ({
+                key: i,
+                href,
+                badge: i + 1,
+                khmerTitle: ref.source,
+              })),
+            };
           })}
-        </div>
-      </section>
+        />
+      )}
       {filteredVirtues.length === 0 && (
         <p className="py-10 text-center text-sm text-ink-muted">
           មិនមានលទ្ធផលទេ

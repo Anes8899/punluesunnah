@@ -1,7 +1,12 @@
-import ArabicBookList from "./arabic-book-list";
-import { listBooks } from "@/content";
+import BookList from "@/app/components/BookList";
+import { booksWithLessons } from "@/lib/bookCollection";
 
 export default function Page() {
-  const books = listBooks("arabic");
-  return <ArabicBookList books={books} />;
+  return (
+    <BookList
+      books={booksWithLessons("arabic", "/arabic-language")}
+      basePath="/arabic-language"
+      title="ភាសាអារ៉ាប់"
+    />
+  );
 }

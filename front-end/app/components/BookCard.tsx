@@ -3,7 +3,7 @@ import Link from "next/link";
 interface BookCardProps {
   href: string;
   badge: string | number;
-  arabicTitle: string;
+  arabicTitle?: string;
   khmerTitle: string;
 }
 
@@ -22,9 +22,11 @@ export default function BookCard({
       <span className="flex size-[52px] shrink-0 items-center justify-center rounded-full bg-[#f0fae1] text-lg font-bold text-[#56633f] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
         {badge}
       </span>
-      <span className="font-arabic text-2xl leading-relaxed text-[#8c491a]">
-        {arabicTitle}
-      </span>
+      {arabicTitle && (
+        <span className="font-arabic text-2xl leading-relaxed text-[#8c491a]">
+          {arabicTitle}
+        </span>
+      )}
       <span className="font-khmer text-lg font-bold text-[#201e1d]">
         {khmerTitle}
       </span>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import LessonList from "./lesson-list";
-import { sectionEntries } from "@/lib/sectionEntries";
+import LessonList from "@/app/components/LessonList";
+import { lessonItems } from "@/lib/bookCollection";
 import { bookKey, getBook } from "@/content";
 import {
   Breadcrumb,
@@ -54,22 +54,7 @@ export default async function AqidahBookPage({
       </h1>
 
       {book.lessons.length > 0 && (
-        <LessonList
-          items={book.lessons.map((lesson) => {
-            const href = `/aqidah/${book.id}/${lesson.id}`;
-            const sections = sectionEntries(lesson.content, href);
-            return {
-              id: lesson.id,
-              href,
-              arabicTitle: lesson.arabic_title,
-              khmerTitle: lesson.khmer_title,
-              meta:
-                sections.length > 0 ? `${sections.length} ផ្នែក` : undefined,
-              openLabel: "អានមេរៀន",
-              entries: sections,
-            };
-          })}
-        />
+        <LessonList items={lessonItems(book, "/aqidah")} />
       )}
 
       {book.lessons.length === 0 && (

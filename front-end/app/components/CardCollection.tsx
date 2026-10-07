@@ -25,8 +25,10 @@ export interface CollectionEntry {
 
 export interface CollectionItem {
   id: string | number;
+  /** Shown in the item's circle; defaults to `id`. */
+  badge?: string | number;
   href: string;
-  arabicTitle: string;
+  arabicTitle?: string;
   khmerTitle: string;
   meta?: string;
   /** Shown when the item is expanded in the accordion view. */
@@ -164,7 +166,7 @@ export default function CardCollection({
           <BookCard
             key={item.id}
             href={item.href}
-            badge={item.id}
+            badge={item.badge ?? item.id}
             arabicTitle={item.arabicTitle}
             khmerTitle={item.khmerTitle}
           />
@@ -183,15 +185,17 @@ export default function CardCollection({
         >
           <AccordionTrigger className="items-center gap-3 px-4 py-3 hover:no-underline sm:gap-4 sm:px-5 sm:py-4">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#f0fae1] text-base font-bold text-[#56633f] sm:size-[44px]">
-              {item.id}
+              {item.badge ?? item.id}
             </span>
             <span className="flex min-w-0 flex-1 flex-col gap-1">
-              <span
-                dir="rtl"
-                className="font-arabic text-lg leading-relaxed text-[#8c491a] wrap-break-word sm:text-xl"
-              >
-                {item.arabicTitle}
-              </span>
+              {item.arabicTitle && (
+                <span
+                  dir="rtl"
+                  className="font-arabic text-lg leading-relaxed text-[#8c491a] wrap-break-word sm:text-xl"
+                >
+                  {item.arabicTitle}
+                </span>
+              )}
               <span className="font-khmer text-[15px] font-bold leading-relaxed text-[#201e1d] wrap-break-word sm:text-base">
                 {item.khmerTitle}
               </span>

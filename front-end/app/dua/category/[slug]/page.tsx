@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import DuaCard from "@/app/features/category/DuaCard";
+import DuaList from "@/app/features/category/DuaList";
 import { listDuas } from "@/content";
 import { getCategoryBySlug } from "@/app/features/category/duaCategoryMeta";
 import {
@@ -48,26 +48,22 @@ export default async function DuaCategoryPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <p className="font-arabic text-center text-3xl text-amber-ink">الدُّعَاء</p>
+      <p className="font-arabic text-center text-3xl text-amber-ink">
+        الدُّعَاء
+      </p>
 
       <div className="mt-1 mb-6 flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">{category}</h1>
         <p className="text-sm text-ink-muted">{duas.length} ទូអា</p>
       </div>
 
-      <section className="rounded-3xl bg-surface-soft/60 p-4 sm:p-6">
-        <div className="motion-stagger grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-          {duas.map((dua) => (
-            <DuaCard key={dua.id} dua={dua} />
-          ))}
-        </div>
-
-        {duas.length === 0 && (
-          <p className="py-10 text-center text-sm text-ink-muted">
-            មិនមានទូអាក្នុងប្រភេទនេះទេ
-          </p>
-        )}
-      </section>
+      {duas.length > 0 ? (
+        <DuaList duas={duas} />
+      ) : (
+        <p className="py-10 text-center text-sm text-ink-muted">
+          មិនមានទូអាក្នុងប្រភេទនេះទេ
+        </p>
+      )}
     </div>
   );
 }

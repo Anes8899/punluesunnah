@@ -5,10 +5,9 @@ import Link from "next/link";
 import { Search, X } from "lucide-react";
 import CardCollection, {
   ViewToggle,
-  type CollectionEntry,
   type View,
 } from "@/app/components/CardCollection";
-import type { BookSummary } from "@/types";
+import type { BookWithLessons } from "@/lib/bookCollection";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,24 +17,27 @@ import {
   BreadcrumbSeparator,
 } from "@/app/ui/breadcrumb";
 
-type BookWithLessons = BookSummary & { lessons: CollectionEntry[] };
-
-export default function AqidahBookList({
-  books: AQIDAH_BOOKS,
+export default function BookList({
+  books,
+  basePath,
+  title,
 }: {
   books: BookWithLessons[];
+  /** Route the books live under, e.g. `/aqidah`. */
+  basePath: string;
+  title: string;
 }) {
   const [query, setQuery] = useState("");
   const [view, setView] = useState<View>("grid");
 
   const q = query.trim().toLowerCase();
   const filteredBooks = q
-    ? AQIDAH_BOOKS.filter(
+    ? books.filter(
         (book) =>
           book.khmer_title.toLowerCase().includes(q) ||
           book.arabic_title.includes(query.trim()),
       )
-    : AQIDAH_BOOKS;
+    : books;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
@@ -48,15 +50,13 @@ export default function AqidahBookList({
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>សៀវភៅទាំងអស់</BreadcrumbPage>
+            <BreadcrumbPage>{title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-        <h1 className="text-2xl font-bold text-ink sm:text-3xl">
-          សៀវភៅទាំងអស់
-        </h1>
+        <h1 className="text-2xl font-bold text-ink sm:text-3xl">{title}</h1>
 
         <div className="flex w-full items-center gap-3 sm:w-auto">
           <div className="group relative w-full sm:w-72 md:w-80">
@@ -89,7 +89,7 @@ export default function AqidahBookList({
         view={view}
         items={filteredBooks.map((book) => ({
           id: book.id,
-          href: `/aqidah/${book.id}`,
+          href: `${basePath}/${book.id}`,
           arabicTitle: book.arabic_title,
           khmerTitle: book.khmer_title,
           meta: `${book.lessonCount} មេរៀន`,

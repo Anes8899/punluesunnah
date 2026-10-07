@@ -3,6 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Search, X } from "lucide-react";
+import CardCollection, {
+  ViewToggle,
+  type View,
+} from "@/app/components/CardCollection";
 import DuaCard from "./DuaCard";
 import type { Dua } from "@/types";
 import { getCategoryMeta } from "./duaCategoryMeta";
@@ -23,6 +27,7 @@ export default function DuaLibrary({
   categories: readonly string[];
 }) {
   const [query, setQuery] = useState("");
+  const [view, setView] = useState<View>("grid");
 
   const q = query.trim().toLowerCase();
   const matchedDuas = q
@@ -51,37 +56,75 @@ export default function DuaLibrary({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <p className="font-arabic text-center text-3xl text-amber-ink">الدُّعَاء</p>
+      <p className="font-arabic text-center text-3xl text-amber-ink">
+        الدُّعَاء
+      </p>
 
       <div className="mt-1 mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">
           ទូអាប្រចាំថ្ងៃ
         </h1>
 
-        <div className="group relative w-full sm:w-72 md:w-80">
-          <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-amber-ink" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Escape" && setQuery("")}
-            placeholder="ស្វែងរកទូអា ឬ តំណាង..."
-            className="w-full rounded-full border border-surface-border bg-surface-soft py-3 pr-11 pl-11 leading-relaxed text-ink shadow-sm outline-none transition-all placeholder:text-ink-muted/60 hover:border-amber/40 focus:border-amber/60 focus:bg-background focus:shadow-md focus:ring-4 focus:ring-amber/10"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              aria-label="សម្អាតការស្វែងរក"
-              className="absolute top-1/2 right-3 flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface hover:text-amber-ink"
-            >
-              <X className="size-4" />
-            </button>
-          )}
+        <div className="flex w-full items-center gap-3 sm:w-auto">
+          <div className="group relative w-full sm:w-72 md:w-80">
+            <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-amber-ink" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Escape" && setQuery("")}
+              placeholder="ស្វែងរកទូអា ឬ តំណាង..."
+              className="w-full rounded-full border border-surface-border bg-surface-soft py-3 pr-11 pl-11 leading-relaxed text-ink shadow-sm outline-none transition-all placeholder:text-ink-muted/60 hover:border-amber/40 focus:border-amber/60 focus:bg-background focus:shadow-md focus:ring-4 focus:ring-amber/10"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="សម្អាតការស្វែងរក"
+                className="absolute top-1/2 right-3 flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface hover:text-amber-ink"
+              >
+                <X className="size-4" />
+              </button>
+            )}
+          </div>
+
+          <ViewToggle view={view} onChange={setView} />
         </div>
       </div>
 
-      {q ? (
+      {view === "accordion" ? (
+        <>
+          <CardCollection
+            view="accordion"
+            items={DUA_CATEGORIES.flatMap((cat, i) => {
+              const duas = (q ? matchedDuas : DUAS).filter(
+                (dua) => dua.category === cat,
+              );
+              if (q && duas.length === 0) return [];
+              return [
+                {
+                  id: cat,
+                  badge: i + 1,
+                  href: `/dua/category/${getCategoryMeta(cat).slug}`,
+                  khmerTitle: cat,
+                  meta: `${duas.length} ទូអា`,
+                  openLabel: "មើលទាំងអស់",
+                  entries: duas.map((dua) => ({
+                    key: dua.id,
+                    href: `/dua/${dua.id}`,
+                    khmerTitle: dua.title,
+                  })),
+                },
+              ];
+            })}
+          />
+          {q && matchedDuas.length === 0 && (
+            <p className="py-10 text-center text-sm text-ink-muted">
+              មិនមានលទ្ធផលទេ
+            </p>
+          )}
+        </>
+      ) : q ? (
         <section className="rounded-3xl bg-surface-soft/60 p-4 sm:p-6">
           <h2 className="mb-4 text-lg font-bold text-amber-ink sm:text-xl">
             លទ្ធផលស្វែងរក
