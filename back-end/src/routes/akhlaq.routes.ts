@@ -7,13 +7,14 @@ import {
   listAkhlaqReferences,
   updateAkhlaq,
 } from "../controllers/akhlaq.controller";
+import { uploadBook } from "../middleware/uploadBook";
 
 const router: Router = Router();
 
 router.get("/", listAkhlaq);
 router.get("/references", listAkhlaqReferences);
 router.get("/:virtueId", getAkhlaq);
-router.post("/", createAkhlaq);
+router.post("/", uploadBook, createAkhlaq);
 router.put("/:virtueId", updateAkhlaq);
 router.delete("/:virtueId", deleteAkhlaq);
 

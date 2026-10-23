@@ -1,5 +1,6 @@
 import { Router } from "express";
 import akhlaqRoutes from "./akhlaq.routes";
+import aqidahRoutes from "./aqidah.routes";
 import bookRoutes from "./book.routes";
 import duaRoutes from "./dua.routes";
 import hadithRoutes from "./hadith.routes";
@@ -16,6 +17,7 @@ router.use("/duas", duaRoutes);
 router.use("/khutbahs", khutbahRoutes);
 router.use("/tazkiyah", tazkiyahRoutes);
 router.use("/akhlaq", akhlaqRoutes);
+router.use("/aqidah", aqidahRoutes);
 router.use("/books", bookRoutes);
 router.use("/ustaz", ustazRoutes);
 router.use("/quran", quranRoutes);
