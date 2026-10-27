@@ -3,7 +3,7 @@ import { getHadith, listHadiths } from "../controllers/hadith.controller";
 
 const router: Router = Router();
 
-router.get("/", listHadiths);
-router.get("/:hadithId", getHadith);
+router.get("/hadiths", listHadiths);
+router.get("/hadiths/:hadithId", getHadith);
 
 export default router;

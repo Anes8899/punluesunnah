@@ -3,7 +3,7 @@ import { getVerses, listChapters } from "../controllers/quran.controller";
 
 const router: Router = Router();
 
-router.get("/chapters", listChapters);
-router.get("/chapters/:chapterId/verses", getVerses);
+router.get("/quran/chapters", listChapters);
+router.get("/quran/chapters/:chapterId/verses", getVerses);
 
 export default router;

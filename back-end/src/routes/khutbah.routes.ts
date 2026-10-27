@@ -7,8 +7,8 @@ import {
 
 const router: Router = Router();
 
-router.get("/", listKhutbahs);
-router.get("/topics", listKhutbahTopics);
-router.get("/:khutbahId", getKhutbah);
+router.get("/khutbahs", listKhutbahs);
+router.get("/khutbahs/topics", listKhutbahTopics);
+router.get("/khutbahs/:khutbahId", getKhutbah);
 
 export default router;

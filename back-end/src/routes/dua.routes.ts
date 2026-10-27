@@ -4,9 +4,9 @@ import { getDua, listDuaCategories, listDuas } from "../controllers/dua.controll
 const router: Router = Router();
 
 // `?category=` filters the list; `/categories/:slug` is the same filter as a path.
-router.get("/", listDuas);
-router.get("/categories", listDuaCategories);
-router.get("/categories/:slug", listDuas);
-router.get("/:duaId", getDua);
+router.get("/duas", listDuas);
+router.get("/duas/categories", listDuaCategories);
+router.get("/duas/categories/:slug", listDuas);
+router.get("/duas/:duaId", getDua);
 
 export default router;

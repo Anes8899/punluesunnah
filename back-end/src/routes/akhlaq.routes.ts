@@ -11,11 +11,11 @@ import { uploadBook } from "../middleware/uploadBook";
 
 const router: Router = Router();
 
-router.get("/", listAkhlaq);
-router.get("/references", listAkhlaqReferences);
-router.get("/:virtueId", getAkhlaq);
-router.post("/", uploadBook, createAkhlaq);
-router.put("/:virtueId", updateAkhlaq);
-router.delete("/:virtueId", deleteAkhlaq);
+router.get("/akhlaq", listAkhlaq);
+router.get("/akhlaq/references", listAkhlaqReferences);
+router.get("/akhlaq/:virtueId", getAkhlaq);
+router.post("/akhlaq", uploadBook, createAkhlaq);
+router.put("/akhlaq/:virtueId", updateAkhlaq);
+router.delete("/akhlaq/:virtueId", deleteAkhlaq);
 
 export default router;
