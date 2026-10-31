@@ -9,9 +9,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@napi-rs/canvas": "^0.1.100",
+    "bidi-js": "^1.1.0",
     "express": "^5.2.1",
     "mongoose": "^9.11.2",
-    "multer": "^2.4.0"
+    "multer": "^2.4.0",
+    "pdf-lib": "^1.17.1",
+    "tesseract.js": "^7.0.0",
+    "unpdf": "^1.4.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

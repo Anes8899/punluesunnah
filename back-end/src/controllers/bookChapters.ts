@@ -2,13 +2,12 @@ import type { Response } from "express";
 import { isValidObjectId, type Types } from "mongoose";
 import { Book } from "../models/Book";
 import { Chapter } from "../models/Chapter";
-import { Content } from "../models/Content";
-
-export type ChapterInput = { title: string; content: string };
+import { parseSections, type ChapterData, type Section } from "../services/chapters.service";
 
 // `chapters` is a JSON string in form-data or an array in a JSON body: [{ title, content? }, ...].
-// Chapter order is the array order. Returns null when the value is malformed.
-export const parseChapters = (raw: unknown): ChapterInput[] | null => {
+// Chapter order is the array order; each content is split into sections like a PDF's text.
+// Returns null when the value is malformed.
+export const parseChapters = (raw: unknown): ChapterData[] | null => {
   if (raw === undefined || raw === "") return [];
   let value = raw;
   if (typeof raw === "string") {
@@ -20,36 +19,36 @@ export const parseChapters = (raw: unknown): ChapterInput[] | null => {
   }
   if (!Array.isArray(value)) return null;
 
-  const chapters: ChapterInput[] = [];
+  const chapters: ChapterData[] = [];
   for (const c of value) {
     const title = typeof c?.title === "string" ? c.title.trim() : "";
     if (!title) return null;
-    chapters.push({ title, content: typeof c.content === "string" ? c.content : "" });
+    const content = typeof c.content === "string" ? c.content : "";
+    chapters.push({ title, sections: parseSections(chapters.length + 1, content.split("\n")) });
   }
   return chapters;
 };
 
-// Each non-empty line of a chapter's content is stored as one Content paragraph.
-export const saveChapters = async (bookId: Types.ObjectId, chapters: ChapterInput[]) => {
+type StoredChapter = { chapterNumber: number; title: string; sections: Section[] };
+
+// The API shape of a chapter: { id, title, sections: [{ id, title, definitions, paragraphs }] }.
+const toChapterJson = (c: StoredChapter) => ({
+  id: c.chapterNumber,
+  title: c.title,
+  sections: c.sections.map(({ id, title, definitions, paragraphs }) => ({ id, title, definitions, paragraphs })),
+});
+
+export const saveChapters = async (bookId: Types.ObjectId, chapters: ChapterData[]) => {
   const created = await Chapter.insertMany(
-    chapters.map((c, i) => ({ book: bookId, chapterNumber: i + 1, title: c.title })),
+    chapters.map((c, i) => ({ book: bookId, chapterNumber: i + 1, title: c.title, sections: c.sections })),
   );
-  await Content.insertMany(
-    created.flatMap((chapter, i) =>
-      chapters[i].content
-        .split("\n")
-        .map((line) => line.trim())
-        .filter(Boolean)
-        .map((text, position) => ({ chapter: chapter._id, position, text })),
-    ),
-  );
-  return created.map((c) => ({ _id: c._id, order: c.chapterNumber, title: c.title }));
+  return created.map(toChapterJson);
 };
 
 const findBook = (category: string, bookId: string) =>
   isValidObjectId(bookId) ? Book.findOne({ _id: bookId, category }).lean() : null;
 
-// A book plus its chapter list (without content).
+// A book plus its chapters, each with its sections.
 export const sendBookWithChapters = async (category: string, bookId: string, res: Response): Promise<void> => {
   const book = await findBook(category, bookId);
   if (!book) {
@@ -60,11 +59,11 @@ export const sendBookWithChapters = async (category: string, bookId: string, res
   res.json({
     ...book,
     chapterCount: chapters.length,
-    chapters: chapters.map((c) => ({ _id: c._id, order: c.chapterNumber, title: c.title })),
+    chapters: chapters.map(toChapterJson),
   });
 };
 
-// One chapter with its content joined back into text, plus prev/next chapter orders (null at the ends).
+// One chapter with its sections, plus prev/next chapter orders (null at the ends).
 export const sendChapter = async (category: string, bookId: string, order: string, res: Response): Promise<void> => {
   const book = await findBook(category, bookId);
   const chapterNumber = Number(order);
@@ -76,16 +75,10 @@ export const sendChapter = async (category: string, bookId: string, order: strin
     res.status(404).json({ error: "Chapter not found" });
     return;
   }
-  const [paragraphs, total] = await Promise.all([
-    Content.find({ chapter: chapter._id }).sort({ position: 1 }).lean(),
-    Chapter.countDocuments({ book: book._id }),
-  ]);
+  const total = await Chapter.countDocuments({ book: book._id });
   res.json({
-    _id: chapter._id,
+    ...toChapterJson(chapter),
     bookId: book._id,
-    order: chapterNumber,
-    title: chapter.title,
-    content: paragraphs.map((p) => p.text).join("\n"),
     prev: chapterNumber > 1 ? chapterNumber - 1 : null,
     next: chapterNumber < total ? chapterNumber + 1 : null,
   });

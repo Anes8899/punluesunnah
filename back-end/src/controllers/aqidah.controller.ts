@@ -1,5 +1,7 @@
 import type { Request, Response } from "express";
 import { Book } from "../models/Book";
+import { Chapter } from "../models/Chapter";
+import { pdfToChapters } from "../services/pdf.service";
 import { parseChapters, saveChapters, sendBookWithChapters, sendChapter } from "./bookChapters";
 import { listBooksByCategory } from "./listBooksByCategory";
 import { notImplemented } from "./notImplemented";
@@ -34,16 +36,29 @@ export const createAqidah = async (req: Request, res: Response): Promise<void> =
   const cover = files.cover?.[0];
   const source = files.file?.[0];
 
-  const book = await Book.create({
-    category: "aqidah",
-    title,
-    author: author || undefined,
-    coverUrl: cover && `/uploads/${cover.filename}`,
-    sourceFileUrl: source && `/uploads/${source.filename}`,
-  });
-  const savedChapters = await saveChapters(book._id, chapters);
-  console.log(`Created aqidah book with ID ${book._id} and ${savedChapters.length} chapters`);
-  res.status(201).json({ ...book.toObject(), chapterCount: savedChapters.length, chapters: savedChapters });
+  let book;
+  try {
+    book = await Book.create({
+      category: "aqidah",
+      title,
+      author: author || undefined,
+      coverUrl: cover && `/uploads/${cover.filename}`,
+      sourceFileUrl: source && `/uploads/${source.filename}`,
+    });
+    // With no chapters given, build them from the uploaded PDF.
+    const savedChapters = await saveChapters(
+      book._id,
+      chapters.length || !source ? chapters : await pdfToChapters(source.path),
+    );
+    res.status(201).json({ ...book.toObject(), chapterCount: savedChapters.length, chapters: savedChapters });
+  } catch (err) {
+    console.error("createAqidah failed:", err);
+    // Don't leave a half-created book behind.
+    if (book) {
+      await Promise.allSettled([Book.deleteOne({ _id: book._id }), Chapter.deleteMany({ book: book._id })]);
+    }
+    res.status(500).json({ error: "Failed to create book" });
+  }
 };
 
 export const updateAqidah = (_req: Request<{ aqidahId: string }>, res: Response): void => {
